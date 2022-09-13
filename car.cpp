@@ -80,6 +80,8 @@ public:
 	}
 } g;
 
+void show_name_jr3(void);
+
 class X11_wrapper {
 private:
 	Display *dpy;
@@ -280,7 +282,9 @@ int check_keys(XEvent *e)
 			case XK_m:
 			    	show_name();
 			    	break;
-
+			case XK_j:
+				show_name_jr3();
+				break;
 			case XK_b:
 				break;
 			case XK_s:
