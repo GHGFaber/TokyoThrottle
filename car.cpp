@@ -60,6 +60,7 @@ void check_mouse(XEvent *e);
 int check_keys(XEvent *e);
 void physics();
 void render();
+void show_name();
 
 class Global {
 public:
@@ -276,6 +277,10 @@ int check_keys(XEvent *e)
 				break;
 			case XK_q:
 				break;
+			case XK_m:
+			    	show_name();
+			    	break;
+
 			case XK_b:
 				break;
 			case XK_s:
