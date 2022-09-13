@@ -61,6 +61,8 @@ int check_keys(XEvent *e);
 void physics();
 void render();
 void show_name();
+void show_name_jr3(void);
+void show_name_s();
 
 class Global {
 public:
@@ -80,7 +82,6 @@ public:
 	}
 } g;
 
-void show_name_jr3(void);
 
 class X11_wrapper {
 private:
@@ -288,6 +289,7 @@ int check_keys(XEvent *e)
 			case XK_b:
 				break;
 			case XK_s:
+				show_name_s();
 				break;
 			case XK_Escape:
 				return 1;
