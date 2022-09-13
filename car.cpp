@@ -63,6 +63,7 @@ void render();
 void show_name();
 void show_name_jr3(void);
 void show_name_s();
+void display_name();
 
 class Global {
 public:
@@ -279,6 +280,7 @@ int check_keys(XEvent *e)
 				g.cameraPosition[0] -= 0.1;
 				break;
 			case XK_q:
+				display_name();
 				break;
 			case XK_m:
 			    	show_name();
