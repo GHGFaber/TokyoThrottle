@@ -1,7 +1,7 @@
 all: car
 
-car: car.cpp mfuentes.cpp jramos3.cpp sdenney.cpp jquinonez.cpp 
-	g++ car.cpp mfuentes.cpp jramos3.cpp sdenney.cpp jquinonez.cpp -Wall -lX11 -lGL -lGLU -lm ./libggfonts.a -ocar
+car: car.cpp ichavez.cpp  mfuentes.cpp jramos3.cpp sdenney.cpp jquinonez.cpp 
+	g++ car.cpp ichavez.cpp mfuentes.cpp jramos3.cpp sdenney.cpp jquinonez.cpp -Wall -lX11 -lGL -lGLU -lm ./libggfonts.a -ocar
 
 clean:
 	rm -f car
