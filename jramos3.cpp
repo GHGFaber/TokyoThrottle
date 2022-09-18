@@ -14,18 +14,18 @@ class OtherCar
 enum Direction
 {
     Left,
-    Right,
-}
+    Right
+};
 
-void car_motion(Direction direction, vec & position)
+void car_motion(Direction direction, float & position)
 {
     // add code relating to movement of the camera (W, A, S, D)
     // this might work with cameraPosition[0]
     switch (direction) {
         case (Left):
-            position[0] -= 1.0f;
+            position -= 1.0f;
         case (Right):
-            position[0] += 1.0f;
+            position += 1.0f;
     }
 }
 
@@ -42,9 +42,9 @@ void decelerate(float & velocity)
     velocity -= 1.0f;
 }
 
-void apply_velocity(int vel, vec & position)
+void apply_velocity(int vel, float & position)
 {
-    position[2] += vel;
+    position += vel;
 }
 
 void show_name_jr3()

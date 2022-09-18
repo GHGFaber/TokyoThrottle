@@ -54,6 +54,11 @@ typedef Flt	Matrix[4][4];
 #define PI 3.14159265358979323846264338327950
 #define MY_INFINITY 1000.0
 
+//
+// TODO: Finalize WASD movement of the camera/car object
+// uncomment all commented-out lines when finished
+//
+
 void init();
 void init_opengl();
 void check_mouse(XEvent *e);
@@ -71,6 +76,7 @@ public:
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
+	// bool wPressed, aPressed, sPressed, dPressed;
 	Global() {
 		//constructor
 		xres=640;
@@ -80,6 +86,10 @@ public:
 		//light is up high, right a little, toward a little
 		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
 		lightPosition[3] = 1.0f;
+		// wPressed = false;
+		// aPressed = false;
+		// sPressed = false;
+		// dPressed = false;
 	}
 } g;
 
@@ -273,11 +283,17 @@ int check_keys(XEvent *e)
 		switch(key) {
 			case XK_1:
 				break;
-			case XK_Right:
-				g.cameraPosition[0] += 0.1;
+			case XK_w:
+				// g.wPressed = true;
 				break;
-			case XK_Left:
-				g.cameraPosition[0] -= 0.1;
+			case XK_a:
+				// g.aPressed = true;
+				break;
+			case XK_s:
+				// g.sPressed = true;
+				break;
+			case XK_d:
+				// g.dPressed = true;
 				break;
 			case XK_i:
 				print_name();
@@ -293,7 +309,7 @@ int check_keys(XEvent *e)
 				break;
 			case XK_b:
 				break;
-			case XK_s:
+			case XK_o:
 				show_name_s();
 				break;
 			case XK_Escape:
@@ -483,10 +499,18 @@ void drawStreet()
 
 void physics()
 {
-    	
-	g.cameraPosition[2] -= 0.1;
-	g.cameraPosition[0] = 1.0 + sin(g.cameraPosition[2]*0.3);
-	
+   
+   /* 
+    	if (g.wPressed)
+	    	g.cameraPosition[2] -= 0.1;
+	if (g.aPressed)
+		g.cameraPosition[0] -= 0.1;
+	if (g.sPressed)
+	    	g.cameraPosition[2] += 0.1;
+	if (g.dPressed)
+		g.cameraPosition[0] += 0.1;
+
+   */		
 }
 
 void render()
