@@ -2,5 +2,5 @@
 using namespace std;
 
 void print_name(){
-	cout<< "irene hello" << endl;
+	cout<< "irene a." << endl;
 	}
