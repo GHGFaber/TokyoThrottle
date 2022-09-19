@@ -49,7 +49,6 @@ void apply_velocity(int vel, float & position)
 
 void show_name_jr3()
 {
-    std::cout << "jramos3" << std::endl;
-    std::cout << "Hello, world..." << std::endl;
+    std::cout << "Jarl Ramos / Geoffrey De Palme" << std::endl;
 }
 
