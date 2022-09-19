@@ -2,5 +2,5 @@
 
 void show_name_s()
 {
-	printf("sdenney\n");
+	printf("sdenney hi\n");
 }
