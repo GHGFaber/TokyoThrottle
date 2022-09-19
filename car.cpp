@@ -70,6 +70,8 @@ void show_name_jr3(void);
 void show_name_s();
 void display_name();
 void print_name();
+// void accelerate(float & velocity)
+// void decelerate(float & velocity)
 class Global {
 public:
 	int xres, yres;
@@ -77,6 +79,7 @@ public:
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	// bool wPressed, aPressed, sPressed, dPressed;
+	// float vel;
 	Global() {
 		//constructor
 		xres=640;
@@ -86,6 +89,7 @@ public:
 		//light is up high, right a little, toward a little
 		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
 		lightPosition[3] = 1.0f;
+		// vel = 0.0f;
 		// wPressed = false;
 		// aPressed = false;
 		// sPressed = false;
@@ -283,18 +287,20 @@ int check_keys(XEvent *e)
 		switch(key) {
 			case XK_1:
 				break;
+				/*
 			case XK_w:
-				// g.wPressed = true;
+				g.wPressed = true;
 				break;
 			case XK_a:
-				// g.aPressed = true;
+				g.aPressed = true;
 				break;
 			case XK_s:
-				// g.sPressed = true;
+				g.sPressed = true;
 				break;
 			case XK_d:
-				// g.dPressed = true;
+				g.dPressed = true;
 				break;
+				*/
 			case XK_i:
 				print_name();
 				break;
@@ -500,17 +506,33 @@ void drawStreet()
 void physics()
 {
    
-   /* 
-    	if (g.wPressed)
-	    	g.cameraPosition[2] -= 0.1;
-	if (g.aPressed)
+   /*
+    if (g.wPressed) {
+		accelerate(g.vel);
+		g.cameraPosition[2] -= g.vel;
+		g.wPressed = false;
+	}
+	if (g.aPressed) {
+		accelerate(g.vel);
+		g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] -= 0.1;
-	if (g.sPressed)
-	    	g.cameraPosition[2] += 0.1;
-	if (g.dPressed)
+		g.aPressed = false;
+	}	
+	if (g.sPressed) {
+		decelerate(g.vel);
+		g.cameraPosition[2] += g.vel;
+		g.sPressed = false;
+	}
+	if (g.dPressed) {
+		accelerate(g.vel);
+		g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] += 0.1;
+		g.dPressed = false;
+	}
+		*/
 
-   */		
+
+   		
 }
 
 void render()
