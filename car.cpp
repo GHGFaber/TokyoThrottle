@@ -19,6 +19,7 @@
 #include "log.h"
 #include "fonts.h"
 #include "myImage.h"
+#include "jquinonez.h"
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
