@@ -108,7 +108,7 @@ public:
 		aPressed = false;
 		sPressed = false;
 		dPressed = false;
-		cPressed = true;
+		cPressed = false;
 	}
 } g;
 
