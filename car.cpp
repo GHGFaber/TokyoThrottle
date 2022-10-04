@@ -72,6 +72,12 @@ void display_name();
 void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
+bool startState(int count); 
+
+int frames = 0;
+bool printGO = false;
+int startCounter = 4;
+
 class MyImage myimage = {"kachow.jpeg"};
 
 MyImage img[1] = {"kachow.jpeg"};
@@ -318,16 +324,16 @@ int check_keys(XEvent *e)
 			case XK_1:
 				break;
 			case XK_w:
-				g.wPressed = true;
+				g.wPressed = startState(startCounter);
 				break;
 			case XK_a:
-				g.aPressed = true;
+				g.aPressed = startState(startCounter);
 				break;
 			case XK_s:
-				g.sPressed = true;
+				g.sPressed = startState(startCounter);
 				break;
 			case XK_d:
-				g.dPressed = true;
+				g.dPressed = startState(startCounter);
 				break;
 			case XK_i:
 				print_name();
@@ -576,6 +582,7 @@ void physics()
 void render()
 {
 	Rect r;
+	Rect s;
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	//
 	//3D mode
@@ -605,6 +612,45 @@ void render()
 	glDisable(GL_LIGHTING);
 	//glDisable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
+
+	        //print counter
+        s.bot = g.yres - 20;
+        s.left = 1200;
+        s.center = 0;
+
+        //if(startCounter > 0) {
+                frames++;
+        //}
+
+        if(frames <= 120) {
+                ggprint8b(&s, 16, 0x00887766, "3");
+                startCounter = 3;
+        }
+        else if(frames >= 240 && frames < 360) {
+                s.bot = g.yres - 40;
+                ggprint8b(&s, 16, 0x00887766, "2");
+                startCounter = 2;
+        }
+        else if(frames >= 360 && frames <= 720) {
+                s.bot = g.yres - 60;
+                ggprint8b(&s, 16, 0x00887766, "1");
+                startCounter = 1;
+                printGO = true;
+
+        }
+
+        else if(frames > 720) {
+                s.bot = g.yres - 40;
+                ggprint8b(&s, 16, 0x00887766, " ");
+                startCounter = 0;
+        }
+
+        if(printGO == true && frames > 720) {
+            s.bot = g.yres - 80;
+            ggprint8b(&s, 16, 0x00887766, "Go");
+            startCounter--;
+        }
+
 	r.bot = g.yres - 20;
 	r.left = 10;
 	r.center = 0;
