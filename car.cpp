@@ -601,7 +601,7 @@ void render()
 	//glDisable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
 
-	    //print counter
+	    	//print counter
         s.bot = g.yres - 20;
         s.left = 1200;
         s.center = 0;
@@ -638,7 +638,6 @@ void render()
             ggprint8b(&s, 16, 0x00887766, "Go");
             startCounter--;
         }
-
 
 
 
