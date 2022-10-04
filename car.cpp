@@ -600,6 +600,7 @@ void render()
 	glDisable(GL_LIGHTING);
 	//glDisable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
+	
 				//print counter
         s.bot = g.yres - 20;
         s.left = 1200;
