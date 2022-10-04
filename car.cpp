@@ -92,7 +92,7 @@ public:
 	GLfloat lightPosition[4];
 	bool cPressed, wPressed, aPressed, sPressed, dPressed;
 	float vel;
-	int xres, yres;	
+	//int xres, yres;	
 	Texture tex;
 	Global() {
 		//constructor
