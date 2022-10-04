@@ -73,12 +73,14 @@ void display_name();
 void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
-class MyImage myimage = {"kachow.jpeg"};
+bool startState(int count); 
 
 int frames = 0;
 bool printGO = false;
 int startCounter = 4;
+MyImage img[1] = {"kachow.jpeg"};
 
+class MyImage myimage = {"kachow.jpeg"};
 class Texture {
 public:
     MyImage *backImage;
