@@ -73,23 +73,10 @@ void display_name();
 void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
-bool startState(int count); 
 
 int frames = 0;
 bool printGO = false;
 int startCounter = 4;
-
-class MyImage myimage = {"kachow.jpeg"};
-
-MyImage img[1] = {"kachow.jpeg"};
-
-class Texture {
-public:
-    MyImage *backImage;
-    GLuint backTexture;
-    float xc[2];
-    float yc[2];
-};
 
 class Global {
 public:
@@ -614,7 +601,7 @@ void render()
 	//glDisable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
 
-	        //print counter
+	    //print counter
         s.bot = g.yres - 20;
         s.left = 1200;
         s.center = 0;
@@ -651,6 +638,10 @@ void render()
             ggprint8b(&s, 16, 0x00887766, "Go");
             startCounter--;
         }
+
+
+
+
 
 	r.bot = g.yres - 20;
 	r.left = 10;
