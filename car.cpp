@@ -73,6 +73,7 @@ void display_name();
 void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
+class MyImage myimage = {"kachow.jpeg"};
 
 int frames = 0;
 bool printGO = false;
