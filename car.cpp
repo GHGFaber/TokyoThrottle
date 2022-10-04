@@ -79,6 +79,14 @@ int frames = 0;
 bool printGO = false;
 int startCounter = 4;
 
+class Texture {
+public:
+    MyImage *backImage;
+    GLuint backTexture;
+    float xc[2];
+    float yc[2];
+};
+
 class Global {
 public:
 	int xres, yres;
