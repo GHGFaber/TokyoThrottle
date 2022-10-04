@@ -33,13 +33,13 @@ void accelerate(float & velocity)
 {
     // change the velocity
     // can this work with cameraPosition[2]?
-    // velocity += 0.1f;
+    velocity += 0.1f;
 }
 
 void decelerate(float & velocity)
 {
     // lower the velocity
-    // velocity -= 0.1f;
+    velocity -= 0.1f;
 }
 
 void apply_velocity(int vel, float & position)
