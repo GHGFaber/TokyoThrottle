@@ -18,7 +18,8 @@
 #include <GL/glu.h>
 #include "log.h"
 #include "fonts.h"
-
+#include "myImage.h"
+#include "jquinonez.h"
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
@@ -83,8 +84,10 @@ public:
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
-	bool wPressed, aPressed, sPressed, dPressed;
+	bool cPressed, wPressed, aPressed, sPressed, dPressed;
 	float vel;
+	//int xres, yres;	
+	Texture tex;
 	Global() {
 		//constructor
 		xres=640;
@@ -99,6 +102,7 @@ public:
 		aPressed = false;
 		sPressed = false;
 		dPressed = false;
+		cPressed = false;
 	}
 } g;
 
@@ -238,6 +242,21 @@ void init_opengl()
 	glEnable(GL_LIGHT0);
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
+	g.tex.backImage = &img[0];
+    //create opengl texture elements
+    glGenTextures(1, &g.tex.backTexture);
+    int w = g.tex.backImage->width;
+    int h = g.tex.backImage->height;
+    glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+            GL_RGB, GL_UNSIGNED_BYTE, g.tex.backImage->data);
+    g.tex.xc[0] = 0.0;
+    g.tex.xc[1] = 0.25;
+    g.tex.yc[0] = 0.0;
+    g.tex.yc[1] = 1.0;
+
 	initialize_fonts();
 	//init_textures();
 }
@@ -321,6 +340,9 @@ int check_keys(XEvent *e)
 			case XK_o:
 				show_name_s();
 				break;
+			case XK_c:
+            	g.cPressed = true;
+                break;
 			case XK_Escape:
 				return 1;
 		}
@@ -447,6 +469,19 @@ void trans_vector(Matrix mat, const Vec in, Vec out)
 	out[1] = f1;
 	out[2] = f2;
 }
+void show_kachow()
+{
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(1.0, 1.0, 1.0);
+         //main
+        glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+        glEnd();
+}
 
 void drawStreet()
 {
@@ -555,7 +590,6 @@ void render()
 	//
 	//
 	//
-	//
 	//switch to 2D mode
 	//
 	glViewport(0, 0, g.xres, g.yres);
@@ -615,6 +649,8 @@ void render()
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00887766, "car framework");
 	glPopAttrib();
+	if(g.cPressed)
+            show_kachow();
 }
 
 
