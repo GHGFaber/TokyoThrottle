@@ -18,7 +18,7 @@
 #include <GL/glu.h>
 #include "log.h"
 #include "fonts.h"
-
+#include "myImage.h"
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
@@ -72,6 +72,18 @@ void display_name();
 void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
+class MyImage myimage = {"kachow.jpeg"};
+
+MyImage img[1] = {"kachow.jpeg"};
+
+class Texture {
+public:
+    MyImage *backImage;
+    GLuint backTexture;
+    float xc[2];
+    float yc[2];
+};
+
 class Global {
 public:
 	int xres, yres;
@@ -80,6 +92,8 @@ public:
 	GLfloat lightPosition[4];
 	bool wPressed, aPressed, sPressed, dPressed;
 	float vel;
+	int xres, yres;	
+	Texture tex;
 	Global() {
 		//constructor
 		xres=640;
@@ -233,6 +247,21 @@ void init_opengl()
 	glEnable(GL_LIGHT0);
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
+	g.tex.backImage = &img[0];
+    //create opengl texture elements
+    glGenTextures(1, &g.tex.backTexture);
+    int w = g.tex.backImage->width;
+    int h = g.tex.backImage->height;
+    glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+            GL_RGB, GL_UNSIGNED_BYTE, g.tex.backImage->data);
+    g.tex.xc[0] = 0.0;
+    g.tex.xc[1] = 0.25;
+    g.tex.yc[0] = 0.0;
+    g.tex.yc[1] = 1.0;
+
 	initialize_fonts();
 	//init_textures();
 }
@@ -548,7 +577,16 @@ void render()
 	drawStreet();
 	//
 	//
-	//
+	glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(1.0, 1.0, 1.0);
+    //main
+    glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+    glBegin(GL_QUADS);
+        glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(0,      0);
+        glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(0,      g.yres);
+        glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres, g.yres);
+        glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres, 0);
+    glEnd();
 	//
 	//switch to 2D mode
 	//
