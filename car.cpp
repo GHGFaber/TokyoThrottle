@@ -510,7 +510,7 @@ void physics()
 	}
 	if (g.aPressed) {
 		accelerate(g.vel);
-		g.cameraPosition[2] -= g.vel;
+		//g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
 	}	
@@ -521,7 +521,7 @@ void physics()
 	}
 	if (g.dPressed) {
 		accelerate(g.vel);
-		g.cameraPosition[2] -= g.vel;
+		//g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
 	}	
