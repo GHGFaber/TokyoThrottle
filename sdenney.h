@@ -5,7 +5,8 @@
 
 
 extern void show_name_s();
-//extern void pause();
+extern bool paused(bool);
+extern bool unpaused(bool);
 
 #ifndef _MYIMAGE_H_
 #define _MYIMAGE_H_

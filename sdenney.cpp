@@ -14,11 +14,17 @@ void show_name_s()
 	printf("sdenney hi\n");
 }
 
-/*void pause()
+bool paused(bool pressed)
 {
-	//
+    pressed = true;
+	return pressed;
 }
-
+bool unpaused(bool pressed)
+{
+    pressed = false;
+    return pressed;
+}
+/*
 extern class MyImage myimage;
 
 MyImage::~MyImage() { delete [] data; }
