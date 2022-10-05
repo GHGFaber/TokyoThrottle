@@ -1,3 +1,4 @@
+//Author: Moises B. Fuentes
 #include <iostream>
 #include <stdlib.h>
 #include <string.h>

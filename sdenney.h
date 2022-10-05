@@ -1,6 +1,20 @@
-//sdenney header file
+//NAME: Spencer Denney
+//FILE: sdenney.h
+//sdenney individual header file
 //
 
 
 extern void show_name_s();
-extern bool pause();
+extern bool paused(bool);
+extern bool unpaused(bool);
+
+#ifndef _MYIMAGE_H_
+#define _MYIMAGE_H_
+class MyImage {
+public:
+    int width, height;
+    unsigned char *data;
+    ~MyImage(); //destructor
+    MyImage(const char *fname);
+};
+#endif

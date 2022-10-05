@@ -1,3 +1,4 @@
+//Modified by: Moises B. Fuentes
 #ifndef _MYIMAGE_H_
 #define _MYIMAGE_H_
 class MyImage {

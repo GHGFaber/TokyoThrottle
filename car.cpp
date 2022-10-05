@@ -20,6 +20,8 @@
 #include "fonts.h"
 #include "myImage.h"
 #include "jquinonez.h"
+#include "sdenney.h"
+#include "jr3image.h"
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
@@ -74,6 +76,7 @@ void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
 bool startState(int count); 
+void show_helpState();
 
 int frames = 0;
 bool printGO = false;
@@ -95,7 +98,7 @@ public:
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
-	bool cPressed, wPressed, aPressed, sPressed, dPressed;
+	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -114,6 +117,8 @@ public:
 		sPressed = false;
 		dPressed = false;
 		cPressed = false;
+        //pause
+        pPressed = false;
 	}
 } g;
 
@@ -347,9 +352,13 @@ int check_keys(XEvent *e)
 				show_name_jr3();
 				break;
 			case XK_b:
+                //g.pPressed = false; //unpause
+                g.pPressed = unpaused(g.pPressed);
+                g.cPressed = false;
 				break;
-			case XK_o:
+			case XK_p:
 				show_name_s();
+                g.pPressed = paused(g.pPressed); //pause
 				break;
 			case XK_c:
             	g.cPressed = true;
@@ -493,13 +502,35 @@ void show_kachow()
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
         glEnd();
 }
+//Pause screen pops up
+void pause() 
+{
+    Rect r;
+        //Pause Title
+        r.bot = g.yres -230;
+        r.left = 300;
+        r.center = 0;
+        ggprint8b(&r, 6, 0x00ffffff, "PAUSED");
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(1.0, 1.0, 0.5);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+        glEnd();
+
+}
 
 void drawStreet()
 {
 	glPushMatrix();
 	glColor3f(0.2f, 0.2f, 0.2f);
 	float w = 5.0;
-	float d = 100.0;
+    //d = 100.0 -> changed
+	float d = 1000.0;
 	float h = 0.0;
 	glTranslatef(0.0f, 0.0f, 0.0f);
 	glBegin(GL_QUADS);
@@ -514,7 +545,8 @@ void drawStreet()
 	//double yellow line
 	glColor3f(0.8f, 0.8f, 0.2f);
 	w = 0.1;
-	d = 100.0;
+    //d = 100.0 -> changed
+	d = 1000.0;
 	h = 0.01;
 	glPushMatrix();
 	glTranslatef(-0.15f, 0.0f, 0.0f);
@@ -540,7 +572,8 @@ void drawStreet()
 	glPopMatrix();
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
-	for (int i=0; i<40; i++) {
+    //i<40 -> changed
+	for (int i=0; i<400; i++) {
 		glPushMatrix();
 		glTranslatef(6.0f, -0.5f, (float)-i*2.5);
 		box(0.2, 5.0, 0.2);
@@ -650,6 +683,40 @@ void render()
             startCounter--;
         }
 
+		if (isOver(g.vel)) {
+	    string mess1 = "GAME OVER!";
+	    string mess2 = "Press any key to continue";
+	    int xcent = g.xres / 2;
+	    int ycent = g.yres / 2;
+	    //int w = 200;
+	    //Rect r1;
+	    //Rect r2;
+
+	    /*
+	    glPushMatrix();
+	    glColor3f(0.0, 1.0, 0.0);
+	    glTranslatef(g.xres / 2, g.yres / 2, 0);
+	    glBegin(GL_QUADS);
+	    	glVertex2f(xcent - w, ycent - w);
+		glVertex2f(xcent - w, ycent + w);
+		glVertex2f(xcent + w, ycent + w);
+		glVertex2f(xcent + w, ycent - w);
+	    glEnd();
+	    glPopMatrix();
+	    */
+
+	    Rect r1;
+	    Rect r2;
+	    r1.bot = 0.5f * ycent + ycent;
+	    r1.left = 0.9 * xcent;
+	    r1.center = 0;
+	    r2.bot = ycent / 2;
+	    r2.left = xcent;
+	    r2.center = 0;
+	    ggprint8b(&r1, 16, 0x00887766, "GAME OVER!");
+	    ggprint8b(&r2, 16, 0x00887766, "Press any key to continue");
+		}	    
+
 
 
 
@@ -660,8 +727,15 @@ void render()
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00887766, "car framework");
 	glPopAttrib();
-	if(g.cPressed)
+    //if p is pressed then pause
+    if(g.pPressed) {
+        pause();
+    }
+
+	if(g.cPressed) {
             show_kachow();
+    }
+
 }
 
 
