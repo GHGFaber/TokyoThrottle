@@ -78,7 +78,6 @@ bool startState(int count);
 void show_helpState();
 
 int frames = 0;
-bool printGO = false;
 int startCounter = 4;
 MyImage img[1] = {"kachow.jpeg"};
 
@@ -612,7 +611,6 @@ void physics()
 void render()
 {
 	Rect r;
-	Rect s;
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	//
 	//3D mode
@@ -644,52 +642,32 @@ void render()
 	//glDisable(GL_CULL_FACE);
 
         //print counter
-        s.bot = g.yres - 20;
-        s.left = 1200;
-        s.center = 0;
+	    r.bot = g.yres - 400;
+        r.left = 1200;
+        r.center = 0;
 
-        //if(startCounter > 0) {
+        if(frames < 360) {
                 frames++;
-        //}
+                cout << frames << endl;
+        }
 
-        if(frames <= 120) {
-                ggprint8b(&s, 16, 0x00887766, "3");
+        if(frames < 120) {
+                ggprint16(&r, 16,  0x00eb1010, "3");
                 startCounter = 3;
         }
-        else if(frames >= 240 && frames < 360) {
-                s.bot = g.yres - 40;
-                ggprint8b(&s, 16, 0x00887766, "2");
+        else if(frames >= 120 && frames < 240) {
+                ggprint16(&r, 16, 0x00eb1010, "2");
                 startCounter = 2;
         }
-        else if(frames >= 360 && frames <= 720) {
-                s.bot = g.yres - 60;
-                ggprint8b(&s, 16, 0x00887766, "1");
+        else if(frames >= 240 && frames < 300) {
+                ggprint16(&r, 16, 0x00eb1010, "1");
                 startCounter = 1;
-                printGO = true;
-
         }
-
-        else if(frames > 720) {
-                s.bot = g.yres - 40;
-                ggprint8b(&s, 16, 0x00887766, " ");
+        else if(frames >= 300 && frames < 360) {
+                ggprint16(&r, 16,  0x0038eb10, "Go!");
                 startCounter = 0;
         }
-
-        if(printGO == true && frames > 720) {
-            s.bot = g.yres - 80;
-            ggprint8b(&s, 16, 0x00887766, "Go");
-            startCounter--;
-        }
-
-
-
-
-
-
-	r.bot = g.yres - 20;
-	r.left = 10;
-	r.center = 0;
-	ggprint8b(&r, 16, 0x00887766, "car framework");
+		
 	glPopAttrib();
     //if p is pressed then pause
     if(g.pPressed) {
