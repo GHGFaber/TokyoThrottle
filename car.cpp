@@ -354,6 +354,8 @@ int check_keys(XEvent *e)
 			case XK_c:
             	g.cPressed = true;
                 break;
+		//	case XK_x:
+				//show_helpState();
 			case XK_Escape:
 				return 1;
 		}
