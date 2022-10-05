@@ -21,6 +21,7 @@
 #include "myImage.h"
 #include "jquinonez.h"
 #include "sdenney.h"
+#include "jr3image.h"
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
@@ -681,6 +682,40 @@ void render()
             ggprint8b(&s, 16, 0x00887766, "Go");
             startCounter--;
         }
+
+		if (isOver(g.vel)) {
+	    string mess1 = "GAME OVER!";
+	    string mess2 = "Press any key to continue";
+	    int xcent = g.xres / 2;
+	    int ycent = g.yres / 2;
+	    //int w = 200;
+	    //Rect r1;
+	    //Rect r2;
+
+	    /*
+	    glPushMatrix();
+	    glColor3f(0.0, 1.0, 0.0);
+	    glTranslatef(g.xres / 2, g.yres / 2, 0);
+	    glBegin(GL_QUADS);
+	    	glVertex2f(xcent - w, ycent - w);
+		glVertex2f(xcent - w, ycent + w);
+		glVertex2f(xcent + w, ycent + w);
+		glVertex2f(xcent + w, ycent - w);
+	    glEnd();
+	    glPopMatrix();
+	    */
+
+	    Rect r1;
+	    Rect r2;
+	    r1.bot = 0.5f * ycent + ycent;
+	    r1.left = 0.9 * xcent;
+	    r1.center = 0;
+	    r2.bot = ycent / 2;
+	    r2.left = xcent;
+	    r2.center = 0;
+	    ggprint8b(&r1, 16, 0x00887766, "GAME OVER!");
+	    ggprint8b(&r2, 16, 0x00887766, "Press any key to continue");
+		}	    
 
 
 
