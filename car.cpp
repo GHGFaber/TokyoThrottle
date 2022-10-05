@@ -20,6 +20,7 @@
 #include "fonts.h"
 #include "myImage.h"
 #include "jquinonez.h"
+#include "sdenney.h"
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
@@ -96,7 +97,7 @@ public:
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
-	bool cPressed, wPressed, aPressed, sPressed, dPressed;
+	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -115,6 +116,8 @@ public:
 		sPressed = false;
 		dPressed = false;
 		cPressed = false;
+        //pause
+        pPressed = false;
 	}
 } g;
 
@@ -348,15 +351,16 @@ int check_keys(XEvent *e)
 				show_name_jr3();
 				break;
 			case XK_b:
+                g.pPressed = false; //unpause
+                g.cPressed = false;
 				break;
-			case XK_o:
+			case XK_p:
 				show_name_s();
+                g.pPressed = true; //pause
 				break;
 			case XK_c:
             	g.cPressed = true;
                 break;
-		//	case XK_x:
-				//show_helpState();
 			case XK_Escape:
 				return 1;
 		}
@@ -496,13 +500,35 @@ void show_kachow()
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
         glEnd();
 }
+//Pause screen pops up
+void pause() 
+{
+    Rect r;
+        //Pause Title
+        r.bot = g.yres -230;
+        r.left = 300;
+        r.center = 0;
+        ggprint8b(&r, 6, 0x00ffffff, "PAWZ-ED");
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(1.0, 1.0, 0.5);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+        glEnd();
+
+}
 
 void drawStreet()
 {
 	glPushMatrix();
 	glColor3f(0.2f, 0.2f, 0.2f);
 	float w = 5.0;
-	float d = 100.0;
+    //d = 100.0 -> changed
+	float d = 1000.0;
 	float h = 0.0;
 	glTranslatef(0.0f, 0.0f, 0.0f);
 	glBegin(GL_QUADS);
@@ -517,7 +543,8 @@ void drawStreet()
 	//double yellow line
 	glColor3f(0.8f, 0.8f, 0.2f);
 	w = 0.1;
-	d = 100.0;
+    //d = 100.0 -> changed
+	d = 1000.0;
 	h = 0.01;
 	glPushMatrix();
 	glTranslatef(-0.15f, 0.0f, 0.0f);
@@ -543,7 +570,8 @@ void drawStreet()
 	glPopMatrix();
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
-	for (int i=0; i<40; i++) {
+    //i<40 -> changed
+	for (int i=0; i<400; i++) {
 		glPushMatrix();
 		glTranslatef(6.0f, -0.5f, (float)-i*2.5);
 		box(0.2, 5.0, 0.2);
@@ -663,8 +691,15 @@ void render()
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00887766, "car framework");
 	glPopAttrib();
-	if(g.cPressed)
+    //if p is pressed then pause
+    if(g.pPressed) {
+        pause();
+    }
+
+	if(g.cPressed) {
             show_kachow();
+    }
+
 }
 
 
