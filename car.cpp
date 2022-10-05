@@ -74,6 +74,7 @@ void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
 bool startState(int count); 
+void show_helpState();
 
 int frames = 0;
 bool printGO = false;
