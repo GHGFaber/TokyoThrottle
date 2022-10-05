@@ -63,3 +63,4 @@ MyImage::MyImage(const char *fname) {
     }
     unlink(ppmname);
 }*/
+ 

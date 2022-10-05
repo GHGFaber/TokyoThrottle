@@ -1,3 +1,4 @@
+//Author: Irene Chavez
 #include <iostream>
 #include <GL/glx.h>
 #include <X11/Xlib.h>
