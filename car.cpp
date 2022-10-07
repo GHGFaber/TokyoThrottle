@@ -538,7 +538,7 @@ void help()
         r.center = 0;
         ggprint16(&r, 6, 0x00cd00cd, "HELP");
          //glClear(GL_COLOR_BUFFER_BIT);
-         glColor3f(1.0, 1.0, 0.5);
+         glColor3f(0.0, 0.0, 1.0);
          //main
         //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
         glBegin(GL_QUADS);
