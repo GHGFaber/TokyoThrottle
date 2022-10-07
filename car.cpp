@@ -546,6 +546,7 @@ void help()
                 glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+		glEnd();
 }
 void drawStreet()
 {
