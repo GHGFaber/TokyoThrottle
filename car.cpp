@@ -76,7 +76,7 @@ void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
 bool startState(int count); 
-void show_helpState();
+bool helpState(bool);
 
 int frames = 0;
 bool printGO = false;
@@ -98,7 +98,7 @@ public:
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
-	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed;
+	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed hPressed;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -119,6 +119,8 @@ public:
 		cPressed = false;
         //pause
         pPressed = false;
+		//help screen
+		hPressed = false;
 	}
 } g;
 
@@ -363,6 +365,9 @@ int check_keys(XEvent *e)
 			case XK_c:
             	g.cPressed = true;
                 break;
+			case XK_h:
+				g.hPressed = true; 
+				break;
 			case XK_Escape:
 				return 1;
 		}
@@ -523,7 +528,25 @@ void pause()
         glEnd();
 
 }
-
+//Help screen 
+void help()
+{
+	 Rect r;
+        //help title
+        r.bot = g.yres -230;
+        r.left = 300;
+        r.center = 0;
+        ggprint16(&r, 6, 0x00cd00cd, "HELP");
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(1.0, 1.0, 0.5);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+}
 void drawStreet()
 {
 	glPushMatrix();
@@ -726,8 +749,7 @@ void render()
 	r.left = 10;
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00887766, "car framework");
-	glPopAttrib();
-    //if p is pressed then pause
+	  //if p is pressed then pause
     if(g.pPressed) {
         pause();
     }
@@ -735,7 +757,11 @@ void render()
 	if(g.cPressed) {
             show_kachow();
     }
-
+	if(h.Pressed){
+		help();
+	}
+	glPopAttrib();
+  
 }
 
 
