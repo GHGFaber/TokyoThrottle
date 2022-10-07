@@ -98,7 +98,7 @@ public:
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
-	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed hPressed;
+	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
