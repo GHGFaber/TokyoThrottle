@@ -757,7 +757,7 @@ void render()
 	if(g.cPressed) {
             show_kachow();
     }
-	if(h.Pressed){
+	if(g.hPressed){
 		help();
 	}
 	glPopAttrib();
