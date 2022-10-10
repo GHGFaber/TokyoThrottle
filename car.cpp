@@ -7,7 +7,7 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 //#include <time.h>
 #include <math.h>
 #include <X11/Xlib.h>
@@ -554,7 +554,7 @@ void credits()
 }
 
 //Pause screen pops up
-void paused() 
+void pause () 
 {
     Rect r;
         //Pause Title
