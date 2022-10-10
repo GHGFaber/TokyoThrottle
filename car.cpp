@@ -536,11 +536,11 @@ void credits()
 		m.bot = g.yres -270;
         m.left = 300;
         m.center = 0;
-        ggprint8b(&r, 6, 0x00ffffff, "Moises Fuentes");
-		ggprint8b(&s, 6, 0x00ffffff, "Jarls Ramos");
-		ggprint8b(&p, 6, 0x00ffffff, "Spencer Denney");
-		ggprint8b(&l, 6, 0x00ffffff, "Irene Chavez");
-		ggprint8b(&m, 6, 0x00ffffff, "Jesus Quinonez");
+        ggprint8b(&r, 6, 0x00000000, "Moises Fuentes");
+		ggprint8b(&s, 6, 0x00000000, "Jarls Ramos");
+		ggprint8b(&p, 6, 0x00000000, "Spencer Denney");
+		ggprint8b(&l, 6, 0x00000000, "Irene Chavez");
+		ggprint8b(&m, 6, 0x00000000, "Jesus Quinonez");
          //glClear(GL_COLOR_BUFFER_BIT);
          glColor3f(1.0, 1.0, 1.0);
          //main
