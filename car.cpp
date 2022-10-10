@@ -562,7 +562,7 @@ void pause ()
         r.bot = g.yres -230;
         r.left = 300;
         r.center = 0;
-        ggprint8b(&r, 6, 0x00ffffff, "PAUSED");
+        ggprint8b(&r, 6, 0x00000000, "PAUSED");
          //glClear(GL_COLOR_BUFFER_BIT);
          glColor3f(1.0, 1.0, 0.5);
          //main
