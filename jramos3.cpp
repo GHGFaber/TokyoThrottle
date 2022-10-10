@@ -103,6 +103,7 @@ unsigned int manage_state(unsigned int s)
 }
 */
 
+// will set the state of whether or not the game is over
 bool isOver(float velocity)
 {
     bool isItOver = false;
@@ -120,41 +121,77 @@ bool isOver(float velocity)
     int ycent = yr / 2;
     int w = 200;
 */
+    // right now, velocity will be the main condition for game over
+    // actual game over conditions will be implemented later
     if (velocity > 10.0f) {
-	cout << "It ran." << endl;
+	//  cout << "It ran." << endl;
     	isItOver = true;
     }
 
     return isItOver;
 }
 
+// build the rectangle used for the game over screen.
+void build_rectangle(float width, float height, float d, float p0, float p1, 
+                     GLubyte red, GLubyte green, GLubyte blue)
+{
+    glPushMatrix(); 
+    glColor3ub(red, green, blue);
+    glTranslatef(p0, p1, 0.0f);
+    glBegin(GL_QUADS);
+          glVertex2f(-width, -height);
+          glVertex2f(-width,  height);
+          glVertex2f( width,  height);
+          glVertex2f( width, -height);
+        glEnd();
+        glPopMatrix();
+}
 
+//constructs the text used for the game over screen.
+void text_rect(Rect & rec, int bot, int left, int center, const char string[])
+{
+    //sets appropriate dimensions
+    rec.bot = bot;
+    rec.left = left;
+    rec.center = center;
+    ggprint8b(&rec, 16, 0x00ffff00, string);
+}
+
+//this will display the game over screen when the correct conditions are met;
+//the function will call both the build_rectangle() and text_rect() functions
+//in order to convey information to the game player
 void render_the_game_over(int xr, int yr) {
+    glClear(GL_COLOR_BUFFER_BIT);
+    //game over messages
     string mess1 = "GAME OVER!";
     string mess2 = "Press any key to continue";
     int xcent = xr / 2;
     int ycent = yr / 2;
     int w = 200;
+ 
+    int h = 200;
+    
+    //builds the background for the game over screen
+    build_rectangle(w, h, 0.0f, xcent, ycent, 0, 225, 0);
+
+    //for the text that will show up on screen
     Rect r1;
     Rect r2;
 
-    r1.bot = 0.5f * ycent + ycent;
-    r1.left = 0.5f * xcent;
-    r1.center = 0;
-    
-    r2.bot = 0.25f * ycent;
-    r2.left = 0.5f * xcent;
-    r2.center = 0;
+    //prints the game over message
+    text_rect(r1, 0.5f * ycent + ycent, 0.5f * xcent, 0, "GAME OVER!");
+    text_rect(r2, 0.25f * ycent, 0.5f * xcent, 0, "Press any key to continue");
 
-        glColor3f(1.0, 0.0, 0.0);
-        glBegin(GL_QUADS);
-            glVertex2f(xcent - w, ycent - w);
-            glVertex2f(xcent - w, ycent + w);
-            glVertex2f(xcent + w, ycent - w);
-            glVertex2f(xcent + w, ycent - w);
-        glEnd();
-        ggprint8b(&r1, 16, 0x00ff0000, "GAME OVER!");
-        ggprint8b(&r2, 16, 0x00ff0000, "Press any key to continue");
+    //r1.bot = 0.5f * ycent + ycent;
+    //r1.left = 0.5f * xcent;
+    //r1.center = 0;
+    
+    //r2.bot = 0.25f * ycent;
+    //r2.left = 0.5f * xcent;
+    //r2.center = 0;
+   
+    //ggprint8b(&r1, 16, 0x00ff0000, "GAME OVER!");
+    //ggprint8b(&r2, 16, 0x00ff0000, "Press any key to continue");
   
 }
 
