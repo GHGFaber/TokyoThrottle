@@ -9,7 +9,6 @@
 #include <stdlib.h>
 //#include <unistd.h>
 //#include <time.h>
-#include <string.h>
 #include <math.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -23,6 +22,7 @@
 #include "jquinonez.h"
 #include "sdenney.h"
 #include "jr3image.h"
+#include <string>
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
