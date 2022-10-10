@@ -85,7 +85,7 @@ int startCounter = 4;
 //MyImage img[1] = {"kachow.jpeg"};
 
 
-class MyImage myimage = {"kachow.jpeg"};
+//class MyImage myimage = {"kachow.jpeg"};
 
 class Texture {
 public:
