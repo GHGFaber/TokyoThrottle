@@ -18,7 +18,7 @@
 #include <GL/glu.h>
 #include "log.h"
 #include "fonts.h"
-#include "myImage.h"
+#include "mfuentes.h"
 #include "jquinonez.h"
 #include "sdenney.h"
 #include "jr3image.h"
@@ -81,16 +81,17 @@ bool helpState(bool);
 int frames = 0;
 bool printGO = false;
 int startCounter = 4;
-MyImage img[1] = {"kachow.jpeg"};
+//MyImage img[1] = {"kachow.jpeg"};
 
-class MyImage myimage = {"kachow.jpeg"};
+
+/*class MyImage myimage = {"kachow.jpeg"};
 class Texture {
 public:
     MyImage *backImage;
     GLuint backTexture;
     float xc[2];
     float yc[2];
-};
+};*/
 
 class Global {
 public:
@@ -101,7 +102,7 @@ public:
 	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	float vel;
 	//int xres, yres;	
-	Texture tex;
+	//Texture tex;
 	Global() {
 		//constructor
 		xres=640;
@@ -260,9 +261,10 @@ void init_opengl()
 	glEnable(GL_LIGHT0);
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
-	g.tex.backImage = &img[0];
+	//g.tex.backImage = &img[0];
     //create opengl texture elements
-    glGenTextures(1, &g.tex.backTexture);
+
+    /*glGenTextures(1, &g.tex.backTexture);
     int w = g.tex.backImage->width;
     int h = g.tex.backImage->height;
     glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
@@ -274,7 +276,7 @@ void init_opengl()
     g.tex.xc[1] = 0.25;
     g.tex.yc[0] = 0.0;
     g.tex.yc[1] = 1.0;
-
+	*/
 	initialize_fonts();
 	//init_textures();
 }
@@ -356,14 +358,14 @@ int check_keys(XEvent *e)
 			case XK_b:
                 //g.pPressed = false; //unpause
                 g.pPressed = unpaused(g.pPressed);
-                g.cPressed = false;
+                g.cPressed = rmcredits(g.cPressed);
 				break;
 			case XK_p:
 				show_name_s();
                 g.pPressed = paused(g.pPressed); //pause
 				break;
 			case XK_c:
-            	g.cPressed = true;
+            	g.cPressed = credits(g.cPressed);
                 break;
 			case XK_h:
 				g.hPressed = true; 
@@ -494,6 +496,7 @@ void trans_vector(Matrix mat, const Vec in, Vec out)
 	out[1] = f1;
 	out[2] = f2;
 }
+/*
 void show_kachow()
 {
          //glClear(GL_COLOR_BUFFER_BIT);
@@ -507,6 +510,48 @@ void show_kachow()
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
         glEnd();
 }
+*/
+void credits() 
+{
+    Rect r;
+	Rect s;
+	Rect p;
+	Rect l;
+	Rect m;
+        //credits location 
+        r.bot = g.yres -230;	
+        r.left = 300;
+        r.center = 0;
+		s.bot = g.yres -240;
+        s.left = 300;
+        s.center = 0;
+		p.bot = g.yres -250;
+        p.left = 300;
+        p.center = 0;
+		l.bot = g.yres -260;
+        l.left = 300;
+        l.center = 0;
+		m.bot = g.yres -270;
+        m.left = 300;
+        m.center = 0;
+        ggprint8b(&r, 6, 0x00ffffff, "Moises Fuentes");
+		ggprint8b(&s, 6, 0x00ffffff, "Jarls Ramos");
+		ggprint8b(&p, 6, 0x00ffffff, "Spencer Denney");
+		ggprint8b(&l, 6, 0x00ffffff, "Irene Chavez");
+		ggprint8b(&m, 6, 0x00ffffff, "Jesus Quinonez");
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(1.0, 1.0, 1.0);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+        glEnd();
+
+}
+
 //Pause screen pops up
 void pause() 
 {
@@ -726,7 +771,7 @@ void render()
     }
 
 	if(g.cPressed) {
-            show_kachow();
+        credits()
     }
 	if(g.hPressed){
 		help();

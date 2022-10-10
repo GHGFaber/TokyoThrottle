@@ -4,7 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "myImage.h"
+#include "mfuentes.h"
 
 using namespace std;
 
@@ -12,7 +12,19 @@ void show_name(){
     cout << "Moises Fuentes:";
 }
 
-extern class MyImage myimage;
+bool credits(bool pressed)
+{
+    pressed = true;
+	return pressed;
+}
+
+bool rmcredits(bool pressed)
+{
+    pressed = false;
+	return pressed;
+}
+
+/*extern class MyImage myimage;
 
 MyImage::~MyImage() { delete [] data; }
 
@@ -50,3 +62,4 @@ MyImage::MyImage(const char *fname) {
     }
     unlink(ppmname);
 }
+*/
