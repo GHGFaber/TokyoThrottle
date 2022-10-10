@@ -56,7 +56,7 @@ typedef Flt	Matrix[4][4];
 #define rnd() (float)rand() / (float)RAND_MAX
 #define PI 3.14159265358979323846264338327950
 #define MY_INFINITY 1000.0
-using namespace std;
+//using namespace std;
 //
 // TODO: Finalize WASD movement of the camera/car object
 // uncomment all commented-out lines when finished
