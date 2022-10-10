@@ -7,11 +7,11 @@
 //
 #include <stdio.h>
 #include <stdlib.h>
-//#include <unistd.h>
+#include <unistd.h>
 //#include <time.h>
 #include <math.h>
 #include <X11/Xlib.h>
-//#include <X11/Xutil.h>
+#include <X11/Xutil.h>
 #include <X11/keysym.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
@@ -56,7 +56,7 @@ typedef Flt	Matrix[4][4];
 #define rnd() (float)rand() / (float)RAND_MAX
 #define PI 3.14159265358979323846264338327950
 #define MY_INFINITY 1000.0
-
+using namespace std;
 //
 // TODO: Finalize WASD movement of the camera/car object
 // uncomment all commented-out lines when finished
