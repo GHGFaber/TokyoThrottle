@@ -554,7 +554,7 @@ void credits()
 }
 
 //Pause screen pops up
-void pause() 
+void paused() 
 {
     Rect r;
         //Pause Title
