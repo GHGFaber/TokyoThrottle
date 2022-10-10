@@ -102,7 +102,7 @@ public:
 	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	float vel;
 	//int xres, yres;	
-	//Texture tex;
+	Texture tex;
 	Global() {
 		//constructor
 		xres=640;
@@ -771,7 +771,7 @@ void render()
     }
 
 	if(g.cPressed) {
-        credits()
+        credits();
     }
 	if(g.hPressed){
 		help();
