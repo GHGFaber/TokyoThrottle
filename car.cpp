@@ -84,14 +84,15 @@ int startCounter = 4;
 //MyImage img[1] = {"kachow.jpeg"};
 
 
-/*class MyImage myimage = {"kachow.jpeg"};
+class MyImage myimage = {"kachow.jpeg"};
+
 class Texture {
 public:
     MyImage *backImage;
     GLuint backTexture;
     float xc[2];
     float yc[2];
-};*/
+};
 
 class Global {
 public:
