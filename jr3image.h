@@ -13,5 +13,8 @@ extern void show_game_over(int xr, int yr, float position);
 */
 
 extern bool isOver(float velocity);
+extern bool challenge_mode(float position);
+//extern void render_the_game_over(int xr, int yr);
+extern void render_the_game_over(int xr, int yr, bool flag);
 
 #endif

@@ -1,4 +1,4 @@
-//
+
 //program: car.cpp
 //author:  Gordon Griesel
 //date:    summer 2017
@@ -101,7 +101,9 @@ public:
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
+	unsigned int feature_mode; //race mode
 	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
+	bool raceModeOn = false;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -372,6 +374,10 @@ int check_keys(XEvent *e)
 			case XK_h:
 				g.hPressed = true; 
 				break;
+			case XK_r:
+				g.feature_mode ^= 1;
+				if (g.feature_mode == 1)
+					g.raceModeOn = true;
 			case XK_Escape:
 				return 1;
 		}
@@ -725,10 +731,15 @@ void render()
 
 
 		if (isOver(g.vel)) {
+		
+		render_the_game_over(g.xres, g.yres, g.raceModeOn);
+		
+		/*
 	    string mess1 = "GAME OVER!";
 	    string mess2 = "Press any key to continue";
 	    int xcent = g.xres / 2;
 	    int ycent = g.yres / 2;
+	    */
 	    //int w = 200;
 	    //Rect r1;
 	    //Rect r2;
@@ -745,7 +756,8 @@ void render()
 	    glEnd();
 	    glPopMatrix();
 	    */
-
+	    
+	    /*
 	    Rect r1;
 	    Rect r2;
 	    r1.bot = 0.5f * ycent + ycent;
@@ -756,6 +768,8 @@ void render()
 	    r2.center = 0;
 	    ggprint8b(&r1, 16, 0x00887766, "GAME OVER!");
 	    ggprint8b(&r2, 16, 0x00887766, "Press any key to continue");
+	    */
+	    
 		}	    
 
 

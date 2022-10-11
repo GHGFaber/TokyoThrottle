@@ -123,7 +123,7 @@ bool isOver(float velocity)
 */
     // right now, velocity will be the main condition for game over
     // actual game over conditions will be implemented later
-    if (velocity > 10.0f) {
+    if (velocity > -10.0f) {
 	//  cout << "It ran." << endl;
     	isItOver = true;
     }
@@ -147,6 +147,20 @@ void build_rectangle(float width, float height, float d, float p0, float p1,
         glPopMatrix();
 }
 
+/*
+bool challenge_mode(float position)
+{
+	bool passed = false;
+	
+	float goal = 50.0f;
+	
+	if (position >= goal)
+		passed = true;
+	
+	return passed;
+}
+*/
+
 //constructs the text used for the game over screen.
 void text_rect(Rect & rec, int bot, int left, int center, const char string[])
 {
@@ -160,8 +174,11 @@ void text_rect(Rect & rec, int bot, int left, int center, const char string[])
 //this will display the game over screen when the correct conditions are met;
 //the function will call both the build_rectangle() and text_rect() functions
 //in order to convey information to the game player
-void render_the_game_over(int xr, int yr) {
-    glClear(GL_COLOR_BUFFER_BIT);
+void render_the_game_over(int xr, int yr, bool flag) {
+	
+	if (!flag) {return;}
+	
+    //glClear(GL_COLOR_BUFFER_BIT);
     //game over messages
     string mess1 = "GAME OVER!";
     string mess2 = "Press any key to continue";
@@ -170,17 +187,17 @@ void render_the_game_over(int xr, int yr) {
     int w = 200;
  
     int h = 200;
-    
-    //builds the background for the game over screen
-    build_rectangle(w, h, 0.0f, xcent, ycent, 0, 225, 0);
 
     //for the text that will show up on screen
     Rect r1;
     Rect r2;
 
     //prints the game over message
-    text_rect(r1, 0.5f * ycent + ycent, 0.5f * xcent, 0, "GAME OVER!");
-    text_rect(r2, 0.25f * ycent, 0.5f * xcent, 0, "Press any key to continue");
+    text_rect(r1, ycent, 0.9f * xcent, 0, "GAME OVER!");
+    text_rect(r2, 0.9 * ycent, 0.6f * xcent, 0, "Press any key to continue");
+    
+    //builds the background for the game over screen
+    build_rectangle(w, h, 0.0f, xcent, ycent, 0, 225, 0);
 
     //r1.bot = 0.5f * ycent + ycent;
     //r1.left = 0.5f * xcent;
@@ -195,8 +212,18 @@ void render_the_game_over(int xr, int yr) {
   
 }
 
+//how will this be implemented with feature mode?
+void you_win(bool flag, int xr, int yr)
+{
+	Rect r3;
+	
+	int xcent = xr / 2;
+	int ycent = yr / 2;
+	
+	if (flag)
+		text_rect(r3, ycent, xcent * 0.8, 0, "YOU WIN!!!!!");
+}
 void show_name_jr3()
 {
     std::cout << "Jarl Ramos / Geoffrey De Palme" << std::endl;
 }
-
