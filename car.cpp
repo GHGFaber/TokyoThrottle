@@ -98,13 +98,13 @@ public:
 class Global {
 public:
 	int xres, yres;
-    float rails = 0.2;
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
 	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	bool raceModeOn = false;
+	bool didYouWin = false;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -226,6 +226,8 @@ int main()
 {
 	init_opengl();
 	int done = 0;
+	int numFrames = 0;
+	int initPosition = get_init_pos(g.cameraPosition[0]);
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -233,6 +235,8 @@ int main()
 			check_mouse(&e);
 			done = check_keys(&e);
 		}
+		if (g.raceModeOn)
+			race_mode(numFrames, initPosition, g.cameraPosition[0], g.didYouWin);
 		physics();
 		render();
 		x11.swapBuffers();
@@ -375,13 +379,11 @@ int check_keys(XEvent *e)
 			case XK_h:
 				g.hPressed = true; 
 				break;
-            case XK_z:
-                g.rails = rails(g.rails);
-                break;
 			case XK_r:
 				g.feature_mode ^= 1;
 				if (g.feature_mode == 1)
 					g.raceModeOn = true;
+				break;
 			case XK_Escape:
 				return 1;
 		}
@@ -651,41 +653,18 @@ void drawStreet()
 		glVertex3f( w, h, d);
 	glEnd();
 	glPopMatrix();
-    double k = 2.0;
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
     //i<40 -> changed
 	for (int i=0; i<400; i++) {
-        if (i <= 200) {
-            k = k + 0.05;
 		glPushMatrix();
 		glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-        //1st element was 0.2
-        //2nd element was 5.0
-		box(g.rails, k, 0.2);
+		box(0.2, 5.0, 0.2);
 		glPopMatrix();
 		glPushMatrix();
 		glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-        //1st element was 0.2
-        //2nd element was 5.0
-		box(g.rails, k, 0.2);
+		box(0.2, 5.0, 0.2);
 		glPopMatrix();
-        }
-        else if (i > 200) {
-            k = k - 0.05;
-        glPushMatrix();
-		glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-        //1st&3rd element was 0.2
-        //2nd element was 5.0
-		box(g.rails, k, 0.2);
-		glPopMatrix();
-		glPushMatrix();
-		glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-        //1st&3rd element was 0.2
-        //2nd element was 5.0
-		box(g.rails, k, 0.2);
-		glPopMatrix();
-        }
 	}
 }
 
@@ -754,12 +733,17 @@ void render()
     }   
     startPrint(frames);
     startCounter = startCount(frames);
+    
+    render_game_mode_title(g.raceModeOn, g.xres, g.yres);
+    you_win(g.didYouWin, g.xres, g.yres);
+    you_lose(g.didYouWin, g.xres, g.yres);
+    
     //Start state
 
 
-		if (isOver(g.vel)) {
+		//if (isOver(g.vel)) {
 		
-		render_the_game_over(g.xres, g.yres, g.raceModeOn);
+		//render_the_game_over(g.xres, g.yres, g.raceModeOn);
 		
 		/*
 	    string mess1 = "GAME OVER!";
@@ -797,7 +781,7 @@ void render()
 	    ggprint8b(&r2, 16, 0x00887766, "Press any key to continue");
 	    */
 	    
-		}	    
+		//}	    
 
 
 
@@ -822,6 +806,10 @@ void render()
 	glPopAttrib();
   
 }
+
+
+
+
 
 
 

@@ -176,12 +176,10 @@ void text_rect(Rect & rec, int bot, int left, int center, const char string[])
 //in order to convey information to the game player
 void render_the_game_over(int xr, int yr, bool flag) {
 	
-	if (!flag) {return;}
+	if (flag) {return;}
 	
     //glClear(GL_COLOR_BUFFER_BIT);
     //game over messages
-    string mess1 = "GAME OVER!";
-    string mess2 = "Press any key to continue";
     int xcent = xr / 2;
     int ycent = yr / 2;
     int w = 200;
@@ -198,21 +196,44 @@ void render_the_game_over(int xr, int yr, bool flag) {
     
     //builds the background for the game over screen
     build_rectangle(w, h, 0.0f, xcent, ycent, 0, 225, 0);
-
-    //r1.bot = 0.5f * ycent + ycent;
-    //r1.left = 0.5f * xcent;
-    //r1.center = 0;
-    
-    //r2.bot = 0.25f * ycent;
-    //r2.left = 0.5f * xcent;
-    //r2.center = 0;
-   
-    //ggprint8b(&r1, 16, 0x00ff0000, "GAME OVER!");
-    //ggprint8b(&r2, 16, 0x00ff0000, "Press any key to continue");
   
 }
 
 //how will this be implemented with feature mode?
+void render_game_mode_title(bool flag, int xr, int yr)
+{
+	Rect rRM;
+	
+	if (flag)
+		text_rect(rRM, xr / 2, yr + 30, 0, "RACE MODE");
+
+}
+float get_init_pos(float position)
+{
+	return position;
+}
+void race_mode(int frames, float init_pos, float position,
+			   bool & won)
+{
+	int countdown = 5;
+	frames = frames + 60;
+	if (frames <= 60)
+		--countdown;
+	else if (frames > 60 && frames <= 120)
+		--countdown;
+	else if (frames > 120 && frames <= 180)
+		--countdown;
+	else if (frames > 180 && frames <= 240)
+		--countdown;
+	else if (frames > 240 && frames <= 300)
+		--countdown;
+		
+	if (position >= init_pos - 5.0f)
+		won = true;
+		
+	if (countdown == 0)
+		won = false;
+}
 void you_win(bool flag, int xr, int yr)
 {
 	Rect r3;
@@ -222,6 +243,11 @@ void you_win(bool flag, int xr, int yr)
 	
 	if (flag)
 		text_rect(r3, ycent, xcent * 0.8, 0, "YOU WIN!!!!!");
+}
+void you_lose(bool flag, int xr, int yr)
+{
+	if (!flag)
+		render_the_game_over(flag, xr, yr);
 }
 void show_name_jr3()
 {
