@@ -98,6 +98,7 @@ public:
 class Global {
 public:
 	int xres, yres;
+    float rails = 0.2;
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
@@ -374,6 +375,9 @@ int check_keys(XEvent *e)
 			case XK_h:
 				g.hPressed = true; 
 				break;
+            case XK_z:
+                g.rails = rails(g.rails);
+                break;
 			case XK_r:
 				g.feature_mode ^= 1;
 				if (g.feature_mode == 1)
@@ -647,18 +651,41 @@ void drawStreet()
 		glVertex3f( w, h, d);
 	glEnd();
 	glPopMatrix();
+    double k = 2.0;
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
     //i<40 -> changed
 	for (int i=0; i<400; i++) {
+        if (i <= 200) {
+            k = k + 0.05;
 		glPushMatrix();
 		glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-		box(0.2, 5.0, 0.2);
+        //1st element was 0.2
+        //2nd element was 5.0
+		box(g.rails, k, 0.2);
 		glPopMatrix();
 		glPushMatrix();
 		glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-		box(0.2, 5.0, 0.2);
+        //1st element was 0.2
+        //2nd element was 5.0
+		box(g.rails, k, 0.2);
 		glPopMatrix();
+        }
+        else if (i > 200) {
+            k = k - 0.05;
+        glPushMatrix();
+		glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+        //1st&3rd element was 0.2
+        //2nd element was 5.0
+		box(g.rails, k, 0.2);
+		glPopMatrix();
+		glPushMatrix();
+		glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+        //1st&3rd element was 0.2
+        //2nd element was 5.0
+		box(g.rails, k, 0.2);
+		glPopMatrix();
+        }
 	}
 }
 
