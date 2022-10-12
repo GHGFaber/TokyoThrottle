@@ -24,6 +24,15 @@ bool unpaused(bool pressed)
     pressed = false;
     return pressed;
 }
+double rails(double rails) {
+    if (rails != 5.0) {
+        return 5.0;
+    }
+    if (rails != 0.2) {
+        return 0.2;
+    }
+    return 0;
+}
 /*
 extern class MyImage myimage;
 

@@ -7,6 +7,7 @@
 extern void show_name_s();
 extern bool paused(bool);
 extern bool unpaused(bool);
+extern double rails(double);
 
 #ifndef _MYIMAGE_H_
 #define _MYIMAGE_H_
