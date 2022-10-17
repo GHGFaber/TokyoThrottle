@@ -103,7 +103,7 @@ public:
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
-	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
+	bool ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	bool raceModeOn = false;
 	bool didYouWin = false;
 	float vel;
@@ -119,6 +119,7 @@ public:
 		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
 		lightPosition[3] = 1.0f;
 		vel = 0.0f;
+		ePressed = false;
 		wPressed = false;
 		aPressed = false;
 		sPressed = false;
@@ -611,6 +612,35 @@ void help()
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
 		glEnd();
 }
+void startMenu()
+{
+         Rect r;
+         Rect s;
+        //start menu
+        r.bot = g.yres -230;
+        r.left = 230;
+        r.center = 0;
+        s.bot = g.yres -270;
+        s.left = 250;
+        s.center = 0;
+        ggprint16(&r, 6, 0x00cd00cd, "TOKYO THROTTLE!");
+
+        ggprint16(&s, 6, 0x00cd00cd, "Press E to Start!");
+        ggprint16(&s, 6, 0x00000000, "Press E to Start!");
+
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(0.0, 0.0, 0.0);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(0,      0);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(0,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  0);
+                glEnd();
+}
+
+
 void drawStreet()
 {
 	glPushMatrix();
@@ -754,6 +784,13 @@ void render()
 	//glDisable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
 
+
+	if(!g.ePressed)
+	{
+		startMenu();
+	}
+	else
+	{
     //Start state 
     if(frames < 480) {
         frames++;
@@ -829,6 +866,7 @@ void render()
     }
 	if(g.hPressed){
 		help();
+	}
 	}
 	glPopAttrib();
   

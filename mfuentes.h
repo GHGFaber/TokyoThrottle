@@ -14,3 +14,4 @@ public:
 
 extern bool credits(bool pressed);
 extern bool rmcredits(bool pressed);
+extern bool startMenu(bool pressed);

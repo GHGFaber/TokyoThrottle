@@ -24,6 +24,12 @@ bool rmcredits(bool pressed)
 	return pressed;
 }
 
+bool startMenu(bool pressed)
+{
+    pressed = true;
+    return pressed; 
+}
+
 /*extern class MyImage myimage;
 
 MyImage::~MyImage() { delete [] data; }
