@@ -384,6 +384,9 @@ int check_keys(XEvent *e)
 			case XK_h:
 				g.hPressed = true; 
 				break;
+			case XK_e:
+				g.ePressed = startMenu(g.ePressed); 
+				break;
 			case XK_r:
 				g.feature_mode ^= 1;
 				if (g.feature_mode == 1)
