@@ -98,6 +98,8 @@ public:
 class Global {
 public:
 	int xres, yres;
+	int iniPos;
+	int rmCountDown;
     float rails = 0.2;
 	Flt aspectRatio;
 	Vec cameraPosition;
@@ -106,6 +108,7 @@ public:
 	bool ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	bool raceModeOn = false;
 	bool didYouWin = false;
+	// float curTheta;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -113,12 +116,15 @@ public:
 		//constructor
 		xres=640;
 		yres=480;
+		
+		rmCountDown = 5;
 		aspectRatio = (GLfloat)xres / (GLfloat)yres;
 		MakeVector(0.0, 1.0, 8.0, cameraPosition);
 		//light is up high, right a little, toward a little
 		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
 		lightPosition[3] = 1.0f;
 		vel = 0.0f;
+		// curTheta = 0.0f;
 		ePressed = false;
 		wPressed = false;
 		aPressed = false;
@@ -227,9 +233,17 @@ public:
 int main()
 {
 	init_opengl();
+	bool second0 = false;
+	bool second1 = false;
+	bool second2 = false;
+	bool second3 = false;
+	bool second4 = false;
+	bool second5 = false;
 	int done = 0;
 	int numFrames = 0;
+	int curCountDown = g.rmCountDown;
 	int initPosition = get_init_pos(g.cameraPosition[0]);
+	g.iniPos = initPosition;
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -238,7 +252,10 @@ int main()
 			done = check_keys(&e);
 		}
 		if (g.raceModeOn)
-			race_mode(numFrames, initPosition, g.cameraPosition[0], g.didYouWin);
+			race_mode(curCountDown, numFrames, g.iniPos, 
+					  g.cameraPosition[2], second0, second1, 
+					  second2, second3, second4, second5, g.didYouWin,
+					  g.xres, g.yres);
 		physics();
 		render();
 		x11.swapBuffers();
@@ -732,23 +749,29 @@ void physics()
 {
     if (g.wPressed) {
 		accelerate(g.vel);
-		g.cameraPosition[2] -= g.vel;
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
+        g.cameraPosition[2] -= g.vel;
 		g.wPressed = false;
 	}
 	if (g.aPressed) {
 		accelerate(g.vel);
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
+        //shift_left(g.curTheta);
 		//g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
 	}	
 	if (g.sPressed) {
 		decelerate(g.vel);
-		g.cameraPosition[2] += g.vel;
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
+        g.cameraPosition[2] += g.vel;
 		g.sPressed = false;
 	}
 	if (g.dPressed) {
 		accelerate(g.vel);
-		//g.cameraPosition[2] -= g.vel;
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
+        //shift_right(g.curTheta);
+        //g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
 	}	
@@ -801,9 +824,9 @@ void render()
     startPrint(frames);
     startCounter = startCount(frames);
     
+    go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
     render_game_mode_title(g.raceModeOn, g.xres, g.yres);
-    you_win(g.didYouWin, g.xres, g.yres);
-    you_lose(g.didYouWin, g.xres, g.yres);
+
     
     //Start state
 
@@ -874,6 +897,12 @@ void render()
 	glPopAttrib();
   
 }
+
+
+
+
+
+
 
 
 

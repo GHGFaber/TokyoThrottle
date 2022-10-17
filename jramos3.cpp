@@ -2,6 +2,7 @@
 #include "jr3image.h"
 #include "fonts.h"
 #include <cstring>
+#include <cmath>
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glu.h>
@@ -13,6 +14,9 @@ using namespace std;
 // ORGN: CSUB - CMPS-3350
 // DATE: 5 October 2022
 // ============================================================================
+
+const float RAD_CONV = 0.0175f;
+
 class OtherCar
 {
     private:
@@ -23,60 +27,6 @@ class OtherCar
     // add data regarding car sprites
     // tie the car position to the street
 };
-/*
-extern class MyImage myimage;
-
-MyImage::~MyImage() {delete [] data;}
-    MyImage::MyImage(const char *fname) {
-        if (fname[0] == '\0')
-            return;
-        char name[40];
-        strcpy (name, fname);
-        int slen = strlen(name);
-        name[slen - 4] = '\0';
-        char ppmname[80];
-        sprintf(ppmname, "%s.ppm", name);
-        char ts[100];
-        sprintf(ts, "convert %s %s, fname, ppmname");
-        system(ts);
-        FILE *fpi = fopen(ppmname, "r");
-        if (fpi) {
-            char line[200];
-            fgets(line, 200, fpi);
-            fgets(line, 200, fpi);
-            //skip comments and blank lines
-            while (line[0] == '#' || strlen(line) < 2)
-                fgets(line, 200, fpi);
-                //get pixel data
-                int n = width * height * 3;
-                data = new unsigned char[n];
-                for (int i = 0; i < n; ++i)
-                    data[i] = fgetc(fpi);
-                    fclose(fpi);
-        } else {
-            printf("ERROR opening image: %s\n", ppmname);
-            exit(0);
-        }
-        unlink(ppmname);
-    }
-*/
-enum Direction
-{
-    Left,
-    Right
-};
-
-void car_motion(Direction direction, float & position)
-{
-    // add code relating to movement of the camera (W, A, S, D)
-    // this might work with cameraPosition[0]
-    switch (direction) {
-        case (Left):
-            position -= 1.0f;
-        case (Right):
-            position += 1.0f;
-    }
-}
 
 void accelerate(float & velocity)
 {
@@ -91,10 +41,97 @@ void decelerate(float & velocity)
     velocity -= 0.1f;
 }
 
-void apply_velocity(int vel, float & position)
+void go_forwards(float & vel, float & cp1, float & cp2, float theta)
 {
-    position += vel;
+    accelerate(vel);
+    //go forward according to value of angle
+    if (theta == 0.0f)
+        cp1 -= vel;
+    else if (theta == 90.0f)
+        cp2 += vel;
+    else if (theta == 180.0f)
+        cp1 += vel;
+    else if (theta == 270.0f)
+        cp2 -= vel;
+    else if (theta == 360.0f)
+        cp1 -= vel;
+    else {
+        if (theta < 90.0f) {
+            cp1 -= vel * cos(conv_rad(theta));
+            cp2 += vel * sin(conv_rad(theta));
+        }
+        else if (theta > 90.0f && theta < 180.0f) {
+            cp2 += vel * cos(conv_rad(theta - 90.0f));
+            cp1 += vel * sin(conv_rad(theta - 90.0f));
+        }
+        else if (theta > 180.0f && theta < 270.0f) {
+            cp2 -= vel * sin(conv_rad(theta - 180.0f));
+            cp1 += vel * cos(conv_rad(theta - 180.0f));
+        }
+        else if (theta > 270.0f && theta < 360.0f) {
+            cp2 -= vel * cos(conv_rad(theta - 270.0f));
+            cp1 -= vel * sin(conv_rad(theta - 270.0f));
+        }
+    }
+    
+    if (theta >= 360.0f)
+        theta = 0.0f;
 }
+
+void go_backwards(float & vel, float & cp1, float & cp2, float theta)
+{
+    decelerate(vel);
+    //go backward according to value of angle
+    if (theta == 0.0f)
+        cp1 += vel;
+    else if (theta == 90.0f)
+        cp2 -= vel;
+    else if (theta == 180.0f)
+        cp1 -= vel;
+    else if (theta == 270.0f)
+        cp2 += vel;
+    else if (theta == 360.0f)
+        cp1 += vel;
+    else {
+        if (theta < 90.0f) {
+            cp1 += vel * cos(conv_rad(theta));
+            cp2 -= vel * sin(conv_rad(theta));
+        }
+        else if (theta > 90.0f && theta < 180.0f) {
+            cp2 -= vel * cos(conv_rad(theta - 90.0f));
+            cp1 -= vel * sin(conv_rad(theta - 90.0f));
+        }
+        else if (theta > 180.0f && theta < 270.0f) {
+            cp2 += vel * sin(conv_rad(theta - 180.0f));
+            cp1 -= vel * cos(conv_rad(theta - 180.0f));
+        }
+        else if (theta > 270.0f && theta < 360.0f) {
+            cp2 += vel * cos(conv_rad(theta - 270.0f));
+            cp1 += vel * sin(conv_rad(theta - 270.0f));
+        }
+    }
+    
+    if (theta >= 360.0f)
+        theta = 0.0f;
+}
+
+void shift_left(float & theta)
+{
+    // modify camera angle
+    theta = theta - 0.75f;
+}
+
+void shift_right(float & theta)
+{
+    //modify camera position
+    theta = theta + 0.75f;
+}
+
+float conv_rad(float deg)
+{
+    return deg * RAD_CONV;
+}
+
 /*
 unsigned int manage_state(unsigned int s)
 {
@@ -107,26 +144,9 @@ unsigned int manage_state(unsigned int s)
 bool isOver(float velocity)
 {
     bool isItOver = false;
-/*
-    int xcent = xr / 2;
-    int ycent = yr / 2;
-    int w = 100;
-    glColor3f(1.0, 0.0, 0.0);
-    glBegin(GL_QUADS);
-    	glVertex2f(xcent - w, ycent - w);
-	glVertex2f(xcent - w, ycent - w);
-	glVertex2f(xcent + w, ycent + w);
 
-    int xcent = xr / 2;
-    int ycent = yr / 2;
-    int w = 200;
-*/
-    // right now, velocity will be the main condition for game over
-    // actual game over conditions will be implemented later
-    if (velocity > -10.0f) {
-	//  cout << "It ran." << endl;
+    if (velocity > -10.0f)
     	isItOver = true;
-    }
 
     return isItOver;
 }
@@ -147,20 +167,6 @@ void build_rectangle(float width, float height, float d, float p0, float p1,
         glPopMatrix();
 }
 
-/*
-bool challenge_mode(float position)
-{
-	bool passed = false;
-	
-	float goal = 50.0f;
-	
-	if (position >= goal)
-		passed = true;
-	
-	return passed;
-}
-*/
-
 //constructs the text used for the game over screen.
 void text_rect(Rect & rec, int bot, int left, int center, const char string[])
 {
@@ -168,16 +174,13 @@ void text_rect(Rect & rec, int bot, int left, int center, const char string[])
     rec.bot = bot;
     rec.left = left;
     rec.center = center;
-    ggprint8b(&rec, 16, 0x00ffff00, string);
+    ggprint16(&rec, 16, 0x00ffff00, string);
 }
 
 //this will display the game over screen when the correct conditions are met;
 //the function will call both the build_rectangle() and text_rect() functions
 //in order to convey information to the game player
-void render_the_game_over(int xr, int yr, bool flag) {
-	
-	if (flag) {return;}
-	
+void render_the_game_over(int xr, int yr) {
     //glClear(GL_COLOR_BUFFER_BIT);
     //game over messages
     int xcent = xr / 2;
@@ -205,49 +208,87 @@ void render_game_mode_title(bool flag, int xr, int yr)
 	Rect rRM;
 	
 	if (flag)
-		text_rect(rRM, xr / 2, yr + 30, 0, "RACE MODE");
+		text_rect(rRM, 80, 1230, 0, "RACE MODE");
 
 }
 float get_init_pos(float position)
 {
 	return position;
 }
-void race_mode(int frames, float init_pos, float position,
-			   bool & won)
+void race_mode(int & ctdn, int & frames, float init_pos, float position,
+			   bool & sec0, bool & sec1, bool & sec2, bool & sec3, 
+			   bool & sec4, bool & sec5, bool & won, int xr, int yr)
 {
-	int countdown = 5;
-	frames = frames + 60;
-	if (frames <= 60)
-		--countdown;
-	else if (frames > 60 && frames <= 120)
-		--countdown;
-	else if (frames > 120 && frames <= 180)
-		--countdown;
-	else if (frames > 180 && frames <= 240)
-		--countdown;
-	else if (frames > 240 && frames <= 300)
-		--countdown;
-		
-	if (position >= init_pos - 5.0f)
-		won = true;
-		
-	if (countdown == 0)
-		won = false;
+	Rect rCD;
+	
+	cout << frames << endl;
+	cout << ctdn << endl;
+	frames = frames + 1;
+	if (frames <= 60 && !sec0) {
+		// --ctdn;
+		sec0 = true;
+	} else if (frames > 60 && frames <= 120 && !sec1) {
+		--ctdn;
+		sec1 = true;
+	} else if (frames > 120 && frames <= 180 && !sec2) {
+		--ctdn;
+		sec2 = true;
+	} else if (frames > 180 && frames <= 240 && !sec3) {
+		--ctdn;
+		sec3 = true;
+	} else if (frames > 240 && frames <= 300 && !sec4) {
+		--ctdn;
+		sec4 = true;
+	} else if (frames > 300 && frames <= 360 && !sec5) {
+		--ctdn;
+		sec5 = true;
+	}
+	
+	if (position <= init_pos - 500.0f)
+		you_win(xr, yr);
+	else { 
+		switch (ctdn) {
+			case 5:
+				text_rect(rCD, 200, 1000, 0, "5");
+				break; 
+			case 4:
+				text_rect(rCD, 200, 1000, 0, "4");
+				break;
+			case 3:
+				// cout << "This case ran" << endl;
+				text_rect(rCD, 200, 1000, 0, "3");
+				break; 
+			case 2:
+				text_rect(rCD, 200, 1000, 0, "2");
+				break; 
+			case 1:
+				text_rect(rCD, 200, 1000, 0, "1");
+				break;
+			case 0:
+				you_lose(xr, yr);
+				break;
+			}
+	}
+	// if (countdown == 0)
+	//   won = false;
 }
-void you_win(bool flag, int xr, int yr)
+void go_go_go(bool flag, float init_pos, float position)
 {
+	Rect r4;
+	
+	if (flag && position > init_pos - 500.0f)
+		 text_rect(r4, 1200, 1200, 0, "GO GO GO!!!!!");
+	
+}
+void you_win(int xr, int yr)
+{	
 	Rect r3;
-	
-	int xcent = xr / 2;
-	int ycent = yr / 2;
-	
-	if (flag)
-		text_rect(r3, ycent, xcent * 0.8, 0, "YOU WIN!!!!!");
+	text_rect(r3, 700, 1230, 0, "YOU WIN!!!!!");
 }
-void you_lose(bool flag, int xr, int yr)
+void you_lose(int xr, int yr)
 {
-	if (!flag)
-		render_the_game_over(flag, xr, yr);
+	// cout << "You have lost." << endl;
+	render_the_game_over(xr, yr);
 }
 void show_name_jr3()
 {
