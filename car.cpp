@@ -78,6 +78,7 @@ void accelerate(float & velocity);
 void decelerate(float & velocity);
 bool startState(int count); 
 bool helpState(bool);
+void pause_state();
 
 int frames = 0;
 bool printGO = false;
@@ -105,7 +106,7 @@ public:
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
-	bool ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
+	bool zPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	bool raceModeOn = false;
 	bool didYouWin = false;
 	// float curTheta;
@@ -125,6 +126,7 @@ public:
 		lightPosition[3] = 1.0f;
 		vel = 0.0f;
 		// curTheta = 0.0f;
+        zPressed = false;
 		ePressed = false;
 		wPressed = false;
 		aPressed = false;
@@ -385,7 +387,7 @@ int check_keys(XEvent *e)
 				break;
 			case XK_b:
                 //g.pPressed = false; //unpause
-                g.pPressed = unpaused(g.pPressed);
+                //g.pPressed = unpaused(g.pPressed);
                 g.cPressed = rmcredits(g.cPressed);
 				break;
 			case XK_p:
@@ -394,6 +396,7 @@ int check_keys(XEvent *e)
 				break;
 			case XK_z:
 				g.rails = rails(g.rails);
+                g.zPressed = car(g.zPressed);
 				break;
 			case XK_c:
             	g.cPressed = credits(g.cPressed);
@@ -591,8 +594,8 @@ void credits()
 
 }
 
-//Pause screen pops up
-void pause () 
+//Pause screen pops up 
+/*void pause()
 {
     Rect r;
         //Pause Title
@@ -611,7 +614,7 @@ void pause ()
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
         glEnd();
 
-}
+}*/
 //Help screen 
 void help()
 {
@@ -743,6 +746,16 @@ void drawStreet()
 		    glPopMatrix();
         }
 	}
+                //box car -- WORK IN PROGRESS
+        		glPushMatrix();
+                //1st element was 6.0f
+                //2nd element was -0.5f
+		        glTranslatef(g.cameraPosition[0], -0.5f, (float)g.cameraPosition[2] - 3.0);
+                //3rd element was 0.2
+                //2nd element was 5.0
+                //1st element was 0.2
+		        box(0.5, 2.0, 0.5);
+		        glPopMatrix();
 }
 
 void physics()
@@ -884,7 +897,7 @@ void render()
 	ggprint8b(&r, 16, 0x00887766, "car framework");
 	  //if p is pressed then pause
     if(g.pPressed) {
-        pause();
+        pause_state();
     }
 
 	if(g.cPressed) {
