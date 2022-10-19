@@ -44,7 +44,12 @@ void decelerate(float & velocity)
 void go_forwards(float & vel, float & cp1, float & cp2, float theta)
 {
     accelerate(vel);
+    if (vel > 15.0f)
+		vel = 15.0f;
     //go forward according to value of angle
+    //do we slow down when turning?
+    
+    //TODO: Maybe implement a turning velocoty
     if (theta == 0.0f)
         cp1 -= vel;
     else if (theta == 90.0f)
@@ -81,6 +86,7 @@ void go_forwards(float & vel, float & cp1, float & cp2, float theta)
 void go_backwards(float & vel, float & cp1, float & cp2, float theta)
 {
     decelerate(vel);
+    
     //go backward according to value of angle
     if (theta == 0.0f)
         cp1 += vel;
@@ -113,32 +119,27 @@ void go_backwards(float & vel, float & cp1, float & cp2, float theta)
     
     if (theta >= 360.0f)
         theta = 0.0f;
+    
+    
+    cout << theta << endl;
 }
 
 void shift_left(float & theta)
 {
     // modify camera angle
-    theta = theta - 0.75f;
+    theta = theta - 30.0f;
 }
 
 void shift_right(float & theta)
 {
     //modify camera position
-    theta = theta + 0.75f;
+    theta = theta + 30.0f;
 }
 
 float conv_rad(float deg)
 {
     return deg * RAD_CONV;
 }
-
-/*
-unsigned int manage_state(unsigned int s)
-{
-    s = s ^ 1;
-    return s;
-}
-*/
 
 // will set the state of whether or not the game is over
 bool isOver(float velocity)
@@ -180,11 +181,11 @@ void text_rect(Rect & rec, int bot, int left, int center, const char string[])
 //this will display the game over screen when the correct conditions are met;
 //the function will call both the build_rectangle() and text_rect() functions
 //in order to convey information to the game player
-void render_the_game_over(int xr, int yr) {
+void render_the_game_over(bool won, bool done, int xr, int yr) {
     //glClear(GL_COLOR_BUFFER_BIT);
     //game over messages
-    int xcent = xr / 2;
-    int ycent = yr / 2;
+    //int xcent = xr / 2;
+    //int ycent = yr / 2;
     int w = 200;
  
     int h = 200;
@@ -194,20 +195,20 @@ void render_the_game_over(int xr, int yr) {
     Rect r2;
 
     //prints the game over message
-    text_rect(r1, ycent, 0.9f * xcent, 0, "GAME OVER!");
-    text_rect(r2, 0.9 * ycent, 0.6f * xcent, 0, "Press any key to continue");
-    
-    //builds the background for the game over screen
-    build_rectangle(w, h, 0.0f, xcent, ycent, 0, 225, 0);
-  
+    if (!won && done) {
+        text_rect(r1, 825.0f, 1240.0f, 0, "GAME OVER!");
+        text_rect(r2, 775.0f, 1180.0f, 0, "Press any key to continue");
+        //builds the background for the game over screen
+        build_rectangle(w, h, 0.0f, 1290.0f, 800.0f, 0, 225, 0);
+    }
 }
 
 //how will this be implemented with feature mode?
-void render_game_mode_title(bool flag, int xr, int yr)
+void render_game_mode_title(bool isModeOn, int xr, int yr)
 {
 	Rect rRM;
 	
-	if (flag)
+	if (isModeOn)
 		text_rect(rRM, 80, 1230, 0, "RACE MODE");
 
 }
@@ -217,17 +218,13 @@ float get_init_pos(float position)
 }
 void race_mode(int & ctdn, int & frames, float init_pos, float position,
 			   bool & sec0, bool & sec1, bool & sec2, bool & sec3, 
-			   bool & sec4, bool & sec5, bool & won, int xr, int yr)
+			   bool & sec4, bool & sec5, bool & won, bool & done,
+               int xr, int yr)
 {
-	Rect rCD;
-	
-	cout << frames << endl;
-	cout << ctdn << endl;
 	frames = frames + 1;
-	if (frames <= 60 && !sec0) {
-		// --ctdn;
+	if (frames <= 60 && !sec0)
 		sec0 = true;
-	} else if (frames > 60 && frames <= 120 && !sec1) {
+	else if (frames > 60 && frames <= 120 && !sec1) {
 		--ctdn;
 		sec1 = true;
 	} else if (frames > 120 && frames <= 180 && !sec2) {
@@ -244,51 +241,60 @@ void race_mode(int & ctdn, int & frames, float init_pos, float position,
 		sec5 = true;
 	}
 	
-	if (position <= init_pos - 500.0f)
-		you_win(xr, yr);
-	else { 
-		switch (ctdn) {
-			case 5:
-				text_rect(rCD, 200, 1000, 0, "5");
-				break; 
-			case 4:
-				text_rect(rCD, 200, 1000, 0, "4");
-				break;
-			case 3:
-				// cout << "This case ran" << endl;
-				text_rect(rCD, 200, 1000, 0, "3");
-				break; 
-			case 2:
-				text_rect(rCD, 200, 1000, 0, "2");
-				break; 
-			case 1:
-				text_rect(rCD, 200, 1000, 0, "1");
-				break;
-			case 0:
-				you_lose(xr, yr);
-				break;
-			}
-	}
-	// if (countdown == 0)
-	//   won = false;
+    if (position <= init_pos - 500.0f) {
+        won = true;
+        done = true;
+    }
+    if (ctdn == 0 && position > init_pos - 500.0f) {
+        won = false;
+        done = true;
+    }
+    
 }
-void go_go_go(bool flag, float init_pos, float position)
+
+void display_countdown(bool isModeOn, int ctdn)
+{
+	Rect rCD;
+	
+    if (isModeOn)
+    {
+        switch (ctdn) {
+            case 5:
+                text_rect(rCD, 1000, 1230, 0, "5");
+                break;
+            case 4:
+                text_rect(rCD, 1000, 1230, 0, "4");
+                break;
+            case 3:
+                // cout << "This case ran" << endl;
+                text_rect(rCD, 1000, 1230, 0, "3");
+                break;
+            case 2:
+                text_rect(rCD, 1000, 1230, 0, "2");
+                break;
+            case 1:
+                text_rect(rCD, 1000, 1230, 0, "1");
+                break;
+                
+        }
+    }
+}
+void go_go_go(bool isModeOn, float init_pos, float position)
 {
 	Rect r4;
 	
-	if (flag && position > init_pos - 500.0f)
+	if (isModeOn && position > init_pos - 500.0f)
 		 text_rect(r4, 1200, 1200, 0, "GO GO GO!!!!!");
 	
 }
-void you_win(int xr, int yr)
-{	
-	Rect r3;
-	text_rect(r3, 700, 1230, 0, "YOU WIN!!!!!");
-}
-void you_lose(int xr, int yr)
+void you_win(bool won, int xr, int yr)
 {
-	// cout << "You have lost." << endl;
-	render_the_game_over(xr, yr);
+    if (won)
+    {
+        Rect r3;
+        text_rect(r3, 700, 1230, 0, "YOU WIN!!!!!");
+    }
+	
 }
 void show_name_jr3()
 {

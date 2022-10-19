@@ -101,15 +101,18 @@ public:
 	int xres, yres;
 	int iniPos;
 	int rmCountDown;
+    int numFrames;
     float rails = 0.2;
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
 	bool zPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
-	bool raceModeOn = false;
-	bool didYouWin = false;
-	// float curTheta;
+	bool raceModeOn;
+	bool didYouWin;
+    bool rmFinished;
+    bool second0, second1, second2, second3, second4, second5;
+	float curTheta;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -119,14 +122,14 @@ public:
 		yres=480;
 		
 		rmCountDown = 5;
+        numFrames = 0;
 		aspectRatio = (GLfloat)xres / (GLfloat)yres;
 		MakeVector(0.0, 1.0, 8.0, cameraPosition);
 		//light is up high, right a little, toward a little
 		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
 		lightPosition[3] = 1.0f;
 		vel = 0.0f;
-		// curTheta = 0.0f;
-        zPressed = false;
+		curTheta = 0.0f;
 		ePressed = false;
 		wPressed = false;
 		aPressed = false;
@@ -137,6 +140,15 @@ public:
         pPressed = false;
 		//help screen
 		hPressed = false;
+        raceModeOn = false;
+        didYouWin = false;
+        rmFinished = false;
+        second0 = false;
+        second1 = false;
+        second2 = false;
+        second3 = false;
+        second4 = false;
+        second5 = false;
 	}
 } g;
 
@@ -235,15 +247,8 @@ public:
 int main()
 {
 	init_opengl();
-	bool second0 = false;
-	bool second1 = false;
-	bool second2 = false;
-	bool second3 = false;
-	bool second4 = false;
-	bool second5 = false;
 	int done = 0;
-	int numFrames = 0;
-	int curCountDown = g.rmCountDown;
+	// int curCountDown = g.rmCountDown;
 	int initPosition = get_init_pos(g.cameraPosition[0]);
 	g.iniPos = initPosition;
 	while (!done) {
@@ -254,10 +259,10 @@ int main()
 			done = check_keys(&e);
 		}
 		if (g.raceModeOn)
-			race_mode(curCountDown, numFrames, g.iniPos, 
-					  g.cameraPosition[2], second0, second1, 
-					  second2, second3, second4, second5, g.didYouWin,
-					  g.xres, g.yres);
+			race_mode(g.rmCountDown, g.numFrames, g.iniPos,
+					  g.cameraPosition[2], g.second0, g.second1,
+					  g.second2, g.second3, g.second4, g.second5, g.didYouWin,
+                      g.rmFinished, g.xres, g.yres);
 		physics();
 		render();
 		x11.swapBuffers();
@@ -595,7 +600,7 @@ void credits()
 }
 
 //Pause screen pops up 
-/*void pause()
+void pause()
 {
     Rect r;
         //Pause Title
@@ -614,7 +619,7 @@ void credits()
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
         glEnd();
 
-}*/
+}
 //Help screen 
 void help()
 {
@@ -761,31 +766,31 @@ void drawStreet()
 void physics()
 {
     if (g.wPressed) {
-		accelerate(g.vel);
-        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
-        g.cameraPosition[2] -= g.vel;
+		//accelerate(g.vel);
+        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        //g.cameraPosition[2] -= g.vel;
 		g.wPressed = false;
 	}
 	if (g.aPressed) {
-		accelerate(g.vel);
-        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
-        //shift_left(g.curTheta);
+		//accelerate(g.vel);
+        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        shift_left(g.curTheta);
 		//g.cameraPosition[2] -= g.vel;
-		g.cameraPosition[0] -= 0.1;
+		//g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
 	}	
 	if (g.sPressed) {
-		decelerate(g.vel);
-        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
-        g.cameraPosition[2] += g.vel;
+		//decelerate(g.vel);
+        go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        //g.cameraPosition[2] += g.vel;
 		g.sPressed = false;
 	}
 	if (g.dPressed) {
-		accelerate(g.vel);
-        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], curTheta);
-        //shift_right(g.curTheta);
+		//accelerate(g.vel);
+        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        shift_right(g.curTheta);
         //g.cameraPosition[2] -= g.vel;
-		g.cameraPosition[0] += 0.1;
+		//g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
 	}	
 }
@@ -831,73 +836,28 @@ void render()
 	else
 	{
     //Start state 
-    if(frames < 480) {
+   if(frames < 480) {
         frames++;
     }   
     startPrint(frames);
     startCounter = startCount(frames);
-    
-    go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
+     
+    render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
     render_game_mode_title(g.raceModeOn, g.xres, g.yres);
+    display_countdown(g.raceModeOn, g.rmCountDown);
+    go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
+    you_win(g.didYouWin, g.xres, g.yres);
+    
 
     
     //Start state
-
-
-		//if (isOver(g.vel)) {
-		
-		//render_the_game_over(g.xres, g.yres, g.raceModeOn);
-		
-		/*
-	    string mess1 = "GAME OVER!";
-	    string mess2 = "Press any key to continue";
-	    int xcent = g.xres / 2;
-	    int ycent = g.yres / 2;
-	    */
-	    //int w = 200;
-	    //Rect r1;
-	    //Rect r2;
-
-	    /*
-	    glPushMatrix();
-	    glColor3f(0.0, 1.0, 0.0);
-	    glTranslatef(g.xres / 2, g.yres / 2, 0);
-	    glBegin(GL_QUADS);
-	    	glVertex2f(xcent - w, ycent - w);
-		glVertex2f(xcent - w, ycent + w);
-		glVertex2f(xcent + w, ycent + w);
-		glVertex2f(xcent + w, ycent - w);
-	    glEnd();
-	    glPopMatrix();
-	    */
-	    
-	    /*
-	    Rect r1;
-	    Rect r2;
-	    r1.bot = 0.5f * ycent + ycent;
-	    r1.left = 0.9 * xcent;
-	    r1.center = 0;
-	    r2.bot = ycent / 2;
-	    r2.left = xcent;
-	    r2.center = 0;
-	    ggprint8b(&r1, 16, 0x00887766, "GAME OVER!");
-	    ggprint8b(&r2, 16, 0x00887766, "Press any key to continue");
-	    */
-	    
-		//}	    
-
-
-
-
-
-
 	r.bot = g.yres - 20;
 	r.left = 10;
 	r.center = 0;
 	ggprint8b(&r, 16, 0x00887766, "car framework");
 	  //if p is pressed then pause
     if(g.pPressed) {
-        pause_state();
+        pause();
     }
 
 	if(g.cPressed) {
@@ -909,6 +869,19 @@ void render()
 	}
 	glPopAttrib();
   
+}
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 
