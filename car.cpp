@@ -81,7 +81,6 @@ bool helpState(bool);
 void pause_state();
 
 int frames = 0;
-bool printGO = false;
 int startCounter = 4;
 //MyImage img[1] = {"kachow.jpeg"};
 
@@ -100,56 +99,64 @@ class Global {
 public:
 	int xres, yres;
 	int iniPos;
+	int iniPos2;
 	int rmCountDown;
-    int numFrames;
-    float rails = 0.2;
+	int numFrames;
+	float rails = 0.2;
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
+	unsigned int restart_mode;
+	unsigned int yPressed;
 	bool zPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	bool raceModeOn;
 	bool didYouWin;
-    bool rmFinished;
-    bool second0, second1, second2, second3, second4, second5;
+	bool rmFinished;
+	bool second0, second1, second2, second3, second4, second5;
 	float curTheta;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
 	Global() {
-		//constructor
-		xres=640;
-		yres=480;
-		
-		rmCountDown = 5;
-        numFrames = 0;
-		aspectRatio = (GLfloat)xres / (GLfloat)yres;
-		MakeVector(0.0, 1.0, 8.0, cameraPosition);
-		//light is up high, right a little, toward a little
-		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
-		lightPosition[3] = 1.0f;
-		vel = 0.0f;
-		curTheta = 0.0f;
-		ePressed = false;
-		wPressed = false;
-		aPressed = false;
-		sPressed = false;
-		dPressed = false;
-		cPressed = false;
-        //pause
-        pPressed = false;
-		//help screen
-		hPressed = false;
-        raceModeOn = false;
-        didYouWin = false;
-        rmFinished = false;
-        second0 = false;
-        second1 = false;
-        second2 = false;
-        second3 = false;
-        second4 = false;
-        second5 = false;
+	    //constructor
+	    xres=640;
+	    yres=480;
+
+	    rmCountDown = 5;
+	    numFrames = 0;
+	    aspectRatio = (GLfloat)xres / (GLfloat)yres;
+	    MakeVector(0.0, 1.0, 8.0, cameraPosition);
+	    //light is up high, right a little, toward a little
+	    MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
+	    lightPosition[3] = 1.0f;
+	    vel = 0.0f;
+	    curTheta = 0.0f;
+	    ePressed = false;
+	    wPressed = false;
+	    aPressed = false;
+	    sPressed = false;
+	    dPressed = false;
+	    cPressed = false;
+	    //pause
+	    pPressed = false;
+	    //help screen
+	    hPressed = false;
+	    raceModeOn = false;
+	    didYouWin = false;
+	    rmFinished = false;
+	    second0 = false;
+	    second1 = false;
+	    second2 = false;
+	    second3 = false;
+	    second4 = false;
+	    second5 = false;
+	    //restart mode
+	    restart_mode = 0;
+	    yPressed = 0;
+	    //restart mode
 	}
+
 } g;
 
 
@@ -250,7 +257,9 @@ int main()
 	int done = 0;
 	// int curCountDown = g.rmCountDown;
 	int initPosition = get_init_pos(g.cameraPosition[0]);
+	int initPosition2 = get_init_pos(g.cameraPosition[2]);
 	g.iniPos = initPosition;
+	g.iniPos2 = initPosition2;
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -385,27 +394,27 @@ int check_keys(XEvent *e)
 				display_name();
 				break;
 			case XK_m:
-			    	show_name();
-			    	break;
+				show_name();
+				break;
 			case XK_j:
 				show_name_jr3();
 				break;
 			case XK_b:
-                //g.pPressed = false; //unpause
-                //g.pPressed = unpaused(g.pPressed);
-                g.cPressed = rmcredits(g.cPressed);
+				//g.pPressed = false; //unpause
+				//g.pPressed = unpaused(g.pPressed);
+				g.cPressed = rmcredits(g.cPressed);
 				break;
 			case XK_p:
 				show_name_s();
-                g.pPressed = paused(g.pPressed); //pause
+				g.pPressed = paused(g.pPressed); //pause
 				break;
 			case XK_z:
 				g.rails = rails(g.rails);
-                g.zPressed = car(g.zPressed);
+				g.zPressed = car(g.zPressed);
 				break;
 			case XK_c:
-            	g.cPressed = credits(g.cPressed);
-                break;
+				g.cPressed = credits(g.cPressed);
+				break;
 			case XK_h:
 				g.hPressed = true; 
 				break;
@@ -415,7 +424,15 @@ int check_keys(XEvent *e)
 			case XK_r:
 				g.feature_mode ^= 1;
 				if (g.feature_mode == 1)
-					g.raceModeOn = true;
+				    g.raceModeOn = true;
+				break;
+			case XK_t:
+				g.restart_mode ^= 1;
+				break;
+			case XK_y:
+				if(g.restart_mode != 0) {
+				    g.yPressed ^= 1;
+				}
 				break;
 			case XK_Escape:
 				return 1;
@@ -831,41 +848,53 @@ void render()
 
 	if(!g.ePressed)
 	{
-		startMenu();
+	    startMenu();
 	}
 	else
 	{
-    //Start state 
-   if(frames < 480) {
-        frames++;
-    }   
-    startPrint(frames);
-    startCounter = startCount(frames);
-     
-    render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
-    render_game_mode_title(g.raceModeOn, g.xres, g.yres);
-    display_countdown(g.raceModeOn, g.rmCountDown);
-    go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
-    you_win(g.didYouWin, g.xres, g.yres);
-    
+	    //Start state 
+	    if(frames < 480) {
+		frames++;
+	    }   
+	    startPrint(frames);
+	    startCounter = startCount(frames);
+	    //Start state
+	    
+	    //restart mode
+	    if(g.restart_mode != 0) {
+		restartPrint();
+		if(g.yPressed) {
+		    frames = 0;
+		    startCounter = 4;
+		    g.yPressed = 0;
+		    g.restart_mode = 0;
+		    g.cameraPosition[0] = g.iniPos;
+		    g.cameraPosition[2] = g.iniPos2;
+		}
+	    }
+	    //restart mode
 
-    
-    //Start state
-	r.bot = g.yres - 20;
-	r.left = 10;
-	r.center = 0;
-	ggprint8b(&r, 16, 0x00887766, "car framework");
-	  //if p is pressed then pause
-    if(g.pPressed) {
-        pause();
-    }
+	    render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
+	    render_game_mode_title(g.raceModeOn, g.xres, g.yres);
+	    display_countdown(g.raceModeOn, g.rmCountDown);
+	    go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
+	    you_win(g.didYouWin, g.xres, g.yres);
 
-	if(g.cPressed) {
-        credits();
-    }
-	if(g.hPressed){
+	    r.bot = g.yres - 20;
+	    r.left = 10;
+	    r.center = 0;
+	    ggprint8b(&r, 16, 0x00887766, "car framework");
+	    //if p is pressed then pause
+	    if(g.pPressed) {
+		pause();
+	    }
+
+	    if(g.cPressed) {
+		credits();
+	    }
+	    if(g.hPressed){
 		help();
-	}
+	    }
 	}
 	glPopAttrib();
   
