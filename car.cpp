@@ -1,4 +1,3 @@
-
 //program: car.cpp
 //author:  Gordon Griesel
 //date:    summer 2017
@@ -114,7 +113,7 @@ public:
 	bool didYouWin;
 	bool rmFinished;
 	bool second0, second1, second2, second3, second4, second5;
-	float curTheta;
+	// float curTheta;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -131,7 +130,7 @@ public:
 	    MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
 	    lightPosition[3] = 1.0f;
 	    vel = 0.0f;
-	    curTheta = 0.0f;
+	    // curTheta = 0.0f;
 	    ePressed = false;
 	    wPressed = false;
 	    aPressed = false;
@@ -783,31 +782,31 @@ void drawStreet()
 void physics()
 {
     if (g.wPressed) {
-		//accelerate(g.vel);
-        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        //g.cameraPosition[2] -= g.vel;
+		accelerate(g.vel);
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        g.cameraPosition[2] -= g.vel;
 		g.wPressed = false;
 	}
 	if (g.aPressed) {
 		//accelerate(g.vel);
-        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        shift_left(g.curTheta);
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        //shift_left(g.curTheta);
 		//g.cameraPosition[2] -= g.vel;
-		//g.cameraPosition[0] -= 0.1;
+		g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
 	}	
 	if (g.sPressed) {
-		//decelerate(g.vel);
-        go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        //g.cameraPosition[2] += g.vel;
+		decelerate(g.vel);
+        //go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        g.cameraPosition[2] += g.vel;
 		g.sPressed = false;
 	}
 	if (g.dPressed) {
 		//accelerate(g.vel);
-        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        shift_right(g.curTheta);
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        //shift_right(g.curTheta);
         //g.cameraPosition[2] -= g.vel;
-		//g.cameraPosition[0] += 0.1;
+		g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
 	}	
 }
@@ -899,6 +898,33 @@ void render()
 	glPopAttrib();
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
