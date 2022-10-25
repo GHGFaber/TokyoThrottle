@@ -4,6 +4,9 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <GL/gl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
 #include "mfuentes.h"
 
 using namespace std;

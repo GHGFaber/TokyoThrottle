@@ -402,7 +402,7 @@ int check_keys(XEvent *e)
 				show_name();
 				break;
 			case XK_j:
-				.jPressed = true;
+				g.jPressed = true;
 
 
                 if((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)){
@@ -462,7 +462,7 @@ int check_keys(XEvent *e)
 				break;
 			case XK_v:
 			g.finishMode ^=1;
-				break:
+				break;
 			case XK_Escape:
 				return 1;
 		}
