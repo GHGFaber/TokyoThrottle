@@ -78,6 +78,7 @@ void accelerate(float & velocity);
 void decelerate(float & velocity);
 bool startState(int count); 
 bool helpState(bool);
+void switchColor();
 void pause_state();
 
 int frames = 0;
@@ -110,7 +111,7 @@ public:
 	unsigned int restart_mode;
 	unsigned int finishMode;
 	unsigned int yPressed;
-	bool zPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
+	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	bool raceModeOn;
 	bool didYouWin;
 	bool rmFinished;
@@ -139,6 +140,7 @@ public:
 	    sPressed = false;
 	    dPressed = false;
 	    cPressed = false;
+		jPressed = false;
 	    //pause
 	    pPressed = false;
 	    //help screen
@@ -400,7 +402,28 @@ int check_keys(XEvent *e)
 				show_name();
 				break;
 			case XK_j:
-				show_name_jr3();
+				.jPressed = true;
+
+
+                if((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)){
+                    red = 1.0f;
+                }
+                else if(red == 1.0f){
+                    red = 0.0f;
+                    green = 1.0f;
+				}
+            	else if(green == 1.0f){
+                    green = 0.0f;
+                    red = 0.0f;
+                    blue = 1.0f;
+				}
+
+            	else if(blue == 1.0f){
+                    blue = 0.0f;
+                    red = 1.0f;
+				}
+
+				
 				break;
 			case XK_b:
 				//g.pPressed = false; //unpause
@@ -776,6 +799,11 @@ void drawStreet()
 	}
                 //box car -- WORK IN PROGRESS
         		glPushMatrix();
+				glColor3f(0.0f, 0.0f, 0.0f);
+                        if(g.jPressed)
+                        {
+                                switchColor();
+                        }
                 //1st element was 6.0f
                 //2nd element was -0.5f
 		        glTranslatef(g.cameraPosition[0], -0.5f, (float)g.cameraPosition[2] - 3.0);
@@ -920,6 +948,24 @@ void render()
 	    if(g.hPressed){
 		help();
 	    }
+		if(g.jPressed){
+
+                Rect r;
+                Rect s;
+                r.bot = 480 - 230;
+                r.left = 230;
+                r.center = 0;
+                s.bot = 480 - 270;
+                s.center = 0;
+                ggprint16(&r, 6, 0x005f0202, "Color Select!");
+                        if(red == 1.0f)
+                                ggprint16(&s, 6, 0x00ff0000, "Red");
+                        else if(green == 1.0f)
+                                ggprint16(&s, 6, 0x0000ff00, "Green");
+                        else if(blue == 1.0f)
+                                ggprint16(&s, 6, 0x000000ff, "Blue");
+        }
+
 	}
 	glPopAttrib();
   

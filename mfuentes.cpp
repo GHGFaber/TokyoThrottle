@@ -7,6 +7,9 @@
 #include "mfuentes.h"
 
 using namespace std;
+float red = 0.0f;
+float green = 0.0f;
+float blue = 0.0f;
 
 void show_name(){
     cout << "Moises Fuentes:";
@@ -29,6 +32,13 @@ bool startMenu(bool pressed)
     pressed = true;
     return pressed; 
 }
+
+void switchColor()
+{
+    //glColor3f(red, green, blue);
+    glColor3f(red, green, blue);
+}
+
 
 /*extern class MyImage myimage;
 

@@ -12,6 +12,11 @@ public:
 #endif
 */
 
+extern float red;
+extern float green;
+extern float blue;
+
 extern bool credits(bool pressed);
 extern bool rmcredits(bool pressed);
 extern bool startMenu(bool pressed);
+extern void switchColor();
