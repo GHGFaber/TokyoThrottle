@@ -26,6 +26,7 @@ public:
 	int xres, yres;
 	
 	float vel;
+    float rails = 0.2;
 	//int xres, yres;	
 	Texture tex;
 	Global() {
@@ -37,6 +38,53 @@ public:
 		// curTheta = 0.0f;
 	}
 } gl;
+
+void box1(float w1, float h1, float d1)
+{
+	float w=w1*0.5;
+	float d=d1*0.5;
+	float h=h1*0.5;
+	//notice the normals being set
+	glBegin(GL_QUADS);
+		//top
+		glNormal3f( 0.0f, 1.0f, 0.0f);
+		glVertex3f( w, h,-d);
+		glVertex3f(-w, h,-d);
+		glVertex3f(-w, h, d);
+		glVertex3f( w, h, d);
+		// bottom
+		glNormal3f( 0.0f, -1.0f, 0.0f);
+		glVertex3f( w,-h, d);
+		glVertex3f(-w,-h, d);
+		glVertex3f(-w,-h,-d);
+		glVertex3f( w,-h,-d);
+		// front
+		glNormal3f( 0.0f, 0.0f, 1.0f);
+		glVertex3f( w, h, d);
+		glVertex3f(-w, h, d);
+		glVertex3f(-w,-h, d);
+		glVertex3f( w,-h, d);
+		// back
+		glNormal3f( 0.0f, 0.0f, -1.0f);
+		glVertex3f( w,-h,-d);
+		glVertex3f(-w,-h,-d);
+		glVertex3f(-w, h,-d);
+		glVertex3f( w, h,-d);
+		// left side
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-w, h, d);
+		glVertex3f(-w, h,-d);
+		glVertex3f(-w,-h,-d);
+		glVertex3f(-w,-h, d);
+		// Right side
+		glNormal3f( 1.0f, 0.0f, 0.0f);
+		glVertex3f( w, h,-d);
+		glVertex3f( w, h, d);
+		glVertex3f( w,-h, d);
+		glVertex3f( w,-h,-d);
+		glEnd();
+	glEnd();
+}
 
 
 
@@ -53,6 +101,7 @@ bool paused(bool pressed)
     else if (pressed == true) {
         pressed = false;
     }
+    gl.rails = pressed;
 	return pressed;
 }
 /*bool unpaused(bool pressed)
@@ -61,11 +110,14 @@ bool paused(bool pressed)
     return pressed;
 }*/
 double rails(double rails) {
-    if (rails != 5.0) {
-        return 5.0;
+    int a = 0.2;
+    int b = 5.0;
+
+    if (rails == a) {
+        return b;
     }
-    if (rails != 0.2) {
-        return 0.2;
+    if (rails == b) {
+        return a;
     }
     return 0;
 }
@@ -76,6 +128,71 @@ bool car(bool z) {
         z = false;
     return z;
 }
+void tunnel() {
+    double k = 2.0;
+    for (int i=0; i<400; i++) {
+        if (i <= 200){
+            k = k + 0.05;
+		    glPushMatrix();
+		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+		    glPushMatrix();
+		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+        }
+        else if (i > 200 && i <= 250) {
+            k = k - 0.1;
+		    glPushMatrix();
+		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+		    glPushMatrix();
+		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+        }
+        else if (i > 250 && i <= 300) {
+            k = k + 0.05;
+		    glPushMatrix();
+		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+		    glPushMatrix();
+		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+        }
+        else {
+            k = k - 0.05;
+		    glPushMatrix();
+		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+		    glPushMatrix();
+		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+        }
+	}
+} 
 void pause_state() 
 {
     Rect r;
@@ -96,6 +213,7 @@ void pause_state()
         glEnd();
 
 }
+
 /*
 extern class MyImage myimage;
 

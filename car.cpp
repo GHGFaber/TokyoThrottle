@@ -111,7 +111,7 @@ public:
 	unsigned int restart_mode;
 	unsigned int finishMode;
 	unsigned int yPressed;
-	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
+	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed, oPressed;
 	bool raceModeOn;
 	bool didYouWin;
 	bool rmFinished;
@@ -143,6 +143,7 @@ public:
 		jPressed = false;
 	    //pause
 	    pPressed = false;
+		oPressed = false;
 	    //help screen
 	    hPressed = false;
 	    raceModeOn = false;
@@ -460,6 +461,9 @@ int check_keys(XEvent *e)
 				    g.yPressed ^= 1;
 				}
 				break;
+			case XK_o:
+				g.oPressed = paused(g.oPressed);
+				break;
 			case XK_v:
 			g.finishMode ^=1;
 				break;
@@ -669,12 +673,16 @@ void pause()
 //Help screen 
 void help()
 {
-	 Rect r;
+	 Rect r, d;
         //help title
         r.bot = g.yres -230;
         r.left = 300;
         r.center = 0;
         ggprint16(&r, 6, 0x00cd00cd, "HELP");
+		d.bot = g.yres -250;
+        d.left = 200;
+        d.center = 0;
+        ggprint08(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
          //glClear(GL_COLOR_BUFFER_BIT);
          glColor3f(0.0, 0.0, 1.0);
          //main
@@ -764,6 +772,9 @@ void drawStreet()
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
     double k = 2.0;
+	if (g.oPressed){
+    	tunnel();
+	}
     //i<40 -> changed
 	for (int i=0; i<400; i++) {
         if (i <= 200){
@@ -922,37 +933,36 @@ void render()
 		//finish line mode 
 		if(g.finishMode !=0){
 			finish();
-		//draw a border using a triangle strip
-        glPushMatrix();
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_BLEND);
-        //exit(0);
-        glColor3f(255, 20, 147);
-        glColor4f(1.0, 0.0, 1.0, 0.9);
+			//draw a border using a triangle strip
+			glPushMatrix();
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_BLEND);
+			//exit(0);
+			glColor3f(255, 20, 147);
+			glColor4f(1.0, 0.0, 1.0, 0.9);
 
-        int w = 40;
-        glBegin(GL_TRIANGLE_STRIP);
-        //glVertex2i(0, 0);
-       // glVertex2i(0+w ,w);
+			int w = 40;
+			glBegin(GL_TRIANGLE_STRIP);
+			//glVertex2i(0, 0);
+		// glVertex2i(0+w ,w);
 
-        glVertex2i(0, g.yres);
-        //glVertex2i(0+w ,g.yres-w);
-        //trying to fix the boader
-        glVertex2i(0,g.yres-w);
+			glVertex2i(0, g.yres);
+			//glVertex2i(0+w ,g.yres-w);
+			//trying to fix the boader
+			glVertex2i(0,g.yres-w);
 
-        glVertex2i(g.xres, g.yres);
-        glVertex2i(g.xres ,g.yres-w);
-        //glVertex2i(g.xres-w ,g.yres);
+			glVertex2i(g.xres, g.yres);
+			glVertex2i(g.xres ,g.yres-w);
+			//glVertex2i(g.xres-w ,g.yres);
 
-        //glVertex2i(g.xres, 0);
-        //glVertex2i(g.xres-w ,w);
+			//glVertex2i(g.xres, 0);
+			//glVertex2i(g.xres-w ,w);
 
-        //glVertex2i(0,0);
-        //glVertex2i(0+w, w);
-        glEnd();
-        glDisable(GL_BLEND);
-        glPopMatrix();
-
+			//glVertex2i(0,0);
+			//glVertex2i(0+w, w);
+			glEnd();
+			glDisable(GL_BLEND);
+			glPopMatrix();
 		}
 		if(g.finishMode != 0 && g.cameraPosition[2] <= -74.0f){
 			practice();

@@ -10,6 +10,8 @@ extern bool paused(bool);
 extern double rails(double);
 extern bool car(bool);
 extern void pause_state();
+extern void tunnel();
+
 
 #ifndef _MYIMAGE_H_
 #define _MYIMAGE_H_
