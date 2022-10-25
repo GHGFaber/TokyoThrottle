@@ -17,6 +17,9 @@ using namespace std;
 
 const float RAD_CONV = 0.0175f;
 
+void text_rect_2(Rect & rec, int bot, int left, int center, const char string[],
+                 float value);
+
 class OtherCar
 {
     private:
@@ -44,6 +47,9 @@ void decelerate(float & velocity)
 void go_forwards(float & vel, float & cp1, float & cp2, float theta)
 {
     accelerate(vel);
+    
+    theta = (int)theta % 360;
+    
     if (vel > 15.0f)
 		vel = 15.0f;
     //go forward according to value of angle
@@ -62,30 +68,34 @@ void go_forwards(float & vel, float & cp1, float & cp2, float theta)
         cp1 -= vel;
     else {
         if (theta < 90.0f) {
-            cp1 -= vel * cos(conv_rad(theta));
-            cp2 += vel * sin(conv_rad(theta));
+            cp1 -= 0.75f * vel * cos(conv_rad(theta));
+            cp2 += 0.75f * vel * sin(conv_rad(theta));
         }
         else if (theta > 90.0f && theta < 180.0f) {
-            cp2 += vel * cos(conv_rad(theta - 90.0f));
-            cp1 += vel * sin(conv_rad(theta - 90.0f));
+            cp2 += 0.75f * vel * cos(conv_rad(theta - 90.0f));
+            cp1 += 0.75f * vel * sin(conv_rad(theta - 90.0f));
         }
         else if (theta > 180.0f && theta < 270.0f) {
-            cp2 -= vel * sin(conv_rad(theta - 180.0f));
-            cp1 += vel * cos(conv_rad(theta - 180.0f));
+            cp2 -= 0.75f * vel * sin(conv_rad(theta - 180.0f));
+            cp1 += 0.75f * vel * cos(conv_rad(theta - 180.0f));
         }
         else if (theta > 270.0f && theta < 360.0f) {
-            cp2 -= vel * cos(conv_rad(theta - 270.0f));
-            cp1 -= vel * sin(conv_rad(theta - 270.0f));
+            cp2 -= 0.75f * vel * cos(conv_rad(theta - 270.0f));
+            cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
         }
     }
     
-    if (theta >= 360.0f)
-        theta = 0.0f;
+    //if (theta >= 360.0f)
+        //theta = 0.0f;
+        
+    cout << theta << endl;
 }
 
 void go_backwards(float & vel, float & cp1, float & cp2, float theta)
 {
     decelerate(vel);
+    
+    theta = (int)theta % 360;
     
     //go backward according to value of angle
     if (theta == 0.0f)
@@ -100,28 +110,24 @@ void go_backwards(float & vel, float & cp1, float & cp2, float theta)
         cp1 += vel;
     else {
         if (theta < 90.0f) {
-            cp1 += vel * cos(conv_rad(theta));
-            cp2 -= vel * sin(conv_rad(theta));
+            cp1 += 0.75f * vel * cos(conv_rad(theta));
+            cp2 -= 0.75f *vel * sin(conv_rad(theta));
         }
         else if (theta > 90.0f && theta < 180.0f) {
-            cp2 -= vel * cos(conv_rad(theta - 90.0f));
-            cp1 -= vel * sin(conv_rad(theta - 90.0f));
+            cp2 -= 0.75f * vel * cos(conv_rad(theta - 90.0f));
+            cp1 -= 0.75f * vel * sin(conv_rad(theta - 90.0f));
         }
         else if (theta > 180.0f && theta < 270.0f) {
-            cp2 += vel * sin(conv_rad(theta - 180.0f));
-            cp1 -= vel * cos(conv_rad(theta - 180.0f));
+            cp2 += 0.75f * vel * sin(conv_rad(theta - 180.0f));
+            cp1 -= 0.75f * vel * cos(conv_rad(theta - 180.0f));
         }
         else if (theta > 270.0f && theta < 360.0f) {
-            cp2 += vel * cos(conv_rad(theta - 270.0f));
-            cp1 += vel * sin(conv_rad(theta - 270.0f));
+            cp2 += 0.75f * vel * cos(conv_rad(theta - 270.0f));
+            cp1 += 0.75f * vel * sin(conv_rad(theta - 270.0f));
         }
     }
     
-    if (theta >= 360.0f)
-        theta = 0.0f;
-    
-    
-    cout << theta << endl;
+    // cout << theta << endl;
 }
 
 void shift_left(float & theta)
@@ -251,7 +257,93 @@ void race_mode(int & ctdn, int & frames, float init_pos, float position,
     }
     
 }
-
+void display_rm_options(bool isModeOn, bool rTestOn)
+{
+	Rect optionR;
+	Rect optionS;
+	
+	if (!isModeOn && !rTestOn) {
+		text_rect(optionR, 80.0f, 1180.0f, 0, 
+				  "Press R for Race Mode!");
+		text_rect(optionS, 20.0f, 1180.0f, 0, 
+				  "Press f to Test Rotation");			  
+	}
+}
+//======================================================================
+//FEATURE MODE IS HERE
+//======================================================================
+//Changes color according to angular value.
+void rotation_test_mode(bool rTestOn, float theta, float & colValue)
+{
+    if (rTestOn) {
+        if (theta > 0 && theta <= 36)
+            colValue = colValue + 0.1f;
+        else if (theta > 36 && theta <= 72)
+            colValue = colValue + 0.1f;
+        else if (theta > 72 && theta <= 108)
+            colValue = colValue + 0.1f;
+        else if (theta > 108 && theta <= 144)
+            colValue = colValue + 0.1f;
+        else if (theta > 144 && theta <= 180)
+            colValue = colValue + 0.1f;
+        else if (theta > -36 && theta < 0)
+            colValue = colValue - 0.1f;
+        else if (theta > -72 && theta <= -36)
+            colValue = colValue - 0.1f;
+        else if (theta > -108 && theta <= -72)
+            colValue = colValue - 0.1f;
+        else if (theta > -144 && theta <= -108)
+            colValue = colValue - 0.1f;
+        else if (theta > -180 && theta <= -144)
+            colValue = colValue - 0.1f;
+    }
+}
+//Displays when rotation test mode is on.
+void display_rotation_text(bool rTestOn)
+{
+	Rect displayR;
+	
+	if (rTestOn) {
+		text_rect(displayR, 80, 1230, 0, "ROTATION TEST MODE");
+	}
+}
+//Guide for determining the direction the car faces.
+void rot_instructions(bool rTestOn)
+{
+	Rect insR1;
+	Rect insR2;
+	Rect insR3;
+	
+	if (rTestOn) {
+		text_rect(insR1, 1200, 900, 0, "The angle will signify");
+		text_rect(insR2, 1100, 900, 0, "what direction the car is facing.");
+		text_rect(insR3, 1000, 900, 0, "0 degrees will make car face forward.");
+	}
+}
+//Theta value will be displayed; helps tester know what direction the car
+//object is facing.
+void display_theta(bool rTestOn, float theta)
+{
+	Rect thetaR1;
+	Rect thetaR2;
+	
+	if (rTestOn) {
+		text_rect_2(thetaR1, 1200, 100, 0, "%i", theta);
+		text_rect(thetaR2, 1200, 200, 0, "degrees");
+	}
+}
+void text_rect_2(Rect & rec, int bot, int left, int center, const char string[],
+                 float value)
+{
+    //sets appropriate dimensions
+    rec.bot = bot;
+    rec.left = left;
+    rec.center = center;
+    ggprint16(&rec, 16, 0x00ffff00, string, value);
+}
+//======================================================================
+//END OF FEATURE MODE
+//======================================================================
 void display_countdown(bool isModeOn, int ctdn)
 {
 	Rect rCD;

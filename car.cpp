@@ -108,15 +108,17 @@ public:
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
-	unsigned int restart_mode;
+    unsigned int rotation_test;
+    unsigned int restart_mode;
 	unsigned int finishMode;
 	unsigned int yPressed;
 	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed, oPressed;
 	bool raceModeOn;
+    bool rotationTestOn;
 	bool didYouWin;
 	bool rmFinished;
 	bool second0, second1, second2, second3, second4, second5;
-	// float curTheta;
+	float curTheta;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
@@ -133,7 +135,7 @@ public:
 	    MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
 	    lightPosition[3] = 1.0f;
 	    vel = 0.0f;
-	    // curTheta = 0.0f;
+	    curTheta = 0.0f;
 	    ePressed = false;
 	    wPressed = false;
 	    aPressed = false;
@@ -147,6 +149,7 @@ public:
 	    //help screen
 	    hPressed = false;
 	    raceModeOn = false;
+        rotationTestOn = false;
 	    didYouWin = false;
 	    rmFinished = false;
 	    second0 = false;
@@ -467,7 +470,12 @@ int check_keys(XEvent *e)
 			case XK_v:
 			g.finishMode ^=1;
 				break;
-			case XK_Escape:
+            case XK_f:
+                g.rotation_test ^= 1;
+                if (g.rotation_test == 1)
+                    g.rotationTestOn = true;
+                break;
+            case XK_Escape:
 				return 1;
 		}
 	}
@@ -848,7 +856,7 @@ void physics()
 	if (g.aPressed) {
 		//accelerate(g.vel);
         //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        //shift_left(g.curTheta);
+        shift_left(g.curTheta);
 		//g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
@@ -862,7 +870,7 @@ void physics()
 	if (g.dPressed) {
 		//accelerate(g.vel);
         //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        //shift_right(g.curTheta);
+        shift_right(g.curTheta);
         //g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
@@ -968,11 +976,15 @@ void render()
 			practice();
 		}
 
-	    render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
-	    render_game_mode_title(g.raceModeOn, g.xres, g.yres);
-	    display_countdown(g.raceModeOn, g.rmCountDown);
-	    go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
-	    you_win(g.didYouWin, g.xres, g.yres);
+        render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
+        render_game_mode_title(g.raceModeOn, g.xres, g.yres);
+        display_rm_options(g.raceModeOn, g.rotationTestOn);
+        rot_instructions(g.rotationTestOn);
+        display_rotation_text(g.rotationTestOn);
+        display_countdown(g.raceModeOn, g.rmCountDown);
+        rot_instructions(g.rotationTestOn);
+        go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
+        you_win(g.didYouWin, g.xres, g.yres);
 
 	    r.bot = g.yres - 20;
 	    r.left = 10;
@@ -1011,6 +1023,57 @@ void render()
 	glPopAttrib();
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

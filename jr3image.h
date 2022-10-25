@@ -16,6 +16,11 @@ extern void race_mode(int & ctdn, int & frames, float init_pos, float position,
                       bool & sec0, bool & sec1, bool & sec2, bool & sec3,
                       bool & sec4, bool & sec5, bool & won, bool & done,
                       int xr, int yr);
+extern void display_rm_options(bool isModeOn, bool rTestOn);
+extern void rotation_test_mode(bool rTestOn, float theta);
+extern void display_rotation_text(bool rTestOn);
+extern void rot_instructions(bool rTestOn);
+extern void display_theta(bool rTestOn, float theta);
 extern void display_countdown(bool isModeOn, int ctdn);
 extern void go_go_go(bool isModeOn, float init_pos, float position);
 extern void you_win(bool won, int xr, int yr);
