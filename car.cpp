@@ -922,6 +922,37 @@ void render()
 		//finish line mode 
 		if(g.finishMode !=0){
 			finish();
+		//draw a border using a triangle strip
+        glPushMatrix();
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
+        //exit(0);
+        glColor3f(255, 20, 147);
+        glColor4f(1.0, 0.0, 1.0, 0.9);
+
+        int w = 40;
+        glBegin(GL_TRIANGLE_STRIP);
+        //glVertex2i(0, 0);
+       // glVertex2i(0+w ,w);
+
+        glVertex2i(0, g.yres);
+        //glVertex2i(0+w ,g.yres-w);
+        //trying to fix the boader
+        glVertex2i(0,g.yres-w);
+
+        glVertex2i(g.xres, g.yres);
+        glVertex2i(g.xres ,g.yres-w);
+        //glVertex2i(g.xres-w ,g.yres);
+
+        //glVertex2i(g.xres, 0);
+        //glVertex2i(g.xres-w ,w);
+
+        //glVertex2i(0,0);
+        //glVertex2i(0+w, w);
+        glEnd();
+        glDisable(GL_BLEND);
+        glPopMatrix();
+
 		}
 		if(g.finishMode != 0 && g.cameraPosition[2] <= -74.0f){
 			practice();
