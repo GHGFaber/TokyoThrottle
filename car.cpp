@@ -21,6 +21,7 @@
 #include "jquinonez.h"
 #include "sdenney.h"
 #include "jr3image.h"
+#include "irene.h"
 #include <string>
 typedef float Flt;
 typedef Flt Vec[3];
@@ -107,6 +108,7 @@ public:
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
 	unsigned int restart_mode;
+	unsigned int finishMode;
 	unsigned int yPressed;
 	bool zPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed;
 	bool raceModeOn;
@@ -154,6 +156,8 @@ public:
 	    restart_mode = 0;
 	    yPressed = 0;
 	    //restart mode
+		//finish
+		finishMode = 0;
 	}
 
 } g;
@@ -433,6 +437,8 @@ int check_keys(XEvent *e)
 				    g.yPressed ^= 1;
 				}
 				break;
+			case XK_v:
+			g.finishMode ^=1;
 			case XK_Escape:
 				return 1;
 		}
@@ -777,6 +783,18 @@ void drawStreet()
                 //1st element was 0.2
 		        box(0.5, 2.0, 0.5);
 		        glPopMatrix();
+
+				//finish mode
+				if(g.finishMode != 0){
+				glEnable(GL_DEPTH_TEST);
+                glDepthFunc(GL_ALWAYS);
+                glPushMatrix();
+                glColor3ub(150.0f, 200.0f, 120.0f);
+                glTranslatef(0.0f, 1.5f, -70.0f);
+                box(5.0, 2.0, 5.0);
+                glPopMatrix();
+
+				}
 }
 
 void physics()
@@ -872,6 +890,13 @@ void render()
 		}
 	    }
 	    //restart mode
+		//finish line mode 
+		if(g.finishMode !=0){
+			finish();
+		}
+		if(g.finishMode != 0 && g.cameraPosition[2] <= -74.0f){
+			practice();
+		}
 
 	    render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
 	    render_game_mode_title(g.raceModeOn, g.xres, g.yres);
