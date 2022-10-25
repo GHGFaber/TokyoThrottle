@@ -439,6 +439,7 @@ int check_keys(XEvent *e)
 				break;
 			case XK_v:
 			g.finishMode ^=1;
+				break:
 			case XK_Escape:
 				return 1;
 		}
