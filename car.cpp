@@ -109,10 +109,11 @@ public:
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
     unsigned int rotation_test;
-    unsigned int restart_mode;
+    unsigned int bounds_mode;
 	unsigned int finishMode;
 	unsigned int yPressed;
-	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, hPressed, oPressed;
+	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, oPressed;
+	int hPressed;
 	bool raceModeOn;
     bool rotationTestOn;
 	bool didYouWin;
@@ -147,7 +148,7 @@ public:
 	    pPressed = false;
 		oPressed = false;
 	    //help screen
-	    hPressed = false;
+	    hPressed = 0;
 	    raceModeOn = false;
         rotationTestOn = false;
 	    didYouWin = false;
@@ -446,7 +447,7 @@ int check_keys(XEvent *e)
 				g.cPressed = credits(g.cPressed);
 				break;
 			case XK_h:
-				g.hPressed = true; 
+				g.hPressed ^= 1; 
 				break;
 			case XK_e:
 				g.ePressed = startMenu(g.ePressed); 
@@ -457,10 +458,10 @@ int check_keys(XEvent *e)
 				    g.raceModeOn = true;
 				break;
 			case XK_t:
-				g.restart_mode ^= 1;
+				g.bounds_mode ^= 1;
 				break;
 			case XK_y:
-				if(g.restart_mode != 0) {
+				if(g.bounds_mode != 0) {
 				    g.yPressed ^= 1;
 				}
 				break;
@@ -691,6 +692,8 @@ void help()
         d.left = 200;
         d.center = 0;
         ggprint08(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
+		r.bot = g.yres -270;
+		ggprint16(&r, 6, 0x00cd00cd, "Jesus Feature Mode: Press t for out of bounds mode");
          //glClear(GL_COLOR_BUFFER_BIT);
          glColor3f(0.0, 0.0, 1.0);
          //main
@@ -925,19 +928,25 @@ void render()
 	    startCounter = startCount(frames);
 	    //Start state
 	    
-	    //restart mode
-	    if(g.restart_mode != 0) {
-		restartPrint();
-		if(g.yPressed) {
-		    frames = 0;
-		    startCounter = 4;
-		    g.yPressed = 0;
-		    g.restart_mode = 0;
-		    g.cameraPosition[0] = g.iniPos;
-		    g.cameraPosition[2] = g.iniPos2;
-		}
-	    }
-	    //restart mode
+	    //out of bounds mode
+	    if(g.bounds_mode != 0) {
+                boundModePrint();
+            }
+
+            if((g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5) && (g.bounds_mode != 0)) {
+                boundsPrint(frames);
+                if(frames > 720) {
+                    g.cameraPosition[0] = g.iniPos;
+                    g.bounds_mode = 0;
+                    frames = 480;
+                }
+                frames++;
+            }
+            else if(g.bounds_mode != 0) {
+                frames = 480;
+            }
+
+	    //out of bounds mode
 		//finish line mode 
 		if(g.finishMode !=0){
 			finish();

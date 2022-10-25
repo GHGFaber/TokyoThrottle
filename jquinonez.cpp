@@ -71,6 +71,45 @@ void restartPrint()
     ggprint16(&r, 16,  0x00eb1010, "Yes(y) No(t)");
 }
 
+void boundsPrint(int frames)
+{
+    Rect r;
+    r.bot = 1080;
+    r.left = 1230;
+    r.center = 0;
+    Rect s;
+    s.bot = 1100;
+    s.left = 1170;
+    s.center = 0;
+
+    if(frames  < 540) {
+        ggprint16(&s, 16, 0x00eb1010, "Out Of Bounds");
+        ggprint16(&r, 16,  0x00eb1010, "3");
+    }
+    else if(frames >= 540 && frames < 600) {
+        ggprint16(&s, 16, 0x00eb1010, "Out Of Bounds");
+        ggprint16(&r, 16, 0x00eb1010, "2");
+    }
+    else if(frames >= 600 && frames < 660) {
+        ggprint16(&s, 16, 0x00eb1010, "Out Of Bounds");
+        ggprint16(&r, 16, 0x00eb1010, "1");
+    }
+    else if(frames >= 660 && frames < 720) {
+        ggprint16(&s, 16, 0x00eb1010, "Out Of Bounds");
+        ggprint16(&r, 16,  0x0038eb10, "Back In!");
+    }
+}
+
+void boundModePrint()
+{
+    Rect s;
+    s.bot = 1200;
+    s.left = 1170;
+    s.center = 0;
+
+    ggprint16(&s, 16, 0x00eb1010, "OUT OF BOUNDS MODE");
+}
+
 
 
 
