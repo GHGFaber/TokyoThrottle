@@ -160,7 +160,7 @@ public:
 	    second4 = false;
 	    second5 = false;
 	    //restart mode
-	    restart_mode = 0;
+	    bounds_mode = 0;
 	    yPressed = 0;
 	    //restart mode
 		//finish
