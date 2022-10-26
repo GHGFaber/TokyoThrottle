@@ -995,10 +995,10 @@ void render()
         go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
         you_win(g.didYouWin, g.xres, g.yres);
 
-	    r.bot = g.yres - 20;
-	    r.left = 10;
+	    r.bot = g.yres - 40;
+	    r.left = 20;
 	    r.center = 0;
-	    ggprint8b(&r, 16, 0x00887766, "car framework");
+	    ggprint16(&r, 16, 0x00ff0000, ">PRESS H FOR SPECIFIC KEYS FOR FEATURES<");
 	    //if p is pressed then pause
 	    if(g.pPressed) {
 		pause();
