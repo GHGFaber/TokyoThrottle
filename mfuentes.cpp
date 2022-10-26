@@ -4,15 +4,46 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "myImage.h"
+#include <GL/gl.h>
+#include <GL/glx.h>
+#include <GL/glu.h>
+#include "mfuentes.h"
 
 using namespace std;
+float red = 0.0f;
+float green = 0.0f;
+float blue = 0.0f;
 
 void show_name(){
     cout << "Moises Fuentes:";
 }
 
-extern class MyImage myimage;
+bool credits(bool pressed)
+{
+    pressed = true;
+	return pressed;
+}
+
+bool rmcredits(bool pressed)
+{
+    pressed = false;
+	return pressed;
+}
+
+bool startMenu(bool pressed)
+{
+    pressed = true;
+    return pressed; 
+}
+
+void switchColor()
+{
+    //glColor3f(red, green, blue);
+    glColor3f(red, green, blue);
+}
+
+
+/*extern class MyImage myimage;
 
 MyImage::~MyImage() { delete [] data; }
 
@@ -50,3 +81,4 @@ MyImage::MyImage(const char *fname) {
     }
     unlink(ppmname);
 }
+*/

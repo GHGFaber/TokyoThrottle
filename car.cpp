@@ -1,4 +1,3 @@
-//
 //program: car.cpp
 //author:  Gordon Griesel
 //date:    summer 2017
@@ -11,17 +10,19 @@
 //#include <time.h>
 #include <math.h>
 #include <X11/Xlib.h>
-//#include <X11/Xutil.h>
+#include <X11/Xutil.h>
 #include <X11/keysym.h>
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glu.h>
 #include "log.h"
 #include "fonts.h"
-#include "myImage.h"
+#include "mfuentes.h"
 #include "jquinonez.h"
 #include "sdenney.h"
 #include "jr3image.h"
+#include "irene.h"
+#include <string>
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
@@ -56,12 +57,12 @@ typedef Flt	Matrix[4][4];
 #define rnd() (float)rand() / (float)RAND_MAX
 #define PI 3.14159265358979323846264338327950
 #define MY_INFINITY 1000.0
-
+//using namespace std;
 //
 // TODO: Finalize WASD movement of the camera/car object
 // uncomment all commented-out lines when finished
 //
-
+//
 void init();
 void init_opengl();
 void check_mouse(XEvent *e);
@@ -76,14 +77,17 @@ void print_name();
 void accelerate(float & velocity);
 void decelerate(float & velocity);
 bool startState(int count); 
-void show_helpState();
+bool helpState(bool);
+void switchColor();
+void pause_state();
 
 int frames = 0;
-bool printGO = false;
 int startCounter = 4;
-MyImage img[1] = {"kachow.jpeg"};
+//MyImage img[1] = {"kachow.jpeg"};
 
-class MyImage myimage = {"kachow.jpeg"};
+
+//class MyImage myimage = {"kachow.jpeg"};
+
 class Texture {
 public:
     MyImage *backImage;
@@ -95,31 +99,74 @@ public:
 class Global {
 public:
 	int xres, yres;
+	int iniPos;
+	int iniPos2;
+	int rmCountDown;
+	int numFrames;
+	float rails = 0.2;
 	Flt aspectRatio;
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
-	bool pPressed, cPressed, wPressed, aPressed, sPressed, dPressed;
+	unsigned int feature_mode; //race mode
+    unsigned int rotation_test;
+    unsigned int bounds_mode;
+	unsigned int finishMode;
+	unsigned int yPressed;
+	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, oPressed;
+	int hPressed;
+	bool raceModeOn;
+    bool rotationTestOn;
+	bool didYouWin;
+	bool rmFinished;
+	bool second0, second1, second2, second3, second4, second5;
+	float curTheta;
 	float vel;
 	//int xres, yres;	
 	Texture tex;
 	Global() {
-		//constructor
-		xres=640;
-		yres=480;
-		aspectRatio = (GLfloat)xres / (GLfloat)yres;
-		MakeVector(0.0, 1.0, 8.0, cameraPosition);
-		//light is up high, right a little, toward a little
-		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
-		lightPosition[3] = 1.0f;
-		vel = 0.0f;
-		wPressed = false;
-		aPressed = false;
-		sPressed = false;
-		dPressed = false;
-		cPressed = false;
-        //pause
-        pPressed = false;
+	    //constructor
+	    xres=640;
+	    yres=480;
+
+	    rmCountDown = 5;
+	    numFrames = 0;
+	    aspectRatio = (GLfloat)xres / (GLfloat)yres;
+	    MakeVector(0.0, 1.0, 8.0, cameraPosition);
+	    //light is up high, right a little, toward a little
+	    MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
+	    lightPosition[3] = 1.0f;
+	    vel = 0.0f;
+	    curTheta = 0.0f;
+	    ePressed = false;
+	    wPressed = false;
+	    aPressed = false;
+	    sPressed = false;
+	    dPressed = false;
+	    cPressed = false;
+		jPressed = false;
+	    //pause
+	    pPressed = false;
+		oPressed = false;
+	    //help screen
+	    hPressed = 0;
+	    raceModeOn = false;
+        rotationTestOn = false;
+	    didYouWin = false;
+	    rmFinished = false;
+	    second0 = false;
+	    second1 = false;
+	    second2 = false;
+	    second3 = false;
+	    second4 = false;
+	    second5 = false;
+	    //restart mode
+	    bounds_mode = 0;
+	    yPressed = 0;
+	    //restart mode
+		//finish
+		finishMode = 0;
 	}
+
 } g;
 
 
@@ -218,6 +265,11 @@ int main()
 {
 	init_opengl();
 	int done = 0;
+	// int curCountDown = g.rmCountDown;
+	int initPosition = get_init_pos(g.cameraPosition[0]);
+	int initPosition2 = get_init_pos(g.cameraPosition[2]);
+	g.iniPos = initPosition;
+	g.iniPos2 = initPosition2;
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -225,6 +277,11 @@ int main()
 			check_mouse(&e);
 			done = check_keys(&e);
 		}
+		if (g.raceModeOn)
+			race_mode(g.rmCountDown, g.numFrames, g.iniPos,
+					  g.cameraPosition[2], g.second0, g.second1,
+					  g.second2, g.second3, g.second4, g.second5, g.didYouWin,
+                      g.rmFinished, g.xres, g.yres);
 		physics();
 		render();
 		x11.swapBuffers();
@@ -258,9 +315,10 @@ void init_opengl()
 	glEnable(GL_LIGHT0);
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
-	g.tex.backImage = &img[0];
+	//g.tex.backImage = &img[0];
     //create opengl texture elements
-    glGenTextures(1, &g.tex.backTexture);
+
+    /*glGenTextures(1, &g.tex.backTexture);
     int w = g.tex.backImage->width;
     int h = g.tex.backImage->height;
     glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
@@ -272,7 +330,7 @@ void init_opengl()
     g.tex.xc[1] = 0.25;
     g.tex.yc[0] = 0.0;
     g.tex.yc[1] = 1.0;
-
+	*/
 	initialize_fonts();
 	//init_textures();
 }
@@ -346,24 +404,79 @@ int check_keys(XEvent *e)
 				display_name();
 				break;
 			case XK_m:
-			    	show_name();
-			    	break;
+				show_name();
+				break;
 			case XK_j:
-				show_name_jr3();
+				g.jPressed = true;
+
+
+                if((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)){
+                    red = 1.0f;
+                }
+                else if(red == 1.0f){
+                    red = 0.0f;
+                    green = 1.0f;
+				}
+            	else if(green == 1.0f){
+                    green = 0.0f;
+                    red = 0.0f;
+                    blue = 1.0f;
+				}
+
+            	else if(blue == 1.0f){
+                    blue = 0.0f;
+                    red = 1.0f;
+				}
+
+				
 				break;
 			case XK_b:
-                //g.pPressed = false; //unpause
-                g.pPressed = unpaused(g.pPressed);
-                g.cPressed = false;
+				//g.pPressed = false; //unpause
+				//g.pPressed = unpaused(g.pPressed);
+				g.cPressed = rmcredits(g.cPressed);
 				break;
 			case XK_p:
 				show_name_s();
-                g.pPressed = paused(g.pPressed); //pause
+				g.pPressed = paused(g.pPressed); //pause
+				break;
+			case XK_z:
+				g.rails = rails(g.rails);
+				g.zPressed = car(g.zPressed);
 				break;
 			case XK_c:
-            	g.cPressed = true;
+				g.cPressed = credits(g.cPressed);
+				break;
+			case XK_h:
+				g.hPressed ^= 1; 
+				break;
+			case XK_e:
+				g.ePressed = startMenu(g.ePressed); 
+				break;
+			case XK_r:
+				g.feature_mode ^= 1;
+				if (g.feature_mode == 1)
+				    g.raceModeOn = true;
+				break;
+			case XK_t:
+				g.bounds_mode ^= 1;
+				break;
+			case XK_y:
+				if(g.bounds_mode != 0) {
+				    g.yPressed ^= 1;
+				}
+				break;
+			case XK_o:
+				g.oPressed = paused(g.oPressed);
+				break;
+			case XK_v:
+			g.finishMode ^=1;
+				break;
+            case XK_f:
+                g.rotation_test ^= 1;
+                if (g.rotation_test == 1)
+                    g.rotationTestOn = true;
                 break;
-			case XK_Escape:
+            case XK_Escape:
 				return 1;
 		}
 	}
@@ -489,6 +602,7 @@ void trans_vector(Matrix mat, const Vec in, Vec out)
 	out[1] = f1;
 	out[2] = f2;
 }
+/*
 void show_kachow()
 {
          //glClear(GL_COLOR_BUFFER_BIT);
@@ -502,15 +616,57 @@ void show_kachow()
                 glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
         glEnd();
 }
-//Pause screen pops up
-void pause() 
+*/
+void credits() 
+{
+    Rect r;
+	Rect s;
+	Rect p;
+	Rect l;
+	Rect m;
+        //credits location 
+        r.bot = g.yres -230;	
+        r.left = 300;
+        r.center = 0;
+		s.bot = g.yres -240;
+        s.left = 300;
+        s.center = 0;
+		p.bot = g.yres -250;
+        p.left = 300;
+        p.center = 0;
+		l.bot = g.yres -260;
+        l.left = 300;
+        l.center = 0;
+		m.bot = g.yres -270;
+        m.left = 300;
+        m.center = 0;
+        ggprint8b(&r, 6, 0x00000000, "Moises Fuentes");
+		ggprint8b(&s, 6, 0x00000000, "Jarls Ramos");
+		ggprint8b(&p, 6, 0x00000000, "Spencer Denney");
+		ggprint8b(&l, 6, 0x00000000, "Irene Chavez");
+		ggprint8b(&m, 6, 0x00000000, "Jesus Quinonez");
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(1.0, 1.0, 1.0);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+        glEnd();
+
+}
+
+//Pause screen pops up 
+void pause()
 {
     Rect r;
         //Pause Title
         r.bot = g.yres -230;
         r.left = 300;
         r.center = 0;
-        ggprint8b(&r, 6, 0x00ffffff, "PAUSED");
+        ggprint8b(&r, 6, 0x00000000, "PAUSED");
          //glClear(GL_COLOR_BUFFER_BIT);
          glColor3f(1.0, 1.0, 0.5);
          //main
@@ -523,6 +679,66 @@ void pause()
         glEnd();
 
 }
+//Help screen 
+void help()
+{
+	 Rect r, d;
+        //help title
+        r.bot = g.yres -230;
+        r.left = 300;
+        r.center = 0;
+        ggprint16(&r, 6, 0x00cd00cd, "HELP");
+		d.bot = g.yres -250;
+        d.left = 300;
+        d.center = 0;
+        ggprint16(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
+		r.bot = g.yres -270;
+		ggprint16(&r, 6, 0x00cd00cd, "Jesus Feature Mode: Press t key for out of bounds mode");
+		r.bot = g.yres -290;
+		ggprint16(&r, 6, 0x00cd00cd, "Moises Feature Mode: Press j key for out of box change color mode");
+		r.bot = g.yres -310;
+		ggprint16(&r, 6, 0x00cd00cd, "Irenes Feature Mode: Press v key for finish line mode");
+		r.bot = g.yres -330;
+		ggprint16(&r, 6, 0x00cd00cd, "Jarls Feature Mode: Press r key for race mode and f key for test rotation mode");
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(0.0, 0.0, 1.0);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+		glEnd();
+}
+void startMenu()
+{
+         Rect r;
+         Rect s;
+        //start menu
+        r.bot = g.yres -230;
+        r.left = 230;
+        r.center = 0;
+        s.bot = g.yres -270;
+        s.left = 250;
+        s.center = 0;
+        ggprint16(&r, 6, 0x00cd00cd, "TOKYO THROTTLE!");
+
+        ggprint16(&s, 6, 0x00cd00cd, "Press E to Start!");
+        ggprint16(&s, 6, 0x00000000, "Press E to Start!");
+
+         //glClear(GL_COLOR_BUFFER_BIT);
+         glColor3f(0.0, 0.0, 0.0);
+         //main
+        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+        glBegin(GL_QUADS);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(0,      0);
+                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(0,      g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  0);
+                glEnd();
+}
+
 
 void drawStreet()
 {
@@ -572,40 +788,99 @@ void drawStreet()
 	glPopMatrix();
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
+    double k = 2.0;
+	if (g.oPressed){
+    	tunnel();
+	}
     //i<40 -> changed
 	for (int i=0; i<400; i++) {
-		glPushMatrix();
-		glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-		box(0.2, 5.0, 0.2);
-		glPopMatrix();
-		glPushMatrix();
-		glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-		box(0.2, 5.0, 0.2);
-		glPopMatrix();
+        if (i <= 200){
+            k = k + 0.05;
+		    glPushMatrix();
+		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box(0.2, k, g.rails);
+		    glPopMatrix();
+		    glPushMatrix();
+		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box(0.2, k, g.rails);
+		    glPopMatrix();
+        }
+        else {
+            k = k - 0.05;
+		    glPushMatrix();
+		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box(0.2, k, g.rails);
+		    glPopMatrix();
+		    glPushMatrix();
+		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box(0.2, k, g.rails);
+		    glPopMatrix();
+        }
 	}
+                //box car -- WORK IN PROGRESS
+        		glPushMatrix();
+				glColor3f(0.0f, 0.0f, 0.0f);
+                        if(g.jPressed)
+                        {
+                                switchColor();
+                        }
+                //1st element was 6.0f
+                //2nd element was -0.5f
+		        glTranslatef(g.cameraPosition[0], -0.5f, (float)g.cameraPosition[2] - 3.0);
+                //3rd element was 0.2
+                //2nd element was 5.0
+                //1st element was 0.2
+		        box(0.5, 2.0, 0.5);
+		        glPopMatrix();
+
+				//finish mode
+				if(g.finishMode != 0){
+				glEnable(GL_DEPTH_TEST);
+                glDepthFunc(GL_ALWAYS);
+                glPushMatrix();
+                glColor3ub(150.0f, 200.0f, 120.0f);
+                glTranslatef(0.0f, 1.5f, -70.0f);
+                box(5.0, 2.0, 5.0);
+                glPopMatrix();
+
+				}
 }
 
 void physics()
 {
     if (g.wPressed) {
 		accelerate(g.vel);
-		g.cameraPosition[2] -= g.vel;
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        g.cameraPosition[2] -= g.vel;
 		g.wPressed = false;
 	}
 	if (g.aPressed) {
-		accelerate(g.vel);
+		//accelerate(g.vel);
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        shift_left(g.curTheta);
 		//g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
 	}	
 	if (g.sPressed) {
 		decelerate(g.vel);
-		g.cameraPosition[2] += g.vel;
+        //go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        g.cameraPosition[2] += g.vel;
 		g.sPressed = false;
 	}
 	if (g.dPressed) {
-		accelerate(g.vel);
-		//g.cameraPosition[2] -= g.vel;
+		//accelerate(g.vel);
+        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        shift_right(g.curTheta);
+        //g.cameraPosition[2] -= g.vel;
 		g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
 	}	
@@ -614,7 +889,6 @@ void physics()
 void render()
 {
 	Rect r;
-	Rect s;
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	//
 	//3D mode
@@ -645,98 +919,226 @@ void render()
 	//glDisable(GL_DEPTH_TEST);
 	//glDisable(GL_CULL_FACE);
 
-        //print counter
-        s.bot = g.yres - 20;
-        s.left = 1200;
-        s.center = 0;
 
-        //if(startCounter > 0) {
+	if(!g.ePressed)
+	{
+	    startMenu();
+	}
+	else
+	{
+	    //Start state 
+	    if(frames < 480) {
+		frames++;
+	    }   
+	    startPrint(frames);
+	    startCounter = startCount(frames);
+	    //Start state
+	    
+	    //out of bounds mode
+	    if(g.bounds_mode != 0) {
+                boundModePrint();
+            }
+
+            if((g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5) && (g.bounds_mode != 0)) {
+                boundsPrint(frames);
+                if(frames > 720) {
+                    g.cameraPosition[0] = g.iniPos;
+                    g.bounds_mode = 0;
+                    frames = 480;
+                }
                 frames++;
-        //}
+            }
+            else if(g.bounds_mode != 0) {
+                frames = 480;
+            }
 
-        if(frames <= 120) {
-                ggprint8b(&s, 16, 0x00887766, "3");
-                startCounter = 3;
+	    //out of bounds mode
+		//finish line mode 
+		if(g.finishMode !=0){
+			finish();
+			//draw a border using a triangle strip
+			glPushMatrix();
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_BLEND);
+			//exit(0);
+			glColor3f(255, 20, 147);
+			glColor4f(1.0, 0.0, 1.0, 0.9);
+
+			int w = 40;
+			glBegin(GL_TRIANGLE_STRIP);
+			//glVertex2i(0, 0);
+		// glVertex2i(0+w ,w);
+
+			glVertex2i(0, g.yres);
+			//glVertex2i(0+w ,g.yres-w);
+			//trying to fix the boader
+			glVertex2i(0,g.yres-w);
+
+			glVertex2i(g.xres, g.yres);
+			glVertex2i(g.xres ,g.yres-w);
+			//glVertex2i(g.xres-w ,g.yres);
+
+			//glVertex2i(g.xres, 0);
+			//glVertex2i(g.xres-w ,w);
+
+			//glVertex2i(0,0);
+			//glVertex2i(0+w, w);
+			glEnd();
+			glDisable(GL_BLEND);
+			glPopMatrix();
+		}
+		if(g.finishMode != 0 && g.cameraPosition[2] <= -74.0f){
+			practice();
+		}
+
+        render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
+        render_game_mode_title(g.raceModeOn, g.xres, g.yres);
+        display_rm_options(g.raceModeOn, g.rotationTestOn);
+        rot_instructions(g.rotationTestOn);
+        display_rotation_text(g.rotationTestOn);
+        display_countdown(g.raceModeOn, g.rmCountDown);
+        rot_instructions(g.rotationTestOn);
+        go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
+        you_win(g.didYouWin, g.xres, g.yres);
+
+	    r.bot = g.yres - 40;
+	    r.left = 20;
+	    r.center = 0;
+	    ggprint16(&r, 16, 0x00ff0000, ">PRESS H FOR SPECIFIC KEYS FOR FEATURES<");
+	    //if p is pressed then pause
+	    if(g.pPressed) {
+		pause();
+	    }
+
+	    if(g.cPressed) {
+		credits();
+	    }
+	    if(g.hPressed){
+		help();
+	    }
+		if(g.jPressed){
+
+                Rect r;
+                Rect s;
+                r.bot = 480 - 230;
+                r.left = 230;
+                r.center = 0;
+                s.bot = 480 - 270;
+                s.center = 0;
+                ggprint16(&r, 6, 0x005f0202, "Color Select!");
+                        if(red == 1.0f)
+                                ggprint16(&s, 6, 0x00ff0000, "Red");
+                        else if(green == 1.0f)
+                                ggprint16(&s, 6, 0x0000ff00, "Green");
+                        else if(blue == 1.0f)
+                                ggprint16(&s, 6, 0x000000ff, "Blue");
         }
-        else if(frames >= 240 && frames < 360) {
-                s.bot = g.yres - 40;
-                ggprint8b(&s, 16, 0x00887766, "2");
-                startCounter = 2;
-        }
-        else if(frames >= 360 && frames <= 720) {
-                s.bot = g.yres - 60;
-                ggprint8b(&s, 16, 0x00887766, "1");
-                startCounter = 1;
-                printGO = true;
 
-        }
-
-        else if(frames > 720) {
-                s.bot = g.yres - 40;
-                ggprint8b(&s, 16, 0x00887766, " ");
-                startCounter = 0;
-        }
-
-        if(printGO == true && frames > 720) {
-            s.bot = g.yres - 80;
-            ggprint8b(&s, 16, 0x00887766, "Go");
-            startCounter--;
-        }
-
-		if (isOver(g.vel)) {
-	    string mess1 = "GAME OVER!";
-	    string mess2 = "Press any key to continue";
-	    int xcent = g.xres / 2;
-	    int ycent = g.yres / 2;
-	    //int w = 200;
-	    //Rect r1;
-	    //Rect r2;
-
-	    /*
-	    glPushMatrix();
-	    glColor3f(0.0, 1.0, 0.0);
-	    glTranslatef(g.xres / 2, g.yres / 2, 0);
-	    glBegin(GL_QUADS);
-	    	glVertex2f(xcent - w, ycent - w);
-		glVertex2f(xcent - w, ycent + w);
-		glVertex2f(xcent + w, ycent + w);
-		glVertex2f(xcent + w, ycent - w);
-	    glEnd();
-	    glPopMatrix();
-	    */
-
-	    Rect r1;
-	    Rect r2;
-	    r1.bot = 0.5f * ycent + ycent;
-	    r1.left = 0.9 * xcent;
-	    r1.center = 0;
-	    r2.bot = ycent / 2;
-	    r2.left = xcent;
-	    r2.center = 0;
-	    ggprint8b(&r1, 16, 0x00887766, "GAME OVER!");
-	    ggprint8b(&r2, 16, 0x00887766, "Press any key to continue");
-		}	    
-
-
-
-
-
-
-	r.bot = g.yres - 20;
-	r.left = 10;
-	r.center = 0;
-	ggprint8b(&r, 16, 0x00887766, "car framework");
+	}
 	glPopAttrib();
-    //if p is pressed then pause
-    if(g.pPressed) {
-        pause();
-    }
-
-	if(g.cPressed) {
-            show_kachow();
-    }
-
+  
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -6,7 +6,12 @@
 
 extern void show_name_s();
 extern bool paused(bool);
-extern bool unpaused(bool);
+//extern bool unpaused(bool);
+extern double rails(double);
+extern bool car(bool);
+extern void pause_state();
+extern void tunnel();
+
 
 #ifndef _MYIMAGE_H_
 #define _MYIMAGE_H_
