@@ -689,11 +689,11 @@ void help()
         r.center = 0;
         ggprint16(&r, 6, 0x00cd00cd, "HELP");
 		d.bot = g.yres -250;
-        d.left = 200;
+        d.left = 300;
         d.center = 0;
-        ggprint08(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
+        ggprint16(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
 		r.bot = g.yres -270;
-		ggprint16(&r, 6, 0x00cd00cd, "Jesus Feature Mode: Press t for out of bounds mode");
+		ggprint16(&r, 6, 0x00cd00cd, "Jesus Feature Mode: Press t key for out of bounds mode");
          //glClear(GL_COLOR_BUFFER_BIT);
          glColor3f(0.0, 0.0, 1.0);
          //main
