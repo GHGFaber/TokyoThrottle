@@ -694,6 +694,12 @@ void help()
         ggprint16(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
 		r.bot = g.yres -270;
 		ggprint16(&r, 6, 0x00cd00cd, "Jesus Feature Mode: Press t key for out of bounds mode");
+		r.bot = g.yres -290;
+		ggprint16(&r, 6, 0x00cd00cd, "Moises Feature Mode: Press j key for out of box change color mode");
+		r.bot = g.yres -310;
+		ggprint16(&r, 6, 0x00cd00cd, "Irenes Feature Mode: Press v key for finish line mode");
+		r.bot = g.yres -330;
+		ggprint16(&r, 6, 0x00cd00cd, "Jarls Feature Mode: Press r key for race mode and f key for test rotation mode");
          //glClear(GL_COLOR_BUFFER_BIT);
          glColor3f(0.0, 0.0, 1.0);
          //main
