@@ -8,6 +8,7 @@
 #include <stdlib.h>
 //#include <unistd.h>
 //#include <time.h>
+#include <iostream>
 #include <math.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -792,7 +793,7 @@ void drawStreet()
 	glPopMatrix();
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
-    double k = 2.0;
+    //double k = 2.0;
 	if (g.oPressed){
     	tunnel();
 	}
