@@ -160,6 +160,17 @@ void tunnel() {
             //2nd element was 5.0
 		    box1(0.2, k, gl.rails);
 		    glPopMatrix();
+            //-------------------top of tunnel--------------------------
+            glPushMatrix();
+            //1st element(x-pos) was 0.0f
+            //2nd element was -0.5f
+            //3rd element was (float)-i*2.5
+		    glTranslatef(0.0f, 2.5f, (float)-i*2.5);
+            //1st element (width) was 0.2
+            //2nd element(height) was 5.0
+            //3rd element (length) was 0.2
+		    box1(5.0, 0.2, 5.0);
+		    glPopMatrix();
         }
         else if (i > 250 && i <= 300) {
             k = k + 0.05;
@@ -189,6 +200,17 @@ void tunnel() {
             //3rd element was 0.2
             //2nd element was 5.0
 		    box1(0.2, k, gl.rails);
+		    glPopMatrix();
+            //-------------------top of tunnel--------------------------
+            glPushMatrix();
+            //1st element(x-pos) was 0.0f
+            //2nd element was -0.5f
+            //3rd element was (float)-i*2.5
+		    glTranslatef(0.0f, 2.5f, (float)-i*2.5);
+            //1st element (width) was 0.2
+            //2nd element(height) was 5.0
+            //3rd element (length) was 0.2
+		    box1(5.0, 0.2, 5.0);
 		    glPopMatrix();
         }
 	}
