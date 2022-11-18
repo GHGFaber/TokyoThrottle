@@ -758,6 +758,10 @@ void drawStreet()
 		glVertex3f( w, h, d);
 	glEnd();
 	glPopMatrix();
+
+	grass(frames); //spawns grass, black/white squares, and light post
+
+
 	//double yellow line
 	glColor3f(0.8f, 0.8f, 0.2f);
 	w = 0.1;
@@ -793,7 +797,7 @@ void drawStreet()
     	tunnel();
 	}
     //i<40 -> changed
-	for (int i=0; i<400; i++) {
+	/*for (int i=0; i<400; i++) {
         if (i <= 200){
             k = k + 0.05;
 		    glPushMatrix();
@@ -824,7 +828,7 @@ void drawStreet()
 		    box(0.2, k, g.rails);
 		    glPopMatrix();
         }
-	}
+	}*/
                 //box car -- WORK IN PROGRESS
         		glPushMatrix();
 				glColor3f(0.0f, 0.0f, 0.0f);
@@ -857,11 +861,19 @@ void drawStreet()
 void physics()
 {
     if (g.wPressed) {
-		accelerate(g.vel);
-        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        g.cameraPosition[2] -= g.vel;
-		g.wPressed = false;
-	}
+        if(g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5){
+            grassAccelerate(g.vel);
+            g.cameraPosition[2] -= g.vel;
+            g.wPressed = false;
+        } else {
+            accelerate(g.vel);
+            //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+            g.cameraPosition[2] -= g.vel;
+            g.wPressed = false;
+        }
+        cout << g.vel << endl;
+    }
+
 	if (g.aPressed) {
 		//accelerate(g.vel);
         //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
