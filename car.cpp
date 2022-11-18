@@ -125,8 +125,8 @@ public:
 	Texture tex;
 	Global() {
 	    //constructor
-	    xres=640;
-	    yres=480;
+	    xres=1920;
+	    yres=3000;
 
 	    rmCountDown = 5;
 	    numFrames = 0;
@@ -716,11 +716,11 @@ void startMenu()
          Rect r;
          Rect s;
         //start menu
-        r.bot = g.yres -230;
-        r.left = 230;
+        r.bot = g.yres -700;
+        r.left = 1150;
         r.center = 0;
-        s.bot = g.yres -270;
-        s.left = 250;
+        s.bot = g.yres -750;
+        s.left = 1160;
         s.center = 0;
         ggprint16(&r, 6, 0x00cd00cd, "TOKYO THROTTLE!");
 
