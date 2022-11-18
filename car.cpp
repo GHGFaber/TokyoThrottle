@@ -122,6 +122,8 @@ public:
 	bool second0, second1, second2, second3, second4, second5;
 	float curTheta;
 	float vel;
+	float anchorPosition0;
+    float anchorPosition2;
 	//int xres, yres;	
 	Texture tex;
 	Global() {
@@ -160,6 +162,8 @@ public:
 	    second3 = false;
 	    second4 = false;
 	    second5 = false;
+	    anchorPosition0 = cameraPosition[0];
+        anchorPosition2 = (float)cameraPosition[2] - 13.0f;
 	    //restart mode
 	    bounds_mode = 0;
 	    yPressed = 0;
@@ -857,6 +861,23 @@ void drawStreet()
                 glPopMatrix();
 
 				}
+				
+				if (g.rotationTestOn) {
+					
+					glPushMatrix();
+					glColor3f(0.0f, 0.0f, 0.0f);
+					//1st element was 6.0f
+					//2nd element was -0.5f
+					glTranslatef(g.anchorPosition0, -0.5f, g.anchorPosition2);
+					//3rd element was 0.2
+					//2nd element was 5.0
+					//1st element was 0.2
+					box(0.5, 2.0, 0.5);
+					rotation_test_mode(g.rotationTestOn, g.cameraPosition[0], g.cameraPosition[2], 
+					g.anchorPosition0, g.anchorPosition2, g.curTheta);
+						
+					glPopMatrix();
+				}
 }
 
 void physics()
@@ -1010,7 +1031,6 @@ void render()
         rot_instructions(g.rotationTestOn);
         display_rotation_text(g.rotationTestOn);
         display_countdown(g.raceModeOn, g.rmCountDown);
-        rot_instructions(g.rotationTestOn);
         go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
         you_win(g.didYouWin, g.xres, g.yres);
 

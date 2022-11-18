@@ -133,13 +133,13 @@ void go_backwards(float & vel, float & cp1, float & cp2, float theta)
 void shift_left(float & theta)
 {
     // modify camera angle
-    theta = theta - 30.0f;
+    theta = theta - 5.0f;
 }
 
 void shift_right(float & theta)
 {
     //modify camera position
-    theta = theta + 30.0f;
+    theta = theta + 5.0f;
 }
 
 float conv_rad(float deg)
@@ -272,31 +272,53 @@ void display_rm_options(bool isModeOn, bool rTestOn)
 //======================================================================
 //FEATURE MODE IS HERE
 //======================================================================
-//Changes color according to angular value.
-void rotation_test_mode(bool rTestOn, float theta, float & colValue)
+//Moves anchor box according to angular value.
+//TODO: New revision to feature mode
+//Implement mechanism that will render a shape in front of player.
+//This will face the car at the specified angle.
+
+
+void rotation_test_mode(bool rTestOn, float cp0, float cp2,
+						float & ap0, float & ap2, float theta)
 {
-    if (rTestOn) {
-        if (theta > 0 && theta <= 36)
-            colValue = colValue + 0.1f;
-        else if (theta > 36 && theta <= 72)
-            colValue = colValue + 0.1f;
-        else if (theta > 72 && theta <= 108)
-            colValue = colValue + 0.1f;
-        else if (theta > 108 && theta <= 144)
-            colValue = colValue + 0.1f;
-        else if (theta > 144 && theta <= 180)
-            colValue = colValue + 0.1f;
-        else if (theta > -36 && theta < 0)
-            colValue = colValue - 0.1f;
-        else if (theta > -72 && theta <= -36)
-            colValue = colValue - 0.1f;
-        else if (theta > -108 && theta <= -72)
-            colValue = colValue - 0.1f;
-        else if (theta > -144 && theta <= -108)
-            colValue = colValue - 0.1f;
-        else if (theta > -180 && theta <= -144)
-            colValue = colValue - 0.1f;
-    }
+	theta = (int)theta % 360;
+	if (theta < 0)
+		theta = theta + 360;
+	
+	cout << theta << endl;
+	
+	if (rTestOn) {
+		if (theta == 0.0f)
+			ap2 = cp2 - 10.0f;
+		else if (theta == 90.0f)
+			ap0 = cp0 + 10.0f;
+		else if (theta == 180.0f)
+			ap2 = cp2 + 10.0f;
+		else if (theta == 270.0f)
+			ap0 = cp0 - 10.0f;
+		else if (theta == 360.0f)
+			ap2 = cp2 - 10.0f;
+		else {
+			if (theta < 90.0f) {
+				ap2 = cp2 - 10.0f * cos(conv_rad(theta));
+				ap0 = cp0 + 10.0f * sin(conv_rad(theta));
+			}
+			else if (theta > 90.0f && theta < 180.0f) {
+				ap2 = cp2 + 10.0f * cos(conv_rad(theta - 90.0f));
+				ap0 = cp0 + 10.0f * sin(conv_rad(theta - 90.0f));
+				
+			}
+			else if (theta > 180.0f && theta < 270.0f) {
+				ap2 = cp2 + 10.0f * cos(conv_rad(theta - 180.0f));
+				ap0 = cp0 - 10.0f * sin(conv_rad(theta - 180.0f));
+				
+			}
+			else if (theta > 270.0f && theta < 360.0f) {
+				ap2 = cp2 - 10.0f * sin(conv_rad(theta - 270.0f));
+				ap0 = cp0 - 10.0f * cos(conv_rad(theta - 270.0f));	
+			}
+		}
+	}
 }
 //Displays when rotation test mode is on.
 void display_rotation_text(bool rTestOn)

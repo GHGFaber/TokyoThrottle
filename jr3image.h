@@ -18,6 +18,8 @@ extern void race_mode(int & ctdn, int & frames, float init_pos, float position,
                       int xr, int yr);
 extern void display_rm_options(bool isModeOn, bool rTestOn);
 extern void rotation_test_mode(bool rTestOn, float theta);
+extern void rotation_test_mode(bool rTestOn, float cp0, float cp2,
+						float & ap0, float & ap2, float theta);
 extern void display_rotation_text(bool rTestOn);
 extern void rot_instructions(bool rTestOn);
 extern void display_theta(bool rTestOn, float theta);
