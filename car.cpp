@@ -744,6 +744,33 @@ void startMenu()
                 glEnd();
 }
 
+void build_billboard(float p1, float p2, float p3, 
+                     float red, float green, float blue)
+{
+    // first param: left/right
+    // last param: push forward 
+    glPushMatrix();
+    glColor3f(red, green, blue);
+        //1st element was 6.0f
+        //2nd element was -0.5f
+    glTranslatef(p1, p2, p3);
+        //3rd element was 0.2
+        //2nd element was 5.0
+        //1st element was 0.2
+    box(0.5, 10.0, 0.5);		
+    glPopMatrix();
+   
+    glPushMatrix();
+    glColor3f(red, green, blue);
+        //1st element was 6.0f
+        //2nd element was -0.5f
+    glTranslatef(p1, p2 + 5.5f, p3);
+        //3rd element was 0.2
+        //2nd element was 5.0
+        //1st element was 0.2
+    box(6.0f, 3.0f, 0.5f);		
+    glPopMatrix();
+}
 
 void drawStreet()
 {
@@ -878,6 +905,22 @@ void drawStreet()
 						
 					glPopMatrix();
 				}
+				// first param: left/right
+				// last param: push forward 
+                                
+                glPushMatrix();
+                build_billboard(-8.0f, -0.5f, -20.0f, 0.0f, 1.0f, 0.0f);  
+                build_billboard(8.0f, -0.5f, -100.0f, 0.0f, 0.0f, 1.0f);
+                build_billboard(-8.0f, -0.5f, -200.0f, 0.0f, 1.0f, 0.0f);
+                build_billboard(8.0f, -0.5f, -300.0f, 1.0f, 0.0f, 0.0f);
+                build_billboard(-8.0f, -0.5f, -400.0f, 0.0f, 1.0f, 0.0f);
+                build_billboard(8.0f, -0.5f, -500.0f, 0.0f, 0.0f, 1.0f);
+                build_billboard(-8.0f, -0.5f, -600.0f, 1.0f, 0.0f, 0.0f);
+                build_billboard(8.0f, -0.5f, -700.0f, 0.0f, 1.0f, 0.0f);
+                build_billboard(-8.0f, -0.5f, -800.0f, 0.0f, 0.0f, 1.0f);
+                build_billboard(8.0f, -0.5f, -900.0f, 1.0f, 0.0f, 0.0f);
+                build_billboard(-8.0f, -0.5f, -1000.0f, 0.0f, 1.0f, 0.0f);
+                glPopMatrix();
 }
 
 void physics()
