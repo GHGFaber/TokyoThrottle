@@ -5,6 +5,11 @@
 #include <X11/keysym.h>
 #include "fonts.h"
 #include "log.h"
+#include "math.h"
+typedef float Flt;
+typedef Flt vec[3];
+#define MakeVector(x, y, z, v) (v)[0]=(x),(v)[1]=(y),(v)[2]=(z)
+
 using namespace std;
 
 class Texture {
@@ -22,11 +27,13 @@ public:
     float vel;
     float rails = 0.2;
     Texture tex;
+    vec camera;
     Global() {
         //constructor
         xres=640;
         yres=480;
         vel = 0.0f;
+        MakeVector(0.0, 1.0, 8.0, camera);
     }   
 } gx; 
 
