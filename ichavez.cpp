@@ -98,12 +98,14 @@ void finish(){
     box2(5.0, 2.0, 1.0, 0.0, 1.5, -70.0);
 }
 
-void finishText()
+void finishText(){
     Rect r;
     r.bot = 1000;
     r.left = 1100;
     r.center = 0;
     ggprint16(&r, 16, 0x00eb1010, "You are now in practice mode, go! go! go!");
+    }
+    
 void practice(){
     Rect s;
     s.bot = 1100;
