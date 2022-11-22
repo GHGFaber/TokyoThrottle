@@ -13,6 +13,7 @@
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glu.h>
+#include <cmath>
 
 class Texture {
 public:
@@ -129,36 +130,136 @@ bool car(bool z) {
     return z;
 }
 void tunnel() {
-    double k = 2.0;
+    /*double width = 9.0;
+    double height = 6.0;
+    unsigned int slices = 10;*/
+    int k = 120;
     for (int i=0; i<400; i++) {
-        if (i <= 200){
-            k = k + 0.05;
+        if (i > 150 && i <= 200) {
 		    glPushMatrix();
-		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+		    glTranslatef(4.5f, -0.5f, (float)-i*2.5);
             //3rd element was 0.2
             //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
+		    box1(0.2, 8.0, gl.rails);
 		    glPopMatrix();
 		    glPushMatrix();
-		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+		    glTranslatef(-4.5f, -0.5f, (float)-i*2.5);
             //3rd element was 0.2
             //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
+		    box1(0.2, 8.0, gl.rails);
 		    glPopMatrix();
+            //-------------------top of tunnel--------------------------
+            glPushMatrix();
+            //1st element(x-pos) was 0.0f
+            //2nd element was -0.5f
+            //3rd element was (float)-i*2.5
+		    glTranslatef(0.0f, 3.5f, (float)-i*2.5);
+            //1st element (width) was 0.2
+            //2nd element(height) was 5.0
+            //3rd element (length) was 0.2
+            //box1(width,height,length)
+		    box1(9.0, 0.2, 5.0);
+		    glPopMatrix();
+
+
+//failed attempt at tunnel
+//**********************************************************************
+/*
+            double width = 9.0;
+            double height = 4.0;
+            unsigned int slices = 10;
+            glPushMatrix();
+            GLfloat offset = 0.5f;
+            glScalef(width/2,height/(1+offset),10.0f);
+            glBegin(GL_QUADS);
+            for( unsigned int j = 0; j < slices; ++j ) {
+                float curAngle = ( ( j + 0 ) / (float)slices ) * 3.14159;
+                float nxtAngle = ( ( j + 1 ) / (float)slices ) * 3.14159;
+                glVertex2f( cos( curAngle ), sin( curAngle ) );
+                glVertex2f( cos( curAngle ), 1.0f + offset );
+                glVertex2f( cos( nxtAngle ), 1.0f + offset );
+                glVertex2f( cos( nxtAngle ), sin( nxtAngle ) );
+            }
+            glEnd();
+            glPopMatrix(); */
+//*********************************************************************
         }
-        else if (i > 200 && i <= 250) {
-            k = k - 0.1;
-		    glPushMatrix();
-		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+        // towers
+        if (i == k && i < 350) {
+
+            //RIGHT SIDE
+            glPushMatrix();
+		    glTranslatef(30.5f, 4.5f, (float)-i*3.0);
             //3rd element was 0.2
             //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
+            //box1(width,height,length)
+		    box1(15.0, 30.0, 12.0);
+		    glPopMatrix();
+            glPushMatrix();
+		    glTranslatef(40.5f, 4.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+            //box1(width,height,length)
+		    box1(28.0, 60.0, 12.0);
+		    glPopMatrix();
+            glPushMatrix();
+		    glTranslatef(25.5f, 4.5f, (float)-i*2.8);
+            //3rd element was 0.2
+            //2nd element was 5.0
+            //box1(width,height,length)
+		    box1(20.0, 30.0, 12.0);
+		    glPopMatrix();
+            glPushMatrix();
+		    glTranslatef(32.5f, 4.5f, (float)-i*2.6);
+            //3rd element was 0.2
+            //2nd element was 5.0
+            //box1(width,height,length)
+		    box1(20.0, 70.0, 12.0);
+		    glPopMatrix();
+
+            //LEFT SIDE
+		    glPushMatrix();
+		    glTranslatef(-25.0f, 4.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+            //box1(width,height,length)
+		    box1(15.0, 20.0, 10.0);
+		    glPopMatrix();
+            glPushMatrix();
+		    glTranslatef(-40.0f, 4.5f, (float)-i*2.8);
+            //3rd element was 0.2
+            //2nd element was 5.0
+            //box1(width,height,length)
+		    box1(20.0, 50.0, 13.0);
+		    glPopMatrix();
+            glPushMatrix();
+		    glTranslatef(-30.0f, 4.5f, (float)-i*3.0);
+            //3rd element was 0.2
+            //2nd element was 5.0
+            //box1(width,height,length)
+		    box1(28.0, 40.0, 12.0);
+		    glPopMatrix();
+            glPushMatrix();
+		    glTranslatef(-45.0f, 4.5f, (float)-i*3.0);
+            //3rd element was 0.2
+            //2nd element was 5.0
+            //box1(width,height,length)
+		    box1(20.0, 65.0, 12.0);
+		    glPopMatrix();
+            k += 20; 
+        }
+        /*if (i > 250) {
+		    glPushMatrix();
+		    glTranslatef(4.5f, -0.5f, (float)-i*2.5);
+            //3rd element was 0.2
+            //2nd element was 5.0
+		    box1(0.2, 8.0, gl.rails);
 		    glPopMatrix();
 		    glPushMatrix();
-		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+		    glTranslatef(-4.5f, -0.5f, (float)-i*2.5);
             //3rd element was 0.2
             //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
+		    box1(0.2, 8.0, gl.rails);
 		    glPopMatrix();
             //-------------------top of tunnel--------------------------
             glPushMatrix();
@@ -166,53 +267,12 @@ void tunnel() {
             //2nd element was -0.5f
             //3rd element was (float)-i*2.5
 		    glTranslatef(0.0f, 2.5f, (float)-i*2.5);
-            //1st element (width) was 0.2
-            //2nd element(height) was 5.0
-            //3rd element (length) was 0.2
-		    box1(5.0, 0.2, 5.0);
+            //1st element (width) was 0.5
+            //2nd element(height) was 0.2
+            //3rd element (length) was 0.5
+		    box1(9.0, 0.2, 4.0);
 		    glPopMatrix();
-        }
-        else if (i > 250 && i <= 300) {
-            k = k + 0.05;
-		    glPushMatrix();
-		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
-		    glPopMatrix();
-		    glPushMatrix();
-		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
-		    glPopMatrix();
-        }
-        else {
-            k = k - 0.05;
-		    glPushMatrix();
-		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
-		    glPopMatrix();
-		    glPushMatrix();
-		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box1(0.2, k, gl.rails);
-		    glPopMatrix();
-            //-------------------top of tunnel--------------------------
-            glPushMatrix();
-            //1st element(x-pos) was 0.0f
-            //2nd element was -0.5f
-            //3rd element was (float)-i*2.5
-		    glTranslatef(0.0f, 2.5f, (float)-i*2.5);
-            //1st element (width) was 0.2
-            //2nd element(height) was 5.0
-            //3rd element (length) was 0.2
-		    box1(5.0, 0.2, 5.0);
-		    glPopMatrix();
-        }
+        }*/
 	}
 } 
 void pause_state() 
