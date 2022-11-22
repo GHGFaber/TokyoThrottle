@@ -119,15 +119,15 @@ void finish(){
 }
 void mainFinish(){
     //this is brown
-    glColor3f(150.0f, 200.0f, 120.0f);// left pole 
+    glColor3f(0.54f, 0.27f, 0.7f);// left pole 
     box2(0.3, 7.0, 0.1, -7.0, 0.0, -950.0);
        
-    //glColor3f(0.54f, 0.27f, 0.07f);//rightpole
-    glColor3f(150.0f, 200.0f, 120.0f);
+    glColor3f(0.54f, 0.27f, 0.07f);//rightpole
+    //glColor3f(150.0f, 200.0f, 120.0f);
     box2(0.3, 7.0, 0.1, 7.0, 0.0, -950.0);
 
     //this is baby green 
-    glColor3f(0.81f, 0.95f, 0.77f);//sign
+    glColor3f(0.45f, 0.70f, 0.22f);//sign
     box2(7.0, 2.0, 0.1, 0.0, 5.0, -950.0);
 
 }
