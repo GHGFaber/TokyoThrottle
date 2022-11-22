@@ -119,7 +119,7 @@ void finish(){
 }
 void mainFinish(){
     //this is brown
-    glColor3f(0.54f, 0.27f, 0.7f);// left pole 
+    glColor3f(0.54f, 0.27f, 0.07f);// left pole 
     box2(0.3, 7.0, 0.1, -7.0, 0.0, -950.0);
        
     glColor3f(0.54f, 0.27f, 0.07f);//rightpole
