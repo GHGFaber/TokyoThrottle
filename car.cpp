@@ -792,6 +792,7 @@ void drawStreet()
 	glPopMatrix();
 
 	grass(frames); //spawns grass, black/white squares, and light post
+	mainFinish();
 	if(g.finishMode != 0){
 		finish();
 	}

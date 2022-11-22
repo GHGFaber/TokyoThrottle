@@ -82,20 +82,45 @@ void box2(float w, float h, float d, float x, float y, float z)
 
 void print_name(){
 	cout<< "irene a." << endl;
+
 }
 bool helpState(bool touch){
 	touch = true; 
 	return touch; 
 }
+void practice(){
+    Rect s;
+    s.bot = 1100;
+    s.left = 1100;
+    s.center = 0;
+    ggprint16(&s, 16, 0x00ff01de, " Congratulations you won!!!");
+}
 void finish(){
-    Rect r;
-    r.bot = 1000;
-    r.left = 1100;
-    r.center = 0;
-    ggprint16(&r, 16, 0x00eb1010, "You are now in practice mode, go! go! go!");
+    //this is not baby green 
+    glColor3f(240.0f, 230.0f, 140.0f);//sign
+    box2(7.0, 2.0, 0.1, 0.0, 5.0, -74.0);
 
-    glColor3f(150.0f, 200.0f, 120.0f);
-    box2(5.0, 2.0, 1.0, 0.0, 1.5, -70.0);
+    //this is not brown
+    glColor3f(255.0f, 160.0f, 122.0f);// left pole 
+    box2(5.0, 2.0, 1.0, 0.0, 1.5, -74.0);
+       
+    glColor3f(255.0f, 160.0f, 122.0f);//rightpole
+    box2(0.3, 7.0, 0.1, 7.0, 0.0, -74.0);
+    if(gx.camera[2] <= -74.0f){
+        practice();
+    }  
+}
+void mainFinish(){
+    //this is baby green 
+    glColor3f(0.81f, 0.95f, 0.77f);//sign
+    box2(7.0, 2.0, 0.1, 0.0, 5.0, -74.0);
+
+    //this is brown
+    glColor3f(150.0f, 200.0f, 120.0f);// left pole 
+    box2(5.0, 2.0, 1.0, 0.0, 1.5, -74.0);
+       
+    glColor3f(0.54f, 0.27f, 0.07f);//rightpole
+    box2(0.3, 7.0, 0.1, 7.0, 0.0, -74.0);
 }
 
 void finishText(){
@@ -106,10 +131,10 @@ void finishText(){
     ggprint16(&r, 16, 0x00eb1010, "You are now in practice mode, go! go! go!");
     }
     
-void practice(){
+/*void practice(){
     Rect s;
     s.bot = 1100;
     s.left = 1100;
     s.center = 0;
     ggprint16(&s, 16, 0x00ff01de, " Congratulations you won!!!");
-}
+}*/
