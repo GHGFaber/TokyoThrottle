@@ -792,7 +792,9 @@ void drawStreet()
 	glPopMatrix();
 
 	grass(frames); //spawns grass, black/white squares, and light post
-
+	if(g.finishMode != 0){
+		finish();
+	}
 
 	//double yellow line
 	glColor3f(0.8f, 0.8f, 0.2f);
@@ -878,6 +880,7 @@ void drawStreet()
 		        glPopMatrix();
 
 				//finish mode
+				/*
 				if(g.finishMode != 0){
 				glEnable(GL_DEPTH_TEST);
                 glDepthFunc(GL_ALWAYS);
@@ -886,8 +889,7 @@ void drawStreet()
                 glTranslatef(0.0f, 1.5f, -70.0f);
                 box(5.0, 2.0, 5.0);
                 glPopMatrix();
-
-				}
+				}*/
 				
 				if (g.rotationTestOn) {
 					
@@ -1032,7 +1034,9 @@ void render()
 	    //out of bounds mode
 		//finish line mode 
 		if(g.finishMode !=0){
-			finish();
+			finishText();
+		}
+			/*
 			//draw a border using a triangle strip
 			glPushMatrix();
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1063,7 +1067,7 @@ void render()
 			glEnd();
 			glDisable(GL_BLEND);
 			glPopMatrix();
-		}
+		}*/
 		if(g.finishMode != 0 && g.cameraPosition[2] <= -74.0f){
 			practice();
 		}
