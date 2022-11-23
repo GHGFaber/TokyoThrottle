@@ -11,6 +11,7 @@ extern double rails(double);
 extern bool car(bool);
 extern void pause_state();
 extern void tunnel();
+//extern void m_music(int, char* []);
 
 
 #ifndef _MYIMAGE_H_

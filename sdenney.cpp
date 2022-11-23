@@ -14,6 +14,12 @@
 #include <GL/glx.h>
 #include <GL/glu.h>
 #include <cmath>
+#include <math.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#ifdef USE_OPENAL_SOUND
+#include </usr/include/AL/alut.h>
+#endif //USE_OPENAL_SOUND
 
 class Texture {
 public:
@@ -129,6 +135,45 @@ bool car(bool z) {
         z = false;
     return z;
 }
+/*
+const unsigned NUM_BUFFERS = 1;
+const unsigned NUM_SOURCES = 1;
+
+void m_music(int argc, char* argv[])
+{ 
+    // Sound buffer variable 
+    ALuint buffer = 0;
+  
+    // Sound source varialbe 
+    ALuint source = 0;
+  
+    // Initialize ALUT 
+    alutInit(&argc, argv);
+  
+    // Generate sound buffer 
+    alGenBuffers(NUM_BUFFERS, &buffer);
+  
+    // Load WAV file 
+    buffer = alutCreateBufferFromFile("Deja.wav");
+  
+    // Generate sound source (sound position in 3D space) 
+    alGenSources(NUM_SOURCES, &source);
+  
+    // Associate source with sound buffer 
+    alSourcei(source, AL_BUFFER, buffer);
+  
+    // Play the sound 
+    alSourcePlay(source);
+  
+    // Wait for playing sound 
+    alutSleep(250000);
+  
+    // Exit from ALUT 
+    alutExit();
+  
+    return;
+}
+*/
 void tunnel() {
     /*double width = 9.0;
     double height = 6.0;
@@ -194,6 +239,7 @@ void tunnel() {
             //2nd element was 5.0
             //box1(width,height,length)
 		    box1(15.0, 30.0, 12.0);
+            glColor3f(0.66, 0.66, 0.66);
 		    glPopMatrix();
             glPushMatrix();
 		    glTranslatef(40.5f, 4.5f, (float)-i*2.5);
@@ -201,6 +247,7 @@ void tunnel() {
             //2nd element was 5.0
             //box1(width,height,length)
 		    box1(28.0, 60.0, 12.0);
+            glColor3f(0.66, 0.66, 0.66);
 		    glPopMatrix();
             glPushMatrix();
 		    glTranslatef(25.5f, 4.5f, (float)-i*2.8);
@@ -208,6 +255,7 @@ void tunnel() {
             //2nd element was 5.0
             //box1(width,height,length)
 		    box1(20.0, 30.0, 12.0);
+            glColor3f(0.66, 0.66, 0.66);
 		    glPopMatrix();
             glPushMatrix();
 		    glTranslatef(32.5f, 4.5f, (float)-i*2.6);
@@ -215,6 +263,7 @@ void tunnel() {
             //2nd element was 5.0
             //box1(width,height,length)
 		    box1(20.0, 70.0, 12.0);
+            glColor3f(0.66, 0.66, 0.66);
 		    glPopMatrix();
 
             //LEFT SIDE
@@ -231,6 +280,7 @@ void tunnel() {
             //2nd element was 5.0
             //box1(width,height,length)
 		    box1(20.0, 50.0, 13.0);
+            glColor3f(0.56, 0.56, 0.56);
 		    glPopMatrix();
             glPushMatrix();
 		    glTranslatef(-30.0f, 4.5f, (float)-i*3.0);
@@ -245,6 +295,7 @@ void tunnel() {
             //2nd element was 5.0
             //box1(width,height,length)
 		    box1(20.0, 65.0, 12.0);
+            glColor3f(0.66, 0.66, 0.66);
 		    glPopMatrix();
             k += 20; 
         }
