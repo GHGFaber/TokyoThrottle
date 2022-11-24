@@ -87,6 +87,20 @@ void box2(float w, float h, float d, float x, float y, float z)
     glPopMatrix();
 }
 
+void backScreen(float w, float h, float d, float x, float y, float z) 
+{
+    glPushMatrix();
+    glColor3f(0.82f, 0.82f, 0.82f);
+    glTranslatef(x,y,z);
+    glBegin(GL_QUADS);
+        glVertex3f( -w, -h);
+        glVertex3f(-w, h);
+        glVertex3f(w, h); 
+        glVertex3f( w, -h); 
+    glEnd();
+    glPopMatrix();
+}
+
 void print_name(){
 	cout<< "irene a." << endl;
 
@@ -96,12 +110,29 @@ bool helpState(bool touch){
 	return touch; 
 }
 void practice(){
+    int w = 175;
+    int h = 80;
+
     Rect s;
-    s.bot = 1100;
-    s.left = 1100;
+    s.bot = 800;
+    s.left = 840;
     s.center = 0;
     ggprint16(&s, 16, 0x00ff01de, " Congratulations you won!!!");
+
+    Rect r;
+    r.bot = 780;
+    r.left = 840;
+    r.center = 0;
+    ggprint16(&r, 16, 0x000b173b, " Want to practice again?");
+    
+    Rect t;
+    t.bot = 760;
+    t.left = 840;
+    t.center = 0;
+    ggprint16(&t, 16, 0x000b173b, " Press (Y) if yes & (V) to return");
+    backScreen(w, h, 0.0f, 980.0f, 800.0f, 0.0f);
 }
+
 void finish(){
     //this is not baby green 
     glColor3f(240.0f, 230.0f, 140.0f);//sign
@@ -135,15 +166,20 @@ void mainFinish(){
 void finishText(){
     Rect r;
     r.bot = 1000;
-    r.left = 1100;
+    r.left = 800;
     r.center = 0;
-    ggprint16(&r, 16, 0x00eb1010, "You are now in practice mode, go! go! go!");
+    ggprint16(&r, 16, 0x000b173b, "You are now in practice mode");
+    
+    Rect s;
+    s.bot = 980;
+    s.left = 800;
+    s.center = 0;
+    ggprint16(&s, 16, 0x000b173b, "Your life level won't be affected");
+    
+    Rect t;
+    t.bot = 960;
+    t.left = 880;
+    t.center = 0;
+    ggprint16(&t, 16, 0x000b173b, "Go! Go! Go!");
     }
     
-/*void practice(){
-    Rect s;
-    s.bot = 1100;
-    s.left = 1100;
-    s.center = 0;
-    ggprint16(&s, 16, 0x00ff01de, " Congratulations you won!!!");
-}*/
