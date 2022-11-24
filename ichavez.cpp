@@ -93,10 +93,10 @@ void backScreen(float w, float h, float d, float x, float y, float z)
     glColor3f(0.82f, 0.82f, 0.82f);
     glTranslatef(x,y,z);
     glBegin(GL_QUADS);
-        glVertex3f( -w, -h);
-        glVertex3f(-w, h);
-        glVertex3f(w, h); 
-        glVertex3f( w, -h); 
+        glVertex2f( -w, -h);
+        glVertex2f(-w, h);
+        glVertex2f(w, h); 
+        glVertex2f( w, -h); 
     glEnd();
     glPopMatrix();
 }
