@@ -933,39 +933,42 @@ void physics()
     if (g.wPressed) {
         if(g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5){
             grassAccelerate(g.vel);
-            g.cameraPosition[2] -= g.vel;
+            go_forwards_grass(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+            //g.cameraPosition[2] -= g.vel;
             g.wPressed = false;
         } else {
-            accelerate(g.vel);
-            //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-            g.cameraPosition[2] -= g.vel;
+            //accelerate(g.vel);
+            go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+            //g.cameraPosition[2] -= g.vel;
             g.wPressed = false;
         }
-        cout << g.vel << endl;
+        
     }
-
 	if (g.aPressed) {
 		//accelerate(g.vel);
-        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
         shift_left(g.curTheta);
 		//g.cameraPosition[2] -= g.vel;
-		g.cameraPosition[0] -= 0.1;
+		//g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
 	}	
 	if (g.sPressed) {
-		decelerate(g.vel);
-        //go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        g.cameraPosition[2] += g.vel;
+		//decelerate(g.vel);
+        go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        //g.cameraPosition[2] -= g.vel;
 		g.sPressed = false;
+		 cout << g.vel << endl;
 	}
 	if (g.dPressed) {
 		//accelerate(g.vel);
-        //go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
         shift_right(g.curTheta);
         //g.cameraPosition[2] -= g.vel;
-		g.cameraPosition[0] += 0.1;
+		//g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
-	}	
+	}
+	pedal_off_slow_down(g.wPressed, g.sPressed, g.vel, g.cameraPosition[2],
+						g.cameraPosition[0], g.curTheta);	
 }
 
 void render()

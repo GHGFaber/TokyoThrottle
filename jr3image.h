@@ -3,7 +3,10 @@
 extern void accelerate(float & velocity);
 extern void decelerate(float & velocity);
 extern void go_forwards(float & vel, float & cp1, float & cp2, float theta);
+void go_forwards_grass(float & vel, float & cp1, float & cp2, float theta);
 extern void go_backwards(float & vel, float & cp1, float & cp2, float theta);
+extern void pedal_off_slow_down(bool pressed1, bool pressed2, float & vel, float & cp1,
+                                float & cp2, float theta);
 extern void shift_left(float & theta);
 extern void shift_right(float & theta);
 extern float conv_rad(float deg);

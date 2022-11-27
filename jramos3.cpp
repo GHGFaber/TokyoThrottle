@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include <GL/glx.h>
 #include <GL/glu.h>
+
 using namespace std;
 // ============================================================================
 // NAME: Jarl Ramos
@@ -35,13 +36,19 @@ void accelerate(float & velocity)
 {
     // change the velocity
     // can this work with cameraPosition[2]?
-    velocity += 0.1f;
+    velocity += 0.3f;
+    
+    if (velocity > 5.0f)
+		velocity = 5.0f;
 }
 
 void decelerate(float & velocity)
 {
     // lower the velocity
-    velocity -= 0.1f;
+    velocity -= 0.3f;
+    
+    if (velocity < -5.0f)
+		velocity = -5.0f;
 }
 
 void go_forwards(float & vel, float & cp1, float & cp2, float theta)
@@ -50,8 +57,7 @@ void go_forwards(float & vel, float & cp1, float & cp2, float theta)
     
     theta = (int)theta % 360;
     
-    if (vel > 15.0f)
-		vel = 15.0f;
+    
     //go forward according to value of angle
     //do we slow down when turning?
     
@@ -84,11 +90,46 @@ void go_forwards(float & vel, float & cp1, float & cp2, float theta)
             cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
         }
     }
-    
-    //if (theta >= 360.0f)
-        //theta = 0.0f;
-        
     cout << theta << endl;
+}
+void go_forwards_grass(float & vel, float & cp1, float & cp2, float theta)
+{ 
+	vel += 0.25f;
+	
+    theta = (int)theta % 360;
+    
+    //go forward according to value of angle
+    //do we slow down when turning?
+    
+    //TODO: Maybe implement a turning velocoty
+    if (theta == 0.0f)
+        cp1 -= vel;
+    else if (theta == 90.0f)
+        cp2 += vel;
+    else if (theta == 180.0f)
+        cp1 += vel;
+    else if (theta == 270.0f)
+        cp2 -= vel;
+    else if (theta == 360.0f)
+        cp1 -= vel;
+    else {
+        if (theta < 90.0f) {
+            cp1 -= 0.75f * vel * cos(conv_rad(theta));
+            cp2 += 0.75f * vel * sin(conv_rad(theta));
+        }
+        else if (theta > 90.0f && theta < 180.0f) {
+            cp2 += 0.75f * vel * cos(conv_rad(theta - 90.0f));
+            cp1 += 0.75f * vel * sin(conv_rad(theta - 90.0f));
+        }
+        else if (theta > 180.0f && theta < 270.0f) {
+            cp2 -= 0.75f * vel * sin(conv_rad(theta - 180.0f));
+            cp1 += 0.75f * vel * cos(conv_rad(theta - 180.0f));
+        }
+        else if (theta > 270.0f && theta < 360.0f) {
+            cp2 -= 0.75f * vel * cos(conv_rad(theta - 270.0f));
+            cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
+        }
+    }
 }
 
 void go_backwards(float & vel, float & cp1, float & cp2, float theta)
@@ -111,7 +152,7 @@ void go_backwards(float & vel, float & cp1, float & cp2, float theta)
     else {
         if (theta < 90.0f) {
             cp1 += 0.75f * vel * cos(conv_rad(theta));
-            cp2 -= 0.75f *vel * sin(conv_rad(theta));
+            cp2 -= 0.75f * vel * sin(conv_rad(theta));
         }
         else if (theta > 90.0f && theta < 180.0f) {
             cp2 -= 0.75f * vel * cos(conv_rad(theta - 90.0f));
@@ -127,7 +168,76 @@ void go_backwards(float & vel, float & cp1, float & cp2, float theta)
         }
     }
     
-    // cout << theta << endl;
+}
+void pedal_off_slow_down(bool pressed1, bool pressed2, 
+						 float & vel, float & cp1, float & cp2, float theta)
+{
+	if (!pressed1 && !pressed2 && vel > 0) {
+		vel -= 0.07f;
+		if (theta == 0.0f)
+			cp1 -= vel;
+		else if (theta == 90.0f)
+			cp2 += vel;
+		else if (theta == 180.0f)
+			cp1 += vel;
+		else if (theta == 270.0f)
+			cp2 -= vel;
+		else if (theta == 360.0f)
+			cp1 -= vel;
+		else {
+			if (theta < 90.0f) {
+				cp1 -= 0.75f * vel * cos(conv_rad(theta));
+				cp2 += 0.75f * vel * sin(conv_rad(theta));
+			}
+			else if (theta > 90.0f && theta < 180.0f) {
+				cp2 += 0.75f * vel * cos(conv_rad(theta - 90.0f));
+				cp1 += 0.75f * vel * sin(conv_rad(theta - 90.0f));
+			}
+			else if (theta > 180.0f && theta < 270.0f) {
+				cp2 -= 0.75f * vel * sin(conv_rad(theta - 180.0f));
+				cp1 += 0.75f * vel * cos(conv_rad(theta - 180.0f));
+			}
+			else if (theta > 270.0f && theta < 360.0f) {
+				cp2 -= 0.75f * vel * cos(conv_rad(theta - 270.0f));
+				cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
+			}
+		}
+		if (vel < 0.0f)
+			vel = 0.0f;
+	}
+	else if (!pressed1 && !pressed2 && vel < 0) {
+		vel += 0.07f;
+		if (theta == 0.0f)
+			cp1 -= vel;
+		else if (theta == 90.0f)
+			cp2 += vel;
+		else if (theta == 180.0f)
+			cp1 += vel;
+		else if (theta == 270.0f)
+			cp2 -= vel;
+		else if (theta == 360.0f)
+			cp1 -= vel;
+		else {
+			if (theta < 90.0f) {
+				cp1 -= 0.75f * vel * cos(conv_rad(theta));
+				cp2 += 0.75f * vel * sin(conv_rad(theta));
+			}
+			else if (theta > 90.0f && theta < 180.0f) {
+				cp2 += 0.75f * vel * cos(conv_rad(theta - 90.0f));
+				cp1 += 0.75f * vel * sin(conv_rad(theta - 90.0f));
+			}
+			else if (theta > 180.0f && theta < 270.0f) {
+				cp2 -= 0.75f * vel * sin(conv_rad(theta - 180.0f));
+				cp1 += 0.75f * vel * cos(conv_rad(theta - 180.0f));
+			}
+			else if (theta > 270.0f && theta < 360.0f) {
+				cp2 -= 0.75f * vel * cos(conv_rad(theta - 270.0f));
+				cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
+			}
+		}
+		if (vel > 0.0f)
+			vel = 0.0f;
+	}
 }
 
 void shift_left(float & theta)
@@ -414,3 +524,4 @@ void show_name_jr3()
 {
     std::cout << "Jarl Ramos / Geoffrey De Palme" << std::endl;
 }
+
