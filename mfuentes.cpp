@@ -73,7 +73,7 @@ void initSound()
         //
         //Source refers to the sound.
         //Generate a source, and store it in a buffer.
-        alGenSources(1, &g.alSourceDrip);
+        alGenSources(1, &alSourceDrip);
         alSourcei(g.alSourceDrip, AL_BUFFER, g.alBufferDrip);
         //Set volume and pitch to normal, no looping of sound.
         alSourcef(g.alSourceDrip, AL_GAIN, 1.0f);
@@ -84,7 +84,7 @@ void initSound()
                 return;
         }
         //Generate a source, and store it in a buffer.
-        alGenSources(1, &g.alSourceTick);
+        alGenSources(1, &alSourceTick);
         alSourcei(g.alSourceTick, AL_BUFFER, g.alBufferTick);
         //Set volume and pitch to normal, no looping of sound.
         alSourcef(g.alSourceTick, AL_GAIN, 1.0f);
@@ -101,11 +101,11 @@ void cleanupSound()
 {
         #ifdef USE_OPENAL_SOUND
         //First delete the source.
-        alDeleteSources(1, &g.alSourceDrip);
-        alDeleteSources(1, &g.alSourceTick);
+        alDeleteSources(1, &alSourceDrip);
+        alDeleteSources(1, &alSourceTick);
         //Delete the buffer.
-        alDeleteBuffers(1, &g.alBufferDrip);
-        alDeleteBuffers(1, &g.alBufferTick);
+        alDeleteBuffers(1, &alBufferDrip);
+        alDeleteBuffers(1, &alBufferTick);
         //Close out OpenAL itself.
         //Get active context.
         ALCcontext *Context = alcGetCurrentContext();
