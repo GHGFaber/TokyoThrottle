@@ -8,11 +8,18 @@
 #include <GL/glx.h>
 #include <GL/glu.h>
 #include "mfuentes.h"
+#ifdef USE_OPENAL_SOUND
+#include </usr/include/AL/alut.h>
+#endif //USE_OPENAL_SOUND
 
 using namespace std;
 float red = 0.0f;
 float green = 0.0f;
 float blue = 0.0f;
+
+ALuint alBufferDrip, alBufferTick;
+ALuint alSourceDrip, alSourceTick;
+
 
 void show_name(){
     cout << "Moises Fuentes:";
@@ -40,6 +47,84 @@ void switchColor()
 {
     //glColor3f(red, green, blue);
     glColor3f(red, green, blue);
+}
+
+void initSound()
+{
+        #ifdef USE_OPENAL_SOUND
+        alutInit(0, NULL);
+        if (alGetError() != AL_NO_ERROR) {
+                printf("ERROR: alutInit()\n");
+                return;
+        }
+        //Clear error state.
+        alGetError();
+        //g.background3 = &img[3];
+        //Setup the listener.
+        //Forward and up vectors are used.
+        float vec[6] = {0.0f,0.0f,1.0f, 0.0f,1.0f,0.0f};
+        alListener3f(AL_POSITION, 0.0f, 0.0f, 0.0f);
+        alListenerfv(AL_ORIENTATION, vec);
+        alListenerf(AL_GAIN, 1.0f);
+        //
+        //Buffer holds the sound information.
+        g.alBufferDrip = alutCreateBufferFromFile("tokyo.wav");
+        g.alBufferTick = alutCreateBufferFromFile("select.wav");
+        //
+        //Source refers to the sound.
+        //Generate a source, and store it in a buffer.
+        alGenSources(1, &g.alSourceDrip);
+        alSourcei(g.alSourceDrip, AL_BUFFER, g.alBufferDrip);
+        //Set volume and pitch to normal, no looping of sound.
+        alSourcef(g.alSourceDrip, AL_GAIN, 1.0f);
+        alSourcef(g.alSourceDrip, AL_PITCH, 1.0f);
+        alSourcei(g.alSourceDrip, AL_LOOPING, AL_FALSE);
+        if (alGetError() != AL_NO_ERROR) {
+                printf("ERROR: setting source\n");
+                return;
+        }
+        //Generate a source, and store it in a buffer.
+        alGenSources(1, &g.alSourceTick);
+        alSourcei(g.alSourceTick, AL_BUFFER, g.alBufferTick);
+        //Set volume and pitch to normal, no looping of sound.
+        alSourcef(g.alSourceTick, AL_GAIN, 1.0f);
+        alSourcef(g.alSourceTick, AL_PITCH, 1.0f);
+        alSourcei(g.alSourceTick, AL_LOOPING, AL_FALSE);
+        if (alGetError() != AL_NO_ERROR) {
+                printf("ERROR: setting source\n");
+                return;
+        }
+        #endif //USE_OPENAL_SOUND
+}
+
+void cleanupSound()
+{
+        #ifdef USE_OPENAL_SOUND
+        //First delete the source.
+        alDeleteSources(1, &g.alSourceDrip);
+        alDeleteSources(1, &g.alSourceTick);
+        //Delete the buffer.
+        alDeleteBuffers(1, &g.alBufferDrip);
+        alDeleteBuffers(1, &g.alBufferTick);
+        //Close out OpenAL itself.
+        //Get active context.
+        ALCcontext *Context = alcGetCurrentContext();
+        //Get device for active context.
+        ALCdevice *Device = alcGetContextsDevice(Context);
+        //Disable context.
+        alcMakeContextCurrent(NULL);
+        //Release context(s).
+        alcDestroyContext(Context);
+        //Close device.
+        alcCloseDevice(Device);
+        #endif //USE_OPENAL_SOUND
+}
+
+void playSound(ALuint source)
+{
+        #ifdef USE_OPENAL_SOUND
+        alSourcePlay(source);
+        #endif
 }
 
 

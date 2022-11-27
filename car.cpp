@@ -58,6 +58,10 @@ typedef Flt	Matrix[4][4];
 #define rnd() (float)rand() / (float)RAND_MAX
 #define PI 3.14159265358979323846264338327950
 #define MY_INFINITY 1000.0
+#ifdef USE_OPENAL_SOUND
+#include </usr/include/AL/alut.h>
+#endif //USE_OPENAL_SOUND
+
 //using namespace std;
 //
 // TODO: Finalize WASD movement of the camera/car object
@@ -81,6 +85,11 @@ bool startState(int count);
 bool helpState(bool);
 void switchColor();
 void pause_state();
+#ifdef USE_OPENAL_SOUND
+void initSound();
+void cleanupSound();
+void playSound(ALuint source);
+#endif
 
 int frames = 0;
 int startCounter = 4;
@@ -269,12 +278,14 @@ public:
 int main()
 {
 	init_opengl();
+	initSound();
 	int done = 0;
 	// int curCountDown = g.rmCountDown;
 	int initPosition = get_init_pos(g.cameraPosition[0]);
 	int initPosition2 = get_init_pos(g.cameraPosition[2]);
 	g.iniPos = initPosition;
 	g.iniPos2 = initPosition2;
+	playSound(alSourceDrip);
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -292,6 +303,7 @@ int main()
 		x11.swapBuffers();
 	}
 	cleanup_fonts();
+	cleanupSound();
 	return 0;
 }
 

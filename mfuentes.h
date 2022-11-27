@@ -12,11 +12,22 @@ public:
 #endif
 */
 
+#ifdef USE_OPENAL_SOUND
+#include </usr/include/AL/alut.h>
+#endif //USE_OPENAL_SOUND
+
 extern float red;
 extern float green;
 extern float blue;
+
+extern ALuint alBufferDrip, alBufferTick;
+extern ALuint alSourceDrip, alSourceTick;
 
 extern bool credits(bool pressed);
 extern bool rmcredits(bool pressed);
 extern bool startMenu(bool pressed);
 extern void switchColor();
+
+extern void initSound();
+extern void cleanupSound();
+extern void playSound(ALuint source);
