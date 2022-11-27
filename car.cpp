@@ -864,7 +864,7 @@ void drawStreet()
 		    glPopMatrix();
         }
 	}*/
-                //box car -- WORK IN PROGRESS
+               //box car -- WORK IN PROGRESS
         		glPushMatrix();
 				glColor3f(0.0f, 0.0f, 0.0f);
                         if(g.jPressed)
@@ -874,6 +874,8 @@ void drawStreet()
                 //1st element was 6.0f
                 //2nd element was -0.5f
 		        glTranslatef(g.cameraPosition[0], -0.5f, (float)g.cameraPosition[2] - 3.0);
+                glRotatef(g.curTheta, 0, -1, 0);
+                glMatrixMode(GL_MODELVIEW);
                 //3rd element was 0.2
                 //2nd element was 5.0
                 //1st element was 0.2
