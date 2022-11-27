@@ -68,28 +68,28 @@ void initSound()
         alListenerf(AL_GAIN, 1.0f);
         //
         //Buffer holds the sound information.
-        g.alBufferDrip = alutCreateBufferFromFile("tokyo.wav");
-        g.alBufferTick = alutCreateBufferFromFile("select.wav");
+        alBufferDrip = alutCreateBufferFromFile("tokyo.wav");
+        alBufferTick = alutCreateBufferFromFile("select.wav");
         //
         //Source refers to the sound.
         //Generate a source, and store it in a buffer.
         alGenSources(1, &alSourceDrip);
-        alSourcei(g.alSourceDrip, AL_BUFFER, g.alBufferDrip);
+        alSourcei(alSourceDrip, AL_BUFFER, alBufferDrip);
         //Set volume and pitch to normal, no looping of sound.
-        alSourcef(g.alSourceDrip, AL_GAIN, 1.0f);
-        alSourcef(g.alSourceDrip, AL_PITCH, 1.0f);
-        alSourcei(g.alSourceDrip, AL_LOOPING, AL_FALSE);
+        alSourcef(alSourceDrip, AL_GAIN, 1.0f);
+        alSourcef(alSourceDrip, AL_PITCH, 1.0f);
+        alSourcei(alSourceDrip, AL_LOOPING, AL_FALSE);
         if (alGetError() != AL_NO_ERROR) {
                 printf("ERROR: setting source\n");
                 return;
         }
         //Generate a source, and store it in a buffer.
         alGenSources(1, &alSourceTick);
-        alSourcei(g.alSourceTick, AL_BUFFER, g.alBufferTick);
+        alSourcei(alSourceTick, AL_BUFFER, alBufferTick);
         //Set volume and pitch to normal, no looping of sound.
-        alSourcef(g.alSourceTick, AL_GAIN, 1.0f);
-        alSourcef(g.alSourceTick, AL_PITCH, 1.0f);
-        alSourcei(g.alSourceTick, AL_LOOPING, AL_FALSE);
+        alSourcef(alSourceTick, AL_GAIN, 1.0f);
+        alSourcef(alSourceTick, AL_PITCH, 1.0f);
+        alSourcei(alSourceTick, AL_LOOPING, AL_FALSE);
         if (alGetError() != AL_NO_ERROR) {
                 printf("ERROR: setting source\n");
                 return;
