@@ -281,8 +281,8 @@ void grass(int frames)
 
 void grassAccelerate(float & velocity)
 {
-    if(velocity > 10) {
-	velocity = 10;
+    if(velocity > 1.0) {
+	velocity = 1.0;
     }else {
 	velocity += 0.05;
     }
@@ -290,9 +290,9 @@ void grassAccelerate(float & velocity)
 
 void speedHud(float vel)
 {
-    int vel2 = vel;
+    //double vel2 = vel;
     char velocity[50];
-    sprintf(velocity, "%i", vel2);
+    sprintf(velocity, "%f", vel);
     Rect f;
     f.bot = 50;
     f.left = 2000;
@@ -343,17 +343,17 @@ void speedHud(float vel)
     x.left = 2000;
     x.center = 0;
 
-    if(vel >=0 && vel < 2) { 
+    if(vel >=0 && vel < 0.5) { 
 	ggprint16(&f, 16, 0x00eb1010, "        ___________");
     }
 
-    if(vel >= 8) {    
+    if(vel >= 2) {    
 	ggprint16(&y, 16, 0x00eb1010, "                            ___________");
     }
 
     ggprint16(&m, 16, 0x00eb1010, "MPH");
     ggprint16(&v, 16, 0x00eb1010, velocity);
-    if(vel >= 4 && vel < 6) {
+    if(vel >= 1 && vel < 1.5) {
 	for(int i = 0; i < 9; i++) { 
 	    ggprint16(&u, 16, 0x00eb1010, "|");
 	}
@@ -364,21 +364,21 @@ void speedHud(float vel)
     t.bot += 180;
     t.left += 115;
    
-    ggprint16(&t, 16, 0x00eb1010, "2");
+    ggprint16(&t, 16, 0x00eb1010, "0.5");
     t.bot += 20;
     t.left += 45;
-    ggprint16(&t, 16, 0x00eb1010, "4");
+    ggprint16(&t, 16, 0x00eb1010, "1");
     t.left += 48;
     t.bot += 3; 
-    ggprint16(&t, 16, 0x00eb1010, "6");
+    ggprint16(&t, 16, 0x00eb1010, "1.5");
 
     t.left += 115;
     t.bot -= 140;
-    ggprint16(&t, 16, 0x00eb1010, "8");
+    ggprint16(&t, 16, 0x00eb1010, "2");
 
     f.bot += 13;
     f.left += 190;
-    if(vel >= 2 && vel < 4) {
+    if(vel >= 0.5 && vel < 1) {
 	for(int i = 0; i < 10; i++) {
 	    ggprint16(&f, 16, 0x00eb1010, "\\");
 	    f.bot += 30;
@@ -391,7 +391,7 @@ void speedHud(float vel)
     f.center = 0;
     f.bot += 13;
     f.left += 190;
-    if(vel >= 6 && vel < 8) {
+    if(vel >= 1.5 && vel < 2) {
 	for(int i = 0; i < 10; i++) {
 	    ggprint16(&f, 16, 0x00eb1010, "/");
 	    f.bot += 30;
