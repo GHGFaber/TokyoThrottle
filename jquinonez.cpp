@@ -255,12 +255,28 @@ void grass(int frames)
    	//stop light
 	
 	//light posts
-         	
-	/*glColor3f(1.0f, 1.0f, 1.0f);
-	myBox(0.1, 3.0, 0.1, -5.0, 0.0, -5.0);//left post
-	myBox(2.6, 0.1, 0.1, -2.5, 3.0, -5.0);//top post
-	glColor3f(0.0f, 0.0f, 0.0f);
- 	myBox(0.2, 0.7, 0.2, 0.0, 2.4, -5.0);//light box*/
+	float x, x2, x3;
+	float dis = -10;
+	for(int i = 0; i < 20; i++) {
+	    if((i%2) == 0) {
+		x = -5;
+		x2 = -3.8;
+		x3 = -2.2;
+	    } else {
+		x = 5;
+		x2 = 3.8;
+		x3 = 2.2;
+	    } 
+	    glColor3f(0.75f, 0.75f, 0.75f);
+	    myBox(0.1, 4.0, 0.1, x, 0.0, dis);//left post
+	    myBox(1.3, 0.1, 0.1, x2, 4.0, dis);//top post
+	    glColor3f(0.75f, 0.75f, 0.75f);
+	    myBox(0.3, 0.1, 0.25, x3, 4.0, dis);//light box 
+	    glColor3f(1.0f, 1.0f, 0.4f);
+	    myBox(0.15, 0.1, 0.15, x3, 3.95, dis);//light bulb 
+	    dis -= 60;
+	}
+
 }
 
 void grassAccelerate(float & velocity)
@@ -270,9 +286,130 @@ void grassAccelerate(float & velocity)
     }else {
 	velocity += 0.05;
     }
-
 }
 
+void speedHud(float vel)
+{
+    int vel2 = vel;
+    char velocity[50];
+    sprintf(velocity, "%i", vel2);
+    Rect f;
+    f.bot = 50;
+    f.left = 2000;
+    f.center = 0;
+
+    Rect y;
+    y.bot = 50;
+    y.left = 2000;
+    y.center = 0;
+
+    Rect t;
+    t.bot = 40;
+    t.left = 2030;
+    t.center = 0;
+
+    Rect u;
+    u.bot = 179;
+    u.left = 2196;
+    u.center = 0;
+
+    Rect m;
+    m.bot = 270;
+    m.left = 2177;
+    m.center = 0;
+    Rect v;
+    v.bot = 250;
+    v.left = 2190;
+    v.center = 0;
+
+
+    Rect l;
+    l.bot = 290;
+    l.left = 2020;
+    l.center = 0;
+
+    Rect r;
+    r.bot = 290;
+    r.left = 2370;
+    r.center = 0;
+    
+    Rect d;
+    d.bot = 310;
+    d.left = 2000;
+    d.center = 0;
+    
+    Rect x;
+    x.bot = 30;
+    x.left = 2000;
+    x.center = 0;
+
+    if(vel >=0 && vel < 2) { 
+	ggprint16(&f, 16, 0x00eb1010, "        ___________");
+    }
+
+    if(vel >= 8) {    
+	ggprint16(&y, 16, 0x00eb1010, "                            ___________");
+    }
+
+    ggprint16(&m, 16, 0x00eb1010, "MPH");
+    ggprint16(&v, 16, 0x00eb1010, velocity);
+    if(vel >= 4 && vel < 6) {
+	for(int i = 0; i < 9; i++) { 
+	    ggprint16(&u, 16, 0x00eb1010, "|");
+	}
+    }
+    
+    ggprint16(&t, 16, 0x00eb1010, "0");
+    
+    t.bot += 180;
+    t.left += 115;
+   
+    ggprint16(&t, 16, 0x00eb1010, "2");
+    t.bot += 20;
+    t.left += 45;
+    ggprint16(&t, 16, 0x00eb1010, "4");
+    t.left += 48;
+    t.bot += 3; 
+    ggprint16(&t, 16, 0x00eb1010, "6");
+
+    t.left += 115;
+    t.bot -= 140;
+    ggprint16(&t, 16, 0x00eb1010, "8");
+
+    f.bot += 13;
+    f.left += 190;
+    if(vel >= 2 && vel < 4) {
+	for(int i = 0; i < 10; i++) {
+	    ggprint16(&f, 16, 0x00eb1010, "\\");
+	    f.bot += 30;
+	    f.left -= 4;
+	}
+    }
+
+    f.bot = 33;
+    f.left = 2007;
+    f.center = 0;
+    f.bot += 13;
+    f.left += 190;
+    if(vel >= 6 && vel < 8) {
+	for(int i = 0; i < 10; i++) {
+	    ggprint16(&f, 16, 0x00eb1010, "/");
+	    f.bot += 30;
+	    f.left += 4;
+	}
+    }
+    
+    for(int i = 0; i < 17; i++) {
+        ggprint16(&l, 16, 0x00eb1010, "|");
+    }
+    	
+    for(int i = 0; i < 17; i++) {
+        ggprint16(&r, 16, 0x00eb1010, "|");
+    }
+
+    ggprint16(&d, 16, 0x00eb1010, "   ___________________________");
+    ggprint16(&x, 16, 0x00eb1010, "   ___________________________");
+}
 
 
 

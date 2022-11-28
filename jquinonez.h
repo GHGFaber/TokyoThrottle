@@ -11,3 +11,4 @@ extern void boundsPrint(int frames);
 extern void boundModePrint();
 extern void grass(int frames);
 extern void grassAccelerate(float & velocity);
+extern void speedHud(float vel);
