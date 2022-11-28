@@ -24,6 +24,7 @@
 #include "jr3image.h"
 #include "irene.h"
 #include <string>
+//#include <unistd.h>
 typedef float Flt;
 typedef Flt Vec[3];
 typedef Flt	Matrix[4][4];
@@ -285,7 +286,7 @@ int main()
 	int initPosition2 = get_init_pos(g.cameraPosition[2]);
 	g.iniPos = initPosition;
 	g.iniPos2 = initPosition2;
-	playSound(alSourceDrip);
+	//playSound(alSourceDrip);
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -1048,6 +1049,12 @@ void render()
             else if(g.bounds_mode != 0) {
                 frames = 480;
             }
+	    if(frames == 60)
+		playSound(alSourceSET);
+	    if(frames == 120)
+		playSound(alSourceSET);
+	    if(frames == 180)
+		playSound(alSourceGO);
 
 	    //out of bounds mode
 		//finish line mode 
