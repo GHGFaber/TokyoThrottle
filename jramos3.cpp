@@ -94,7 +94,7 @@ void go_forwards(float & vel, float & cp1, float & cp2, float theta)
 }
 void go_forwards_grass(float & vel, float & cp1, float & cp2, float theta)
 { 
-	vel += 0.25f;
+	vel += 0.1f;
 	
     theta = (int)theta % 360;
     
