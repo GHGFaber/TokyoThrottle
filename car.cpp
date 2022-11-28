@@ -1047,6 +1047,8 @@ void render()
 			else if(g.bounds_mode != 0) {
 				frames = 480;
 			}
+		speedHud(g.vel);
+		
 		if(frames == 60)
 		playSound(alSourceSET);
 		if(frames == 120)
@@ -1054,7 +1056,7 @@ void render()
 		if(frames == 180)
 		playSound(alSourceGO);
 
-		//out of bounds mode
+		
 		//finish line mode 
 		if(g.finishMode !=0) {
 			finishText();
