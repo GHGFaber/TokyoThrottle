@@ -1036,11 +1036,11 @@ void render()
 		//Start state
 		
 		//out of bounds mode
-		if(g.bounds_mode != 0) {
+		/*if(g.bounds_mode != 0) {
 				boundModePrint();
-			}
+			}*/
 
-			if((g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5) && (g.bounds_mode != 0)) {
+			if((g.cameraPosition[0] > 13 || g.cameraPosition[0] < -13)) {
 				boundsPrint(frames);
 				if(frames > 720) {
 					g.cameraPosition[0] = g.iniPos;
