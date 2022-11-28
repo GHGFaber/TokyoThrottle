@@ -36,10 +36,10 @@ void accelerate(float & velocity)
 {
     // change the velocity
     // can this work with cameraPosition[2]?
-    velocity += 0.3f;
+    velocity += 0.2f;
     
-    if (velocity > 5.0f)
-		velocity = 5.0f;
+    if (velocity > 3.0f)
+		velocity = 3.0f;
 }
 
 void decelerate(float & velocity)
