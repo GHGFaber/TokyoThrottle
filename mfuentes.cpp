@@ -17,8 +17,8 @@ float red = 0.0f;
 float green = 0.0f;
 float blue = 0.0f;
 
-ALuint alBufferDrip, alBufferTick;
-ALuint alSourceDrip, alSourceTick;
+ALuint alBufferDrip, alBufferTick, alBufferSET, alBufferGO;
+ALuint alSourceDrip, alSourceTick, alSourceSET, alSourceGO;
 
 
 void show_name(){
@@ -70,6 +70,8 @@ void initSound()
         //Buffer holds the sound information.
         alBufferDrip = alutCreateBufferFromFile("tokyo.wav");
         alBufferTick = alutCreateBufferFromFile("select.wav");
+        alBufferSET = alutCreateBufferFromFile("SET.wav");
+        alBufferGO = alutCreateBufferFromFile("GO.wav");
         //
         //Source refers to the sound.
         //Generate a source, and store it in a buffer.
@@ -94,6 +96,28 @@ void initSound()
                 printf("ERROR: setting source\n");
                 return;
         }
+	//SET setup
+        alGenSources(1, &alSourceSET);
+        alSourcei(alSourceSET, AL_BUFFER, alBufferSET);
+        //Set volume and pitch to normal, no looping of sound.
+        alSourcef(alSourceSET, AL_GAIN, 1.0f);
+        alSourcef(alSourceSET, AL_PITCH, 1.0f);
+        alSourcei(alSourceSET, AL_LOOPING, AL_FALSE);
+        if (alGetError() != AL_NO_ERROR) {
+                printf("ERROR: setting source\n");
+                return;
+        }
+	//GO setup
+        alGenSources(1, &alSourceGO);
+        alSourcei(alSourceGO, AL_BUFFER, alBufferGO);
+        //Set volume and pitch to normal, no looping of sound.
+        alSourcef(alSourceGO, AL_GAIN, 1.0f);
+        alSourcef(alSourceGO, AL_PITCH, 1.0f);
+        alSourcei(alSourceGO, AL_LOOPING, AL_FALSE);
+        if (alGetError() != AL_NO_ERROR) {
+                printf("ERROR: setting source\n");
+                return;
+        }
         #endif //USE_OPENAL_SOUND
 }
 
@@ -103,9 +127,15 @@ void cleanupSound()
         //First delete the source.
         alDeleteSources(1, &alSourceDrip);
         alDeleteSources(1, &alSourceTick);
+        alDeleteSources(1, &alSourceSET);
+        alDeleteSources(1, &alSourceGO);
+
         //Delete the buffer.
         alDeleteBuffers(1, &alBufferDrip);
         alDeleteBuffers(1, &alBufferTick);
+        alDeleteBuffers(1, &alBufferSET);
+        alDeleteBuffers(1, &alBufferGO);
+
         //Close out OpenAL itself.
         //Get active context.
         ALCcontext *Context = alcGetCurrentContext();

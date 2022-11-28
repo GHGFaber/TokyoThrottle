@@ -20,8 +20,8 @@ extern float red;
 extern float green;
 extern float blue;
 
-extern ALuint alBufferDrip, alBufferTick;
-extern ALuint alSourceDrip, alSourceTick;
+extern ALuint alBufferDrip, alBufferTick, alBufferSET, alBufferGO;
+extern ALuint alSourceDrip, alSourceTick, alSourceSET, alSourceGO;
 
 extern bool credits(bool pressed);
 extern bool rmcredits(bool pressed);
