@@ -1,6 +1,6 @@
 //program: car.cpp
 //author:  Gordon Griesel
-//date:    summer 2017
+//date:	summer 2017
 //
 //Framework for group attempting a 3D game.
 //
@@ -101,10 +101,10 @@ int startCounter = 4;
 
 class Texture {
 public:
-    MyImage *backImage;
-    GLuint backTexture;
-    float xc[2];
-    float yc[2];
+	MyImage *backImage;
+	GLuint backTexture;
+	float xc[2];
+	float yc[2];
 };
 
 class Global {
@@ -119,65 +119,65 @@ public:
 	Vec cameraPosition;
 	GLfloat lightPosition[4];
 	unsigned int feature_mode; //race mode
-    unsigned int rotation_test;
-    unsigned int bounds_mode;
+	unsigned int rotation_test;
+	unsigned int bounds_mode;
 	unsigned int finishMode;
 	unsigned int yPressed;
 	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, oPressed;
 	int hPressed;
 	bool raceModeOn;
-    bool rotationTestOn;
+	bool rotationTestOn;
 	bool didYouWin;
 	bool rmFinished;
 	bool second0, second1, second2, second3, second4, second5;
 	float curTheta;
 	float vel;
 	float anchorPosition0;
-    float anchorPosition2;
-	//int xres, yres;	
+	float anchorPosition2;
+	//int xres, yres;
 	Texture tex;
 	Global() {
-	    //constructor
-	    xres=1920;
-	    yres=3000;
+		//constructor
+		xres=1920;
+		yres=3000;
 
-	    rmCountDown = 5;
-	    numFrames = 0;
-	    aspectRatio = (GLfloat)xres / (GLfloat)yres;
-	    MakeVector(0.0, 1.0, 8.0, cameraPosition);
-	    //light is up high, right a little, toward a little
-	    MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
-	    lightPosition[3] = 1.0f;
-	    vel = 0.0f;
-	    curTheta = 0.0f;
-	    ePressed = false;
-	    wPressed = false;
-	    aPressed = false;
-	    sPressed = false;
-	    dPressed = false;
-	    cPressed = false;
+		rmCountDown = 5;
+		numFrames = 0;
+		aspectRatio = (GLfloat)xres / (GLfloat)yres;
+		MakeVector(0.0, 1.0, 8.0, cameraPosition);
+		//light is up high, right a little, toward a little
+		MakeVector(100.0f, 240.0f, 40.0f, lightPosition);
+		lightPosition[3] = 1.0f;
+		vel = 0.0f;
+		curTheta = 0.0f;
+		ePressed = false;
+		wPressed = false;
+		aPressed = false;
+		sPressed = false;
+		dPressed = false;
+		cPressed = false;
 		jPressed = false;
-	    //pause
-	    pPressed = false;
+		//pause
+		pPressed = false;
 		oPressed = false;
-	    //help screen
-	    hPressed = 0;
-	    raceModeOn = false;
-        rotationTestOn = false;
-	    didYouWin = false;
-	    rmFinished = false;
-	    second0 = false;
-	    second1 = false;
-	    second2 = false;
-	    second3 = false;
-	    second4 = false;
-	    second5 = false;
-	    anchorPosition0 = cameraPosition[0];
-        anchorPosition2 = (float)cameraPosition[2] - 13.0f;
-	    //restart mode
-	    bounds_mode = 0;
-	    yPressed = 0;
-	    //restart mode
+		//help screen
+		hPressed = 0;
+		raceModeOn = false;
+		rotationTestOn = false;
+		didYouWin = false;
+		rmFinished = false;
+		second0 = false;
+		second1 = false;
+		second2 = false;
+		second3 = false;
+		second4 = false;
+		second5 = false;
+		anchorPosition0 = cameraPosition[0];
+		anchorPosition2 = (float)cameraPosition[2] - 13.0f;
+		//restart mode
+		bounds_mode = 0;
+		yPressed = 0;
+		//restart mode
 		//finish
 		finishMode = 0;
 	}
@@ -296,9 +296,9 @@ int main()
 		}
 		if (g.raceModeOn)
 			race_mode(g.rmCountDown, g.numFrames, g.iniPos,
-					  g.cameraPosition[2], g.second0, g.second1,
-					  g.second2, g.second3, g.second4, g.second5, g.didYouWin,
-                      g.rmFinished, g.xres, g.yres);
+					g.cameraPosition[2], g.second0, g.second1,
+					g.second2, g.second3, g.second4, g.second5, g.didYouWin,
+					g.rmFinished, g.xres, g.yres);
 		physics();
 		render();
 		x11.swapBuffers();
@@ -334,20 +334,20 @@ void init_opengl()
 	//Do this to allow fonts
 	glEnable(GL_TEXTURE_2D);
 	//g.tex.backImage = &img[0];
-    //create opengl texture elements
+	//create opengl texture elements
 
-    /*glGenTextures(1, &g.tex.backTexture);
-    int w = g.tex.backImage->width;
-    int h = g.tex.backImage->height;
-    glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-            GL_RGB, GL_UNSIGNED_BYTE, g.tex.backImage->data);
-    g.tex.xc[0] = 0.0;
-    g.tex.xc[1] = 0.25;
-    g.tex.yc[0] = 0.0;
-    g.tex.yc[1] = 1.0;
+	/*glGenTextures(1, &g.tex.backTexture);
+	int w = g.tex.backImage->width;
+	int h = g.tex.backImage->height;
+	glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
+			GL_RGB, GL_UNSIGNED_BYTE, g.tex.backImage->data);
+	g.tex.xc[0] = 0.0;
+	g.tex.xc[1] = 0.25;
+	g.tex.yc[0] = 0.0;
+	g.tex.yc[1] = 1.0;
 	*/
 	initialize_fonts();
 	//init_textures();
@@ -428,22 +428,22 @@ int check_keys(XEvent *e)
 				g.jPressed = true;
 
 
-                if((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)){
-                    red = 1.0f;
-                }
-                else if(red == 1.0f){
-                    red = 0.0f;
-                    green = 1.0f;
+				if((red == 0.0f) && (green == 0.0f) && (blue == 0.0f)) {
+					red = 1.0f;
 				}
-            	else if(green == 1.0f){
-                    green = 0.0f;
-                    red = 0.0f;
-                    blue = 1.0f;
+				else if(red == 1.0f) {
+					red = 0.0f;
+					green = 1.0f;
+				}
+				else if(green == 1.0f) {
+					green = 0.0f;
+					red = 0.0f;
+					blue = 1.0f;
 				}
 
-            	else if(blue == 1.0f){
-                    blue = 0.0f;
-                    red = 1.0f;
+				else if(blue == 1.0f) {
+					blue = 0.0f;
+					red = 1.0f;
 				}
 
 				
@@ -473,14 +473,14 @@ int check_keys(XEvent *e)
 			case XK_r:
 				g.feature_mode ^= 1;
 				if (g.feature_mode == 1)
-				    g.raceModeOn = true;
+					g.raceModeOn = true;
 				break;
 			case XK_t:
 				g.bounds_mode ^= 1;
 				break;
 			case XK_y:
 				if(g.bounds_mode != 0) {
-				    g.yPressed ^= 1;
+					g.yPressed ^= 1;
 				}
 				break;
 			case XK_o:
@@ -489,12 +489,12 @@ int check_keys(XEvent *e)
 			case XK_v:
 			g.finishMode ^=1;
 				break;
-            case XK_f:
-                g.rotation_test ^= 1;
-                if (g.rotation_test == 1)
-                    g.rotationTestOn = true;
-                break;
-            case XK_Escape:
+			case XK_f:
+				g.rotation_test ^= 1;
+				if (g.rotation_test == 1)
+					g.rotationTestOn = true;
+				break;
+			case XK_Escape:
 				return 1;
 		}
 	}
@@ -623,93 +623,93 @@ void trans_vector(Matrix mat, const Vec in, Vec out)
 /*
 void show_kachow()
 {
-         //glClear(GL_COLOR_BUFFER_BIT);
-         glColor3f(1.0, 1.0, 1.0);
-         //main
-        glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
-        glBegin(GL_QUADS);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
-        glEnd();
+		 //glClear(GL_COLOR_BUFFER_BIT);
+		 glColor3f(1.0, 1.0, 1.0);
+		 //main
+		glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+		glBegin(GL_QUADS);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,	  10);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,	  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+		glEnd();
 }
 */
 void credits() 
 {
-    Rect r;
+	Rect r;
 	Rect s;
 	Rect p;
 	Rect l;
 	Rect m;
-        //credits location 
-        r.bot = g.yres -230;	
-        r.left = 300;
-        r.center = 0;
+		//credits location 
+		r.bot = g.yres -230;	
+		r.left = 300;
+		r.center = 0;
 		s.bot = g.yres -240;
-        s.left = 300;
-        s.center = 0;
+		s.left = 300;
+		s.center = 0;
 		p.bot = g.yres -250;
-        p.left = 300;
-        p.center = 0;
+		p.left = 300;
+		p.center = 0;
 		l.bot = g.yres -260;
-        l.left = 300;
-        l.center = 0;
+		l.left = 300;
+		l.center = 0;
 		m.bot = g.yres -270;
-        m.left = 300;
-        m.center = 0;
-        ggprint8b(&r, 6, 0x00000000, "Moises Fuentes");
+		m.left = 300;
+		m.center = 0;
+		ggprint8b(&r, 6, 0x00000000, "Moises Fuentes");
 		ggprint8b(&s, 6, 0x00000000, "Jarls Ramos");
 		ggprint8b(&p, 6, 0x00000000, "Spencer Denney");
 		ggprint8b(&l, 6, 0x00000000, "Irene Chavez");
 		ggprint8b(&m, 6, 0x00000000, "Jesus Quinonez");
-         //glClear(GL_COLOR_BUFFER_BIT);
-         glColor3f(1.0, 1.0, 1.0);
-         //main
-        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
-        glBegin(GL_QUADS);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
-        glEnd();
+		 //glClear(GL_COLOR_BUFFER_BIT);
+		 glColor3f(1.0, 1.0, 1.0);
+		 //main
+		//glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+		glBegin(GL_QUADS);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,	  10);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,	  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+		glEnd();
 
 }
 
 //Pause screen pops up 
 void pause()
 {
-    Rect r;
-        //Pause Title
-        r.bot = g.yres -230;
-        r.left = 300;
-        r.center = 0;
-        ggprint8b(&r, 6, 0x00000000, "PAUSED");
-         //glClear(GL_COLOR_BUFFER_BIT);
-         glColor3f(1.0, 1.0, 0.5);
-         //main
-        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
-        glBegin(GL_QUADS);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
-        glEnd();
+	Rect r;
+		//Pause Title
+		r.bot = g.yres -230;
+		r.left = 300;
+		r.center = 0;
+		ggprint8b(&r, 6, 0x00000000, "PAUSED");
+		 //glClear(GL_COLOR_BUFFER_BIT);
+		 glColor3f(1.0, 1.0, 0.5);
+		 //main
+		//glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+		glBegin(GL_QUADS);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,	  10);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,	  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+		glEnd();
 
 }
 //Help screen 
 void help()
 {
 	 Rect r, d;
-        //help title
-        r.bot = g.yres -230;
-        r.left = 300;
-        r.center = 0;
-        ggprint16(&r, 6, 0x00cd00cd, "HELP");
+		//help title
+		r.bot = g.yres -230;
+		r.left = 300;
+		r.center = 0;
+		ggprint16(&r, 6, 0x00cd00cd, "HELP");
 		d.bot = g.yres -250;
-        d.left = 300;
-        d.center = 0;
-        ggprint16(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
+		d.left = 300;
+		d.center = 0;
+		ggprint16(&d, 6, 0x00cd00cd, "Spencer's Feature Mode: press 'o'");
 		r.bot = g.yres -270;
 		ggprint16(&r, 6, 0x00cd00cd, "Jesus Feature Mode: Press t key for out of bounds mode");
 		r.bot = g.yres -290;
@@ -718,71 +718,71 @@ void help()
 		ggprint16(&r, 6, 0x00cd00cd, "Irenes Feature Mode: Press v key for finish line mode");
 		r.bot = g.yres -330;
 		ggprint16(&r, 6, 0x00cd00cd, "Jarls Feature Mode: Press r key for race mode and f key for test rotation mode");
-         //glClear(GL_COLOR_BUFFER_BIT);
-         glColor3f(0.0, 0.0, 1.0);
-         //main
-        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
-        glBegin(GL_QUADS);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,      10);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,      g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
+		 //glClear(GL_COLOR_BUFFER_BIT);
+		 glColor3f(0.0, 0.0, 1.0);
+		 //main
+		//glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+		glBegin(GL_QUADS);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(10,	  10);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(10,	  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
 		glEnd();
 }
 void startMenu()
 {
-         Rect r;
-         Rect s;
-        //start menu
-        r.bot = g.yres -700;
-        r.left = 1150;
-        r.center = 0;
-        s.bot = g.yres -750;
-        s.left = 1160;
-        s.center = 0;
-        ggprint16(&r, 6, 0x00cd00cd, "TOKYO THROTTLE!");
+		 Rect r;
+		 Rect s;
+		//start menu
+		r.bot = g.yres -700;
+		r.left = 1150;
+		r.center = 0;
+		s.bot = g.yres -750;
+		s.left = 1160;
+		s.center = 0;
+		ggprint16(&r, 6, 0x00cd00cd, "TOKYO THROTTLE!");
 
-        ggprint16(&s, 6, 0x00cd00cd, "Press E to Start!");
-        ggprint16(&s, 6, 0x00000000, "Press E to Start!");
+		ggprint16(&s, 6, 0x00cd00cd, "Press E to Start!");
+		ggprint16(&s, 6, 0x00000000, "Press E to Start!");
 
-         //glClear(GL_COLOR_BUFFER_BIT);
-         glColor3f(0.0, 0.0, 0.0);
-         //main
-        //glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
-        glBegin(GL_QUADS);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(0,      0);
-                glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(0,      g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
-                glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  0);
-                glEnd();
+		 //glClear(GL_COLOR_BUFFER_BIT);
+		 glColor3f(0.0, 0.0, 0.0);
+		 //main
+		//glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+		glBegin(GL_QUADS);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[1]); glVertex2i(0,	  0);
+				glTexCoord2f(g.tex.xc[0], g.tex.yc[0]); glVertex2i(0,	  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[0]); glVertex2i(g.xres,  g.yres);
+				glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  0);
+				glEnd();
 }
 
 void build_billboard(float p1, float p2, float p3, 
-                     float red, float green, float blue)
+					 float red, float green, float blue)
 {
-    // first param: left/right
-    // last param: push forward 
-    glPushMatrix();
-    glColor3f(red, green, blue);
-        //1st element was 6.0f
-        //2nd element was -0.5f
-    glTranslatef(p1, p2, p3);
-        //3rd element was 0.2
-        //2nd element was 5.0
-        //1st element was 0.2
-    box(0.5, 10.0, 0.5);		
-    glPopMatrix();
+	// first param: left/right
+	// last param: push forward 
+	glPushMatrix();
+	glColor3f(red, green, blue);
+		//1st element was 6.0f
+		//2nd element was -0.5f
+	glTranslatef(p1, p2, p3);
+		//3rd element was 0.2
+		//2nd element was 5.0
+		//1st element was 0.2
+	box(0.5, 10.0, 0.5);
+	glPopMatrix();
    
-    glPushMatrix();
-    glColor3f(red, green, blue);
-        //1st element was 6.0f
-        //2nd element was -0.5f
-    glTranslatef(p1, p2 + 5.5f, p3);
-        //3rd element was 0.2
-        //2nd element was 5.0
-        //1st element was 0.2
-    box(6.0f, 3.0f, 0.5f);		
-    glPopMatrix();
+	glPushMatrix();
+	glColor3f(red, green, blue);
+		//1st element was 6.0f
+		//2nd element was -0.5f
+	glTranslatef(p1, p2 + 5.5f, p3);
+		//3rd element was 0.2
+		//2nd element was 5.0
+		//1st element was 0.2
+	box(6.0f, 3.0f, 0.5f);
+	glPopMatrix();
 }
 
 void drawStreet()
@@ -790,7 +790,7 @@ void drawStreet()
 	glPushMatrix();
 	glColor3f(0.2f, 0.2f, 0.2f);
 	float w = 5.0;
-    //d = 100.0 -> changed
+	//d = 100.0 -> changed
 	float d = 1000.0;
 	float h = 0.0;
 	glTranslatef(0.0f, 0.0f, 0.0f);
@@ -813,7 +813,7 @@ void drawStreet()
 	//double yellow line
 	glColor3f(0.8f, 0.8f, 0.2f);
 	w = 0.1;
-    //d = 100.0 -> changed
+	//d = 100.0 -> changed
 	d = 1000.0;
 	h = 0.01;
 	glPushMatrix();
@@ -840,71 +840,70 @@ void drawStreet()
 	glPopMatrix();
 	//guard rails
 	glColor3f(1.0f, 1.0f, 1.0f);
-    //double k = 2.0;
-	if (g.oPressed){
-    	tunnel();
+	//double k = 2.0;
+	if (g.oPressed) {
+		tunnel();
 	}
-    //i<40 -> changed
+	//i<40 -> changed
 	/*for (int i=0; i<400; i++) {
-        if (i <= 200){
-            k = k + 0.05;
-		    glPushMatrix();
-		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box(0.2, k, g.rails);
-		    glPopMatrix();
-		    glPushMatrix();
-		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box(0.2, k, g.rails);
-		    glPopMatrix();
-        }
-        else {
-            k = k - 0.05;
-		    glPushMatrix();
-		    glTranslatef(6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box(0.2, k, g.rails);
-		    glPopMatrix();
-		    glPushMatrix();
-		    glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
-            //3rd element was 0.2
-            //2nd element was 5.0
-		    box(0.2, k, g.rails);
-		    glPopMatrix();
-        }
+		if (i <= 200){
+			k = k + 0.05;
+			glPushMatrix();
+			glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+			//3rd element was 0.2
+			//2nd element was 5.0
+			box(0.2, k, g.rails);
+			glPopMatrix();
+			glPushMatrix();
+			glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+			//3rd element was 0.2
+			//2nd element was 5.0
+			box(0.2, k, g.rails);
+			glPopMatrix();
+		}
+		else {
+			k = k - 0.05;
+			glPushMatrix();
+			glTranslatef(6.0f, -0.5f, (float)-i*2.5);
+			//3rd element was 0.2
+			//2nd element was 5.0
+			box(0.2, k, g.rails);
+			glPopMatrix();
+			glPushMatrix();
+			glTranslatef(-6.0f, -0.5f, (float)-i*2.5);
+			//3rd element was 0.2
+			//2nd element was 5.0
+			box(0.2, k, g.rails);
+			glPopMatrix();
+		}
 	}*/
-               //box car -- WORK IN PROGRESS
-        		glPushMatrix();
+				//box car -- WORK IN PROGRESS
+				glPushMatrix();
 				glColor3f(0.0f, 0.0f, 0.0f);
-                        if(g.jPressed)
-                        {
-                                switchColor();
-                        }
-                //1st element was 6.0f
-                //2nd element was -0.5f
-		        glTranslatef(g.cameraPosition[0], -0.5f, (float)g.cameraPosition[2] - 3.0);
-                glRotatef(g.curTheta, 0, -1, 0);
-                glMatrixMode(GL_MODELVIEW);
-                //3rd element was 0.2
-                //2nd element was 5.0
-                //1st element was 0.2
-		        box(0.5, 2.0, 0.5);
-		        glPopMatrix();
+						if(g.jPressed) {
+							switchColor();
+						}
+				//1st element was 6.0f
+				//2nd element was -0.5f
+				glTranslatef(g.cameraPosition[0], -0.5f, (float)g.cameraPosition[2] - 3.0);
+				glRotatef(g.curTheta, 0, -1, 0);
+				glMatrixMode(GL_MODELVIEW);
+				//3rd element was 0.2
+				//2nd element was 5.0
+				//1st element was 0.2
+				box(0.5, 2.0, 0.5);
+				glPopMatrix();
 
 				//finish mode
 				/*
 				if(g.finishMode != 0){
 				glEnable(GL_DEPTH_TEST);
-                glDepthFunc(GL_ALWAYS);
-                glPushMatrix();
-                glColor3ub(150.0f, 200.0f, 120.0f);
-                glTranslatef(0.0f, 1.5f, -70.0f);
-                box(5.0, 2.0, 5.0);
-                glPopMatrix();
+				glDepthFunc(GL_ALWAYS);
+				glPushMatrix();
+				glColor3ub(150.0f, 200.0f, 120.0f);
+				glTranslatef(0.0f, 1.5f, -70.0f);
+				box(5.0, 2.0, 5.0);
+				glPopMatrix();
 				}*/
 				
 				if (g.rotationTestOn) {
@@ -925,58 +924,58 @@ void drawStreet()
 				}
 				// first param: left/right
 				// last param: push forward 
-                                
-                glPushMatrix();
-                build_billboard(-8.0f, -0.5f, -20.0f, 0.0f, 1.0f, 0.0f);  
-                build_billboard(8.0f, -0.5f, -100.0f, 0.0f, 0.0f, 1.0f);
-                build_billboard(-8.0f, -0.5f, -200.0f, 0.0f, 1.0f, 0.0f);
-                build_billboard(8.0f, -0.5f, -300.0f, 1.0f, 0.0f, 0.0f);
-                build_billboard(-8.0f, -0.5f, -400.0f, 0.0f, 1.0f, 0.0f);
-                build_billboard(8.0f, -0.5f, -500.0f, 0.0f, 0.0f, 1.0f);
-                build_billboard(-8.0f, -0.5f, -600.0f, 1.0f, 0.0f, 0.0f);
-                build_billboard(8.0f, -0.5f, -700.0f, 0.0f, 1.0f, 0.0f);
-                build_billboard(-8.0f, -0.5f, -800.0f, 0.0f, 0.0f, 1.0f);
-                build_billboard(8.0f, -0.5f, -900.0f, 1.0f, 0.0f, 0.0f);
-                build_billboard(-8.0f, -0.5f, -1000.0f, 0.0f, 1.0f, 0.0f);
-                glPopMatrix();
+
+				glPushMatrix();
+				build_billboard(-8.0f, -0.5f, -20.0f, 0.0f, 1.0f, 0.0f);  
+				build_billboard(8.0f, -0.5f, -100.0f, 0.0f, 0.0f, 1.0f);
+				build_billboard(-8.0f, -0.5f, -200.0f, 0.0f, 1.0f, 0.0f);
+				build_billboard(8.0f, -0.5f, -300.0f, 1.0f, 0.0f, 0.0f);
+				build_billboard(-8.0f, -0.5f, -400.0f, 0.0f, 1.0f, 0.0f);
+				build_billboard(8.0f, -0.5f, -500.0f, 0.0f, 0.0f, 1.0f);
+				build_billboard(-8.0f, -0.5f, -600.0f, 1.0f, 0.0f, 0.0f);
+				build_billboard(8.0f, -0.5f, -700.0f, 0.0f, 1.0f, 0.0f);
+				build_billboard(-8.0f, -0.5f, -800.0f, 0.0f, 0.0f, 1.0f);
+				build_billboard(8.0f, -0.5f, -900.0f, 1.0f, 0.0f, 0.0f);
+				build_billboard(-8.0f, -0.5f, -1000.0f, 0.0f, 1.0f, 0.0f);
+				glPopMatrix();
 }
 
 void physics()
 {
-    if (g.wPressed) {
-        if(g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5){
-            grassAccelerate(g.vel);
-            go_forwards_grass(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-            //g.cameraPosition[2] -= g.vel;
-            g.wPressed = false;
-        } else {
-            //accelerate(g.vel);
-            go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-            //g.cameraPosition[2] -= g.vel;
-            g.wPressed = false;
-        }
-        
-    }
+	if (g.wPressed) {
+		if(g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5){
+			grassAccelerate(g.vel);
+			go_forwards_grass(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+			//g.cameraPosition[2] -= g.vel;
+			g.wPressed = false;
+		} else {
+			//accelerate(g.vel);
+			go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+			//g.cameraPosition[2] -= g.vel;
+			g.wPressed = false;
+		}
+		
+	}
 	if (g.aPressed) {
 		//accelerate(g.vel);
-        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        shift_left(g.curTheta);
+		go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+		shift_left(g.curTheta);
 		//g.cameraPosition[2] -= g.vel;
 		//g.cameraPosition[0] -= 0.1;
 		g.aPressed = false;
 	}	
 	if (g.sPressed) {
 		//decelerate(g.vel);
-        go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        //g.cameraPosition[2] -= g.vel;
+		go_backwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+		//g.cameraPosition[2] -= g.vel;
 		g.sPressed = false;
 		 cout << g.vel << endl;
 	}
 	if (g.dPressed) {
 		//accelerate(g.vel);
-        go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
-        shift_right(g.curTheta);
-        //g.cameraPosition[2] -= g.vel;
+		go_forwards(g.vel, g.cameraPosition[2], g.cameraPosition[0], g.curTheta);
+		shift_right(g.curTheta);
+		//g.cameraPosition[2] -= g.vel;
 		//g.cameraPosition[0] += 0.1;
 		g.dPressed = false;
 	}
@@ -1018,47 +1017,46 @@ void render()
 	//glDisable(GL_CULL_FACE);
 
 
-	if(!g.ePressed)
-	{
-	    startMenu();
+	if(!g.ePressed) {
+		startMenu();
 	}
 	else
 	{
-	    //Start state 
-	    if(frames < 480) {
+		//Start state 
+		if(frames < 480) {
 		frames++;
-	    }   
-	    startPrint(frames);
-	    startCounter = startCount(frames);
-	    //Start state
-	    
-	    //out of bounds mode
-	    if(g.bounds_mode != 0) {
-                boundModePrint();
-            }
+		}   
+		startPrint(frames);
+		startCounter = startCount(frames);
+		//Start state
+		
+		//out of bounds mode
+		if(g.bounds_mode != 0) {
+				boundModePrint();
+			}
 
-            if((g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5) && (g.bounds_mode != 0)) {
-                boundsPrint(frames);
-                if(frames > 720) {
-                    g.cameraPosition[0] = g.iniPos;
-                    g.bounds_mode = 0;
-                    frames = 480;
-                }
-                frames++;
-            }
-            else if(g.bounds_mode != 0) {
-                frames = 480;
-            }
-	    if(frames == 60)
+			if((g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5) && (g.bounds_mode != 0)) {
+				boundsPrint(frames);
+				if(frames > 720) {
+					g.cameraPosition[0] = g.iniPos;
+					g.bounds_mode = 0;
+					frames = 480;
+				}
+				frames++;
+			}
+			else if(g.bounds_mode != 0) {
+				frames = 480;
+			}
+		if(frames == 60)
 		playSound(alSourceSET);
-	    if(frames == 120)
+		if(frames == 120)
 		playSound(alSourceSET);
-	    if(frames == 180)
+		if(frames == 180)
 		playSound(alSourceGO);
 
-	    //out of bounds mode
+		//out of bounds mode
 		//finish line mode 
-		if(g.finishMode !=0){
+		if(g.finishMode !=0) {
 			finishText();
 		}
 			/*
@@ -1093,51 +1091,51 @@ void render()
 			glDisable(GL_BLEND);
 			glPopMatrix();
 		}*/
-		if(g.finishMode != 0 && g.cameraPosition[2] <= -74.0f){
+		if(g.finishMode != 0 && g.cameraPosition[2] <= -74.0f) {
 			practice();
 		}
 
-        render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
-        render_game_mode_title(g.raceModeOn, g.xres, g.yres);
-        display_rm_options(g.raceModeOn, g.rotationTestOn);
-        rot_instructions(g.rotationTestOn);
-        display_rotation_text(g.rotationTestOn);
-        display_countdown(g.raceModeOn, g.rmCountDown);
-        go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
-        you_win(g.didYouWin, g.xres, g.yres);
+		render_the_game_over(g.didYouWin, g.rmFinished, g.xres, g.yres);
+		render_game_mode_title(g.raceModeOn, g.xres, g.yres);
+		display_rm_options(g.raceModeOn, g.rotationTestOn);
+		rot_instructions(g.rotationTestOn);
+		display_rotation_text(g.rotationTestOn);
+		display_countdown(g.raceModeOn, g.rmCountDown);
+		go_go_go(g.raceModeOn, g.iniPos, g.cameraPosition[2]);
+		you_win(g.didYouWin, g.xres, g.yres);
 
-	    r.bot = g.yres - 40;
-	    r.left = 20;
-	    r.center = 0;
-	    ggprint16(&r, 16, 0x00ff0000, ">PRESS H FOR SPECIFIC KEYS FOR FEATURES<");
-	    //if p is pressed then pause
-	    if(g.pPressed) {
+		r.bot = g.yres - 40;
+		r.left = 20;
+		r.center = 0;
+		ggprint16(&r, 16, 0x00ff0000, ">PRESS H FOR SPECIFIC KEYS FOR FEATURES<");
+		//if p is pressed then pause
+		if(g.pPressed) {
 		pause();
-	    }
+		}
 
-	    if(g.cPressed) {
+		if(g.cPressed) {
 		credits();
-	    }
-	    if(g.hPressed){
+		}
+		if(g.hPressed) {
 		help();
-	    }
-		if(g.jPressed){
+		}
+		if(g.jPressed) {
 
-                Rect r;
-                Rect s;
-                r.bot = 480 - 230;
-                r.left = 230;
-                r.center = 0;
-                s.bot = 480 - 270;
-                s.center = 0;
-                ggprint16(&r, 6, 0x005f0202, "Color Select!");
-                        if(red == 1.0f)
-                                ggprint16(&s, 6, 0x00ff0000, "Red");
-                        else if(green == 1.0f)
-                                ggprint16(&s, 6, 0x0000ff00, "Green");
-                        else if(blue == 1.0f)
-                                ggprint16(&s, 6, 0x000000ff, "Blue");
-        }
+				Rect r;
+				Rect s;
+				r.bot = 480 - 230;
+				r.left = 230;
+				r.center = 0;
+				s.bot = 480 - 270;
+				s.center = 0;
+				ggprint16(&r, 6, 0x005f0202, "Color Select!");
+						if(red == 1.0f)
+								ggprint16(&s, 6, 0x00ff0000, "Red");
+						else if(green == 1.0f)
+								ggprint16(&s, 6, 0x0000ff00, "Green");
+						else if(blue == 1.0f)
+								ggprint16(&s, 6, 0x000000ff, "Blue");
+		}
 
 	}
 	glPopAttrib();
