@@ -121,6 +121,7 @@ public:
 	unsigned int feature_mode; //race mode
 	unsigned int rotation_test;
 	unsigned int bounds_mode;
+	unsigned int speed_mode;
 	unsigned int finishMode;
 	unsigned int yPressed;
 	bool zPressed, jPressed, ePressed, pPressed, cPressed, wPressed, aPressed, sPressed, dPressed, oPressed;
@@ -176,6 +177,7 @@ public:
 		anchorPosition2 = (float)cameraPosition[2] - 13.0f;
 		//restart mode
 		bounds_mode = 0;
+		speed_mode = 0;
 		yPressed = 0;
 		//restart mode
 		//finish
@@ -477,6 +479,9 @@ int check_keys(XEvent *e)
 				break;
 			case XK_t:
 				g.bounds_mode ^= 1;
+				break;
+			case XK_x:
+				g.speed_mode ^= 1;
 				break;
 			case XK_y:
 				if(g.bounds_mode != 0) {
@@ -1047,7 +1052,13 @@ void render()
 			else if(g.bounds_mode != 0) {
 				frames = 480;
 			}
-		speedHud(g.vel);
+		if(g.cameraPosition[2] < -1000) {
+            g.cameraPosition[0] = g.iniPos;
+            g.cameraPosition[2] = 8;
+        }
+		if(g.speed_mode) {
+			speedHud(g.vel);
+		}
 		
 		if(frames == 60)
 		playSound(alSourceSET);
