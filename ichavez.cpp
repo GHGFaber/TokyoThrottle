@@ -133,7 +133,27 @@ void practice(){
     backScreen(w, h, 0.0f, 980.0f, 800.0f, 0.0f);
 }
 
+void dodge () {
+    glColor3f(1.0f, 0.5f, 0.0f);
+    box2(0.3, 1.0, 0.1, 3.0, 0.0, -25.0);
+
+    glColor3f(1.0f, 0.5f, 0.0f);
+    box2(0.3, 1.0, 0.1, -2.0, 0.0, -30.0);
+
+    glColor3f(1.0f, 0.5f, 0.0f);
+    box2(0.3, 1.0, 0.1, -3.0, 0.0, -40.0);
+
+    glColor3f(1.0f, 0.5f, 0.0f);
+    box2(0.3, 1.0, 0.1, -2.0, 0.0, -50.0);
+
+    glColor3f(1.0f, 0.5f, 0.0f);
+    box2(0.3, 1.0, 0.1, 2.0, 0.0, -60.0);
+
+    glColor3f(1.0f, 0.5f, 0.0f);
+    box2(0.3, 1.0, 0.1, 3.0, 0.0, -70.0);
+}
 void finish(){
+    dodge();
     //this is not baby green 
     glColor3f(240.0f, 230.0f, 140.0f);//sign
     box2(7.0, 2.0, 0.1, 0.0, 5.0, -74.0);
