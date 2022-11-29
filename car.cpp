@@ -1049,9 +1049,7 @@ void render()
 				}
 				frames++;
 			}
-			else{
-				frames = 480;
-			}
+			
 		if(g.cameraPosition[2] < -1000) {
             g.cameraPosition[0] = g.iniPos;
             g.cameraPosition[2] = 8;
