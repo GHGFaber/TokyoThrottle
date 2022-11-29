@@ -1,3 +1,11 @@
+// ============================================================================
+// NAME: Jarl Ramos
+// ASGT: Lab 7 / Group Project - Tokyo Throttle
+// FILE: jramos3.cpp
+// ORGN: CSUB - CMPS-3350
+// DATE: 5 October 2022
+// ============================================================================
+
 #include <iostream>
 #include "jr3image.h"
 #include "fonts.h"
@@ -8,60 +16,45 @@
 #include <GL/glu.h>
 
 using namespace std;
-// ============================================================================
-// NAME: Jarl Ramos
-// ASGT: Lab 7 / Group Project - Tokyo Throttle
-// FILE: jramos3.cpp
-// ORGN: CSUB - CMPS-3350
-// DATE: 5 October 2022
-// ============================================================================
 
+//Will be used for converting degrees to radians.
 const float RAD_CONV = 0.0175f;
 
+//Function prototype for modified text_rect function.
 void text_rect_2(Rect & rec, int bot, int left, int center, const char string[],
                  float value);
 
-class OtherCar
-{
-    private:
-    int xPosition;
-    int yPosition;
-    int velocity;
-    public:
-    // add data regarding car sprites
-    // tie the car position to the street
-};
-
+//Increases the car velocity.
 void accelerate(float & velocity)
 {
-    // change the velocity
-    // can this work with cameraPosition[2]?
     velocity += 0.2f;
     
+    //Cap velocity.
     if (velocity > 3.0f)
 		velocity = 3.0f;
 }
 
+//Decreases the car velocity.
 void decelerate(float & velocity)
 {
-    // lower the velocity
     velocity -= 0.3f;
     
+    //Cap velocity.
     if (velocity < -5.0f)
 		velocity = -5.0f;
 }
 
+//Makes the car go forward and increases its velocity.
 void go_forwards(float & vel, float & cp1, float & cp2, float theta)
 {
     accelerate(vel);
     
+    //Range of theta is 0 - 360 degrees.
     theta = (int)theta % 360;
-    
-    
-    //go forward according to value of angle
-    //do we slow down when turning?
-    
-    //TODO: Maybe implement a turning velocoty
+
+    //if the car is facing exactly north/south/east/west
+    //
+    //The car will move in the direction of theta.
     if (theta == 0.0f)
         cp1 -= vel;
     else if (theta == 90.0f)
@@ -92,16 +85,15 @@ void go_forwards(float & vel, float & cp1, float & cp2, float theta)
     }
     cout << theta << endl;
 }
+
+//Similar function to above but for when traversing grass.
 void go_forwards_grass(float & vel, float & cp1, float & cp2, float theta)
-{ 
+{
+    //Acceleration is slower when moving through grass.
 	vel += 0.1f;
 	
     theta = (int)theta % 360;
     
-    //go forward according to value of angle
-    //do we slow down when turning?
-    
-    //TODO: Maybe implement a turning velocoty
     if (theta == 0.0f)
         cp1 -= vel;
     else if (theta == 90.0f)
@@ -132,13 +124,14 @@ void go_forwards_grass(float & vel, float & cp1, float & cp2, float theta)
     }
 }
 
+//Makes the car go backwards.
 void go_backwards(float & vel, float & cp1, float & cp2, float theta)
 {
     decelerate(vel);
     
     theta = (int)theta % 360;
     
-    //go backward according to value of angle
+    //Go backward according to value of angle.
     if (theta == 0.0f)
         cp1 += vel;
     else if (theta == 90.0f)
@@ -167,11 +160,14 @@ void go_backwards(float & vel, float & cp1, float & cp2, float theta)
             cp1 += 0.75f * vel * sin(conv_rad(theta - 270.0f));
         }
     }
-    
 }
+
+//This will make the car move after the key press to simulate
+//car deceleration when the gas pedal is no longer pressed.
 void pedal_off_slow_down(bool pressed1, bool pressed2, 
 						 float & vel, float & cp1, float & cp2, float theta)
 {
+    //Decelerate forwards.
 	if (!pressed1 && !pressed2 && vel > 0) {
 		vel -= 0.07f;
 		if (theta == 0.0f)
@@ -202,11 +198,12 @@ void pedal_off_slow_down(bool pressed1, bool pressed2,
 				cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
 			}
 		}
+        //The vehicle definitely stops when velocity reaches zero.
 		if (vel < 0.0f)
 			vel = 0.0f;
-	}
-	else if (!pressed1 && !pressed2 && vel < 0) {
-		vel += 0.07f;
+	} else if (!pressed1 && !pressed2 && vel < 0) {
+		//Decelerate backwards.
+        vel += 0.07f;
 		if (theta == 0.0f)
 			cp1 -= vel;
 		else if (theta == 90.0f)
@@ -235,29 +232,33 @@ void pedal_off_slow_down(bool pressed1, bool pressed2,
 				cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
 			}
 		}
+        //The vehicle definitely stops when velocity reaches zero.
 		if (vel > 0.0f)
 			vel = 0.0f;
 	}
 }
 
+//Makes the car shift to the left.
 void shift_left(float & theta)
 {
-    // modify camera angle
+    //Theta decreases making the car face left.
     theta = theta - 5.0f;
 }
 
+//Makes the car shift to the right.
 void shift_right(float & theta)
 {
-    //modify camera position
+    //Theta decreases making the car face right.
     theta = theta + 5.0f;
 }
 
+//Converts a degree value to radians.
 float conv_rad(float deg)
 {
     return deg * RAD_CONV;
 }
 
-// will set the state of whether or not the game is over
+//Will set the state of whether or not the game is over
 bool isOver(float velocity)
 {
     bool isItOver = false;
@@ -268,7 +269,7 @@ bool isOver(float velocity)
     return isItOver;
 }
 
-// build the rectangle used for the game over screen.
+//Build the rectangle used for the game over screen.
 void build_rectangle(float width, float height, float d, float p0, float p1, 
                      GLubyte red, GLubyte green, GLubyte blue)
 {
@@ -284,42 +285,38 @@ void build_rectangle(float width, float height, float d, float p0, float p1,
         glPopMatrix();
 }
 
-//constructs the text used for the game over screen.
+//Constructs the text used for the game over screen.
 void text_rect(Rect & rec, int bot, int left, int center, const char string[])
 {
-    //sets appropriate dimensions
+    //Sets appropriate dimensions.
     rec.bot = bot;
     rec.left = left;
     rec.center = center;
     ggprint16(&rec, 16, 0x00ffff00, string);
 }
 
-//this will display the game over screen when the correct conditions are met;
+//This will display the game over screen when the correct conditions are met;
 //the function will call both the build_rectangle() and text_rect() functions
-//in order to convey information to the game player
+//in order to convey information to the game player.
 void render_the_game_over(bool won, bool done, int xr, int yr) {
-    //glClear(GL_COLOR_BUFFER_BIT);
-    //game over messages
-    //int xcent = xr / 2;
-    //int ycent = yr / 2;
+    
     int w = 200;
- 
     int h = 200;
 
-    //for the text that will show up on screen
+    //For the text that will show up on screen.
     Rect r1;
     Rect r2;
 
-    //prints the game over message
+    //Prints the game over message.
     if (!won && done) {
         text_rect(r1, 825.0f, 1240.0f, 0, "GAME OVER!");
         text_rect(r2, 775.0f, 1180.0f, 0, "Press any key to continue");
-        //builds the background for the game over screen
+        //Builds the background for the game over screen.
         build_rectangle(w, h, 0.0f, 1290.0f, 800.0f, 0, 225, 0);
     }
 }
 
-//how will this be implemented with feature mode?
+//Shows the mode title on screen when mode is turned on.
 void render_game_mode_title(bool isModeOn, int xr, int yr)
 {
 	Rect rRM;
@@ -328,15 +325,28 @@ void render_game_mode_title(bool isModeOn, int xr, int yr)
 		text_rect(rRM, 80, 1230, 0, "RACE MODE");
 
 }
+
+//Fetches the position value.
 float get_init_pos(float position)
 {
 	return position;
 }
+
+//==============================================================================
+//FEATURE MODE 1 IS HERE
+//==============================================================================
+//The following feature adds a gameplay mechanism where the player has
+//to cross a point in the game environment within an arbitrary interval
+//of time.
 void race_mode(int & ctdn, int & frames, float init_pos, float position,
 			   bool & sec0, bool & sec1, bool & sec2, bool & sec3, 
 			   bool & sec4, bool & sec5, bool & won, bool & done,
                int xr, int yr)
 {
+    //Records time by counting the number of frames; it is assumed that the
+    //program runs at 60 frames per second.
+    //
+    //Countdown begins at five seconds.
 	frames = frames + 1;
 	if (frames <= 60 && !sec0)
 		sec0 = true;
@@ -356,17 +366,23 @@ void race_mode(int & ctdn, int & frames, float init_pos, float position,
 		--ctdn;
 		sec5 = true;
 	}
-	
-    if (position <= init_pos - 500.0f) {
+    //The player wins if they reach this position;
+    //-950.0f is the location of the finish line.
+    if (position <= -950.0f) {
         won = true;
         done = true;
     }
-    if (ctdn == 0 && position > init_pos - 500.0f) {
+    //The player loses when they don't reach the position within 5 seconds.
+    if (ctdn == 0 && position > -950.0f) {
         won = false;
         done = true;
     }
     
 }
+//==============================================================================
+//END OF FEATURE MODE 1
+//==============================================================================
+//Displays feature mode options for both features.
 void display_rm_options(bool isModeOn, bool rTestOn)
 {
 	Rect optionR;
@@ -379,23 +395,18 @@ void display_rm_options(bool isModeOn, bool rTestOn)
 				  "Press f to Test Rotation");			  
 	}
 }
-//======================================================================
-//FEATURE MODE IS HERE
-//======================================================================
+//==============================================================================
+//FEATURE MODE 2 IS HERE
+//==============================================================================
 //Moves anchor box according to angular value.
-//TODO: New revision to feature mode
-//Implement mechanism that will render a shape in front of player.
-//This will face the car at the specified angle.
-
-
+//Implements mechanism that will render a shape in front of player that will
+//face the car at the specified angle.
 void rotation_test_mode(bool rTestOn, float cp0, float cp2,
 						float & ap0, float & ap2, float theta)
 {
 	theta = (int)theta % 360;
 	if (theta < 0)
 		theta = theta + 360;
-	
-	cout << theta << endl;
 	
 	if (rTestOn) {
 		if (theta == 0.0f)
@@ -464,6 +475,7 @@ void display_theta(bool rTestOn, float theta)
 		text_rect(thetaR2, 1200, 200, 0, "degrees");
 	}
 }
+//Special text_rect for this feature.
 void text_rect_2(Rect & rec, int bot, int left, int center, const char string[],
                  float value)
 {
@@ -473,9 +485,10 @@ void text_rect_2(Rect & rec, int bot, int left, int center, const char string[],
     rec.center = center;
     ggprint16(&rec, 16, 0x00ffff00, string, value);
 }
-//======================================================================
-//END OF FEATURE MODE
-//======================================================================
+//==============================================================================
+//END OF FEATURE MODE 2
+//==============================================================================
+//Displays countdown for first feature mode.
 void display_countdown(bool isModeOn, int ctdn)
 {
 	Rect rCD;
@@ -490,7 +503,6 @@ void display_countdown(bool isModeOn, int ctdn)
                 text_rect(rCD, 1000, 1230, 0, "4");
                 break;
             case 3:
-                // cout << "This case ran" << endl;
                 text_rect(rCD, 1000, 1230, 0, "3");
                 break;
             case 2:
@@ -503,6 +515,7 @@ void display_countdown(bool isModeOn, int ctdn)
         }
     }
 }
+//Extra message for first feature mode.
 void go_go_go(bool isModeOn, float init_pos, float position)
 {
 	Rect r4;
@@ -511,6 +524,7 @@ void go_go_go(bool isModeOn, float init_pos, float position)
 		 text_rect(r4, 1200, 1200, 0, "GO GO GO!!!!!");
 	
 }
+//Displays message when the player has met the win condition.
 void you_win(bool won, int xr, int yr)
 {
     if (won)
@@ -520,6 +534,7 @@ void you_win(bool won, int xr, int yr)
     }
 	
 }
+//Shows name.
 void show_name_jr3()
 {
     std::cout << "Jarl Ramos / Geoffrey De Palme" << std::endl;
