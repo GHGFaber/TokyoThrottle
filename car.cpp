@@ -288,7 +288,7 @@ int main()
 	int initPosition2 = get_init_pos(g.cameraPosition[2]);
 	g.iniPos = initPosition;
 	g.iniPos2 = initPosition2;
-	//playSound(alSourceDrip);
+	//playSound(alSourceIDLE);
 	while (!done) {
 		while (x11.getXPending()) {
 			XEvent e = x11.getXNextEvent();
@@ -1065,13 +1065,18 @@ void render()
 			speedHud(g.vel);
 		}
 		
-		if(frames == 60)
-		playSound(alSourceSET);
+		if(frames == 60){
+			playSound(alSourceSET);
+			playSound(alSourceIDLE);
+		}
 		if(frames == 120)
 		playSound(alSourceSET);
 		if(frames == 180)
 		playSound(alSourceGO);
-
+		if(g.vel == 0 && frames == 190)
+		for(int i = 0; i <4; i++){
+			playSound(alSourceCAR);
+		}
 		
 		//finish line mode 
 		if(g.finishMode !=0) {

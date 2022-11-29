@@ -17,8 +17,8 @@ float red = 0.0f;
 float green = 0.0f;
 float blue = 0.0f;
 
-ALuint alBufferDrip, alBufferTick, alBufferSET, alBufferGO;
-ALuint alSourceDrip, alSourceTick, alSourceSET, alSourceGO;
+ALuint alBufferDrip, alBufferTick, alBufferSET, alBufferGO, alBufferIDLE, alBufferCAR;
+ALuint alSourceDrip, alSourceTick, alSourceSET, alSourceGO, alSourceIDLE, alSourceCAR;
 
 
 void show_name(){
@@ -72,6 +72,9 @@ void initSound()
         alBufferTick = alutCreateBufferFromFile("select.wav");
         alBufferSET = alutCreateBufferFromFile("SET.wav");
         alBufferGO = alutCreateBufferFromFile("GO.wav");
+        alBufferIDLE = alutCreateBufferFromFile("idle.wav");
+        alBufferCAR = alutCreateBufferFromFile("carstart.wav");
+
         //
         //Source refers to the sound.
         //Generate a source, and store it in a buffer.
@@ -118,6 +121,29 @@ void initSound()
                 printf("ERROR: setting source\n");
                 return;
         }
+	//IDLE SETUP
+        alGenSources(1, &alSourceIDLE);
+        alSourcei(alSourceIDLE, AL_BUFFER, alBufferIDLE);
+        //Set volume and pitch to normal, no looping of sound.
+        alSourcef(alSourceIDLE, AL_GAIN, 1.0f);
+        alSourcef(alSourceIDLE, AL_PITCH, 1.0f);
+        alSourcei(alSourceIDLE, AL_LOOPING, AL_FALSE);
+        if (alGetError() != AL_NO_ERROR) {
+                printf("ERROR: setting source\n");
+                return;
+        }
+	//Car start
+        alGenSources(1, &alSourceCAR);
+        alSourcei(alSourceCAR, AL_BUFFER, alBufferCAR);
+        //Set volume and pitch to normal, no looping of sound.
+        alSourcef(alSourceCAR, AL_GAIN, 1.0f);
+        alSourcef(alSourceCAR, AL_PITCH, 1.0f);
+        alSourcei(alSourceCAR, AL_LOOPING, AL_FALSE);
+        if (alGetError() != AL_NO_ERROR) {
+                printf("ERROR: setting source\n");
+                return;
+        }
+
         #endif //USE_OPENAL_SOUND
 }
 
@@ -129,12 +155,14 @@ void cleanupSound()
         alDeleteSources(1, &alSourceTick);
         alDeleteSources(1, &alSourceSET);
         alDeleteSources(1, &alSourceGO);
+        alDeleteSources(1, &alSourceIDLE);
 
         //Delete the buffer.
         alDeleteBuffers(1, &alBufferDrip);
         alDeleteBuffers(1, &alBufferTick);
         alDeleteBuffers(1, &alBufferSET);
         alDeleteBuffers(1, &alBufferGO);
+        alDeleteBuffers(1, &alBufferIDLE);
 
         //Close out OpenAL itself.
         //Get active context.
