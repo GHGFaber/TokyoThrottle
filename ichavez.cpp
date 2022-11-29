@@ -174,7 +174,7 @@ void finish(float z, float x){
     box2(0.3, 1.0, 0.1, 3.0, 0.0, -70.0);
 
     if (z <= -22.0f && z >= -24.0f && x >= 2.8f && x <= 4.0f){
-        cout<<"you hit a box / had a collision"
+        cout<<"you hit a box / had a collision" << endl;
     }
 
     //this is the finish line

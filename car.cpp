@@ -812,7 +812,7 @@ void drawStreet()
 	grass(frames); //spawns grass, black/white squares, and light post
 	mainFinish();
 	if(g.finishMode != 0){
-		finish();
+		finish(g.cameraPosition[2], g.cameraPosition[0]);
 	}
 
 	//double yellow line
