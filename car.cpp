@@ -1004,7 +1004,7 @@ void render()
 		//for documentation...
 		//
 		if(g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5){
-			Vec up = {(rnd()*.2)-0.1, 1, (rnd()*.2)-0.1};
+			Vec up = {static_cast<float>((rnd()*.2)-0.1), 1, static_cast<float>((rnd()*.2)-0.1)};
 
 		gluLookAt(
 			g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2],
