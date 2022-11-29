@@ -140,7 +140,7 @@ public:
 	Global() {
 		//constructor
 		xres=1920;
-		yres=3000;
+		yres=1080;
 
 		rmCountDown = 5;
 		numFrames = 0;
@@ -206,7 +206,7 @@ public:
 		//XVisualInfo *vi;
 		Colormap cmap;
 		XSetWindowAttributes swa;
-		setup_screen_res(640, 480);
+		setup_screen_res(g.xres, g.yres);
 		dpy = XOpenDisplay(NULL);
 		if (dpy == NULL) {
 			printf("\n\tcannot connect to X server\n\n");
