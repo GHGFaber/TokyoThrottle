@@ -10,6 +10,7 @@ extern bool paused(bool);
 extern double rails(double);
 extern bool car(bool);
 extern void pause_state();
+extern void pause_game();
 extern void tunnel();
 //extern void m_music(int, char* []);
 

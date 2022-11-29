@@ -40,6 +40,7 @@ public:
 		//constructor
 		xres=640;
 		yres=480;
+		
 
 		vel = 0.0f;
 		// curTheta = 0.0f;
@@ -92,8 +93,6 @@ void box1(float w1, float h1, float d1)
 		glEnd();
 	glEnd();
 }
-
-
 
 void show_name_s()
 {
@@ -180,7 +179,7 @@ void tunnel() {
 	unsigned int slices = 10;*/
 	int k = 120;
 	for (int i=0; i<400; i++) {
-		if (i > 150 && i <= 200) {
+		if (i > 100 && i <= 200) {
 			glPushMatrix();
 			glTranslatef(4.5f, -0.5f, (float)-i*2.5);
 			//3rd element was 0.2
@@ -331,7 +330,7 @@ void pause_state()
 	Rect r;
 		//Pause Title
 		r.bot = gl.yres -230;
-		r.left = 300;
+		r.left = 280;
 		r.center = 0;
 		ggprint8b(&r, 6, 0x00000000, "PAUSED");
 		 //glClear(GL_COLOR_BUFFER_BIT);
@@ -340,11 +339,38 @@ void pause_state()
 		//glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
 		glBegin(GL_QUADS);
 				glTexCoord2f(gl.tex.xc[0], gl.tex.yc[1]); glVertex2i(10,	  10);
-				glTexCoord2f(gl.tex.xc[0], gl.tex.yc[0]); glVertex2i(10,	  gl.yres);
+				glTexCoord2f(gl.tex.xc[0], gl.tex.yc[0]); glVertex2i(10,	gl.yres);
 				glTexCoord2f(gl.tex.xc[1], gl.tex.yc[0]); glVertex2i(gl.xres,  gl.yres);
 				glTexCoord2f(gl.tex.xc[1], gl.tex.yc[1]); glVertex2i(gl.xres,  10);
 		glEnd();
+		glPopMatrix();
 
+}
+void pause_game()
+{
+	float w = 175.0;
+	float h = 70.0;
+	float x = 915.0f;
+	float y = 800.0f;
+	float z = 0.0f;
+	Rect r;
+		//Pause Title
+		r.bot = 790;
+			r.left = 900;
+			r.center = 0;
+		ggprint8b(&r, 6, 0x00000000, "PAUSED");
+		 //glClear(GL_COLOR_BUFFER_BIT);
+		 glColor3f(1.0, 1.0, 0.5);
+		 //main
+		//glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
+		glTranslatef(x,y,z);
+		glBegin(GL_QUADS);
+				glTexCoord2f(gl.tex.xc[0], gl.tex.yc[1]); glVertex2i(-w, -h);
+				glTexCoord2f(gl.tex.xc[0], gl.tex.yc[0]); glVertex2i(-w, h);
+				glTexCoord2f(gl.tex.xc[1], gl.tex.yc[0]); glVertex2i(w, h);
+				glTexCoord2f(gl.tex.xc[1], gl.tex.yc[1]); glVertex2i(w, -h);
+		glEnd();
+		glPopMatrix();
 }
 
 /*

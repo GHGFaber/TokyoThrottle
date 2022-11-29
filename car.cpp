@@ -74,6 +74,7 @@ void init_opengl();
 void check_mouse(XEvent *e);
 int check_keys(XEvent *e);
 void physics();
+void pause_state();
 void render();
 void show_name();
 void show_name_jr3(void);
@@ -85,7 +86,6 @@ void decelerate(float & velocity);
 bool startState(int count); 
 bool helpState(bool);
 void switchColor();
-void pause_state();
 #ifdef USE_OPENAL_SOUND
 void initSound();
 void cleanupSound();
@@ -301,7 +301,8 @@ int main()
 					g.cameraPosition[2], g.second0, g.second1,
 					g.second2, g.second3, g.second4, g.second5, g.didYouWin,
 					g.rmFinished, g.xres, g.yres);
-		physics();
+		if (!g.pPressed)
+			physics();
 		render();
 		x11.swapBuffers();
 	}
@@ -682,7 +683,7 @@ void credits()
 }
 
 //Pause screen pops up 
-void pause()
+/*void pause()
 {
 	Rect r;
 		//Pause Title
@@ -701,7 +702,7 @@ void pause()
 				glTexCoord2f(g.tex.xc[1], g.tex.yc[1]); glVertex2i(g.xres,  10);
 		glEnd();
 
-}
+}*/
 //Help screen 
 void help()
 {
@@ -991,35 +992,41 @@ void physics()
 void render()
 {
 	Rect r;
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-	//
-	//3D mode
-	glMatrixMode(GL_PROJECTION); glLoadIdentity();
-	gluPerspective(45.0f, g.aspectRatio, 0.1f, 100.0f);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	//for documentation...
-	Vec up = {0,1,0};
-	gluLookAt(
-		g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2],
-		g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2]-1.0,
-		up[0], up[1], up[2]);
-	glLightfv(GL_LIGHT0, GL_POSITION, g.lightPosition);
-	//
-	drawStreet();
-	//
-	//
-	//
-	//switch to 2D mode
-	//
-	glViewport(0, 0, g.xres, g.yres);
-	glMatrixMode(GL_MODELVIEW);   glLoadIdentity();
-	glMatrixMode (GL_PROJECTION); glLoadIdentity();
-	gluOrtho2D(0, g.xres, 0, g.yres);
-	glPushAttrib(GL_ENABLE_BIT);
-	glDisable(GL_LIGHTING);
-	//glDisable(GL_DEPTH_TEST);
-	//glDisable(GL_CULL_FACE);
+	if(!g.pPressed) {
+		
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		//
+		//3D mode
+		glMatrixMode(GL_PROJECTION); glLoadIdentity();
+		gluPerspective(45.0f, g.aspectRatio, 0.1f, 100.0f);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		//for documentation...
+		Vec up = {0,1,0};
+		gluLookAt(
+			g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2],
+			g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2]-1.0,
+			up[0], up[1], up[2]);
+		glLightfv(GL_LIGHT0, GL_POSITION, g.lightPosition);
+		//
+		drawStreet();
+		//
+		//
+		//
+		//switch to 2D mode
+		//
+		glViewport(0, 0, g.xres, g.yres);
+		glMatrixMode(GL_MODELVIEW);   glLoadIdentity();
+		glMatrixMode (GL_PROJECTION); glLoadIdentity();
+		gluOrtho2D(0, g.xres, 0, g.yres);
+		glPushAttrib(GL_ENABLE_BIT);
+		glDisable(GL_LIGHTING);
+		//glDisable(GL_DEPTH_TEST);
+		//glDisable(GL_CULL_FACE);
+	}
+	else {
+		pause_game();
+	}
 
 
 	if(!g.ePressed) {
@@ -1051,9 +1058,9 @@ void render()
 			}
 			
 		if(g.cameraPosition[2] < -1000) {
-            g.cameraPosition[0] = g.iniPos;
-            g.cameraPosition[2] = 8;
-        }
+			g.cameraPosition[0] = g.iniPos;
+			g.cameraPosition[2] = 8;
+		}
 		if(g.speed_mode) {
 			speedHud(g.vel);
 		}
@@ -1121,7 +1128,7 @@ void render()
 		ggprint16(&r, 16, 0x00ff0000, ">PRESS H FOR SPECIFIC KEYS FOR FEATURES<");
 		//if p is pressed then pause
 		if(g.pPressed) {
-		pause();
+		pause_game();
 		}
 
 		if(g.cPressed) {
@@ -1152,105 +1159,6 @@ void render()
 	glPopAttrib();
   
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
