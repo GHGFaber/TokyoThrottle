@@ -1049,7 +1049,7 @@ void render()
 				}
 				frames++;
 			}
-			else if(g.bounds_mode != 0) {
+			else{
 				frames = 480;
 			}
 		if(g.cameraPosition[2] < -1000) {
