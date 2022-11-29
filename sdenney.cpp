@@ -40,7 +40,6 @@ public:
 		//constructor
 		xres=640;
 		yres=480;
-		
 
 		vel = 0.0f;
 		// curTheta = 0.0f;
@@ -338,10 +337,10 @@ void pause_state()
 		 //main
 		//glBindTexture(GL_TEXTURE_2D, g.tex.backTexture);
 		glBegin(GL_QUADS);
-				glTexCoord2f(gl.tex.xc[0], gl.tex.yc[1]); glVertex2i(10,	  10);
-				glTexCoord2f(gl.tex.xc[0], gl.tex.yc[0]); glVertex2i(10,	gl.yres);
-				glTexCoord2f(gl.tex.xc[1], gl.tex.yc[0]); glVertex2i(gl.xres,  gl.yres);
-				glTexCoord2f(gl.tex.xc[1], gl.tex.yc[1]); glVertex2i(gl.xres,  10);
+			glTexCoord2f(gl.tex.xc[0], gl.tex.yc[1]); glVertex2i(10,	  10);
+			glTexCoord2f(gl.tex.xc[0], gl.tex.yc[0]); glVertex2i(10,	gl.yres);
+			glTexCoord2f(gl.tex.xc[1], gl.tex.yc[0]); glVertex2i(gl.xres,  gl.yres);
+			glTexCoord2f(gl.tex.xc[1], gl.tex.yc[1]); glVertex2i(gl.xres,  10);
 		glEnd();
 		glPopMatrix();
 
@@ -356,8 +355,8 @@ void pause_game()
 	Rect r;
 		//Pause Title
 		r.bot = 790;
-			r.left = 900;
-			r.center = 0;
+		r.left = 900;
+		r.center = 0;
 		ggprint8b(&r, 6, 0x00000000, "PAUSED");
 		 //glClear(GL_COLOR_BUFFER_BIT);
 		 glColor3f(1.0, 1.0, 0.5);
