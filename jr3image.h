@@ -1,3 +1,10 @@
+//==============================================================================
+//NAME: Jarl Ramos
+//ASGT: Group Project - Tokyo Throttle
+//ORGN: CSUB - CMPS-3350
+//FILE: jr3image.h
+//DATE: 28 November 2022
+//==============================================================================
 #ifndef IMAGE_H
 #define IMAGE_H
 extern void accelerate(float & velocity);

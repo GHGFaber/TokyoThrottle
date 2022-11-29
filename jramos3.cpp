@@ -1,10 +1,10 @@
-// ============================================================================
+// =============================================================================
 // NAME: Jarl Ramos
 // ASGT: Lab 7 / Group Project - Tokyo Throttle
-// FILE: jramos3.cpp
 // ORGN: CSUB - CMPS-3350
+// FILE: jramos3.cpp
 // DATE: 5 October 2022
-// ============================================================================
+// =============================================================================
 
 #include <iostream>
 #include "jr3image.h"
@@ -83,7 +83,6 @@ void go_forwards(float & vel, float & cp1, float & cp2, float theta)
             cp1 -= 0.75f * vel * sin(conv_rad(theta - 270.0f));
         }
     }
-    cout << theta << endl;
 }
 
 //Similar function to above but for when traversing grass.
@@ -493,8 +492,7 @@ void display_countdown(bool isModeOn, int ctdn)
 {
 	Rect rCD;
 	
-    if (isModeOn)
-    {
+    if (isModeOn) {
         switch (ctdn) {
             case 5:
                 text_rect(rCD, 1000, 1230, 0, "5");
@@ -527,16 +525,15 @@ void go_go_go(bool isModeOn, float init_pos, float position)
 //Displays message when the player has met the win condition.
 void you_win(bool won, int xr, int yr)
 {
-    if (won)
-    {
+    if (won) {
         Rect r3;
         text_rect(r3, 700, 1230, 0, "YOU WIN!!!!!");
     }
-	
 }
 //Shows name.
 void show_name_jr3()
 {
     std::cout << "Jarl Ramos / Geoffrey De Palme" << std::endl;
 }
+
 
