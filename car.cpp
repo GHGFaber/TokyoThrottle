@@ -488,6 +488,9 @@ int check_keys(XEvent *e)
 				if(g.bounds_mode != 0) {
 					g.yPressed ^= 1;
 				}
+				if(g.finishMode != 0){
+					g.yPressed ^= 1;
+				}
 				break;
 			case XK_o:
 				g.oPressed = paused(g.oPressed);
@@ -814,6 +817,9 @@ void drawStreet()
 	mainFinish();
 	if(g.finishMode != 0){
 		finish(g.cameraPosition[2], g.cameraPosition[0]);
+		if(g.yPressed != 0){
+			g.cameraPosition[0] = g.iniPos;
+		}
 	}
 
 	//double yellow line
