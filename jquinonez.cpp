@@ -295,52 +295,52 @@ void speedHud(float vel)
     sprintf(velocity, "%f", vel);
     Rect f;
     f.bot = 50;
-    f.left = 2000;
+    f.left = 1000;
     f.center = 0;
 
     Rect y;
     y.bot = 50;
-    y.left = 2000;
+    y.left = 1000;
     y.center = 0;
 
     Rect t;
     t.bot = 40;
-    t.left = 2030;
+    t.left = 1030;
     t.center = 0;
 
     Rect u;
     u.bot = 179;
-    u.left = 2196;
+    u.left = 1196;
     u.center = 0;
 
     Rect m;
     m.bot = 270;
-    m.left = 2177;
+    m.left = 1177;
     m.center = 0;
     Rect v;
     v.bot = 250;
-    v.left = 2190;
+    v.left = 1190;
     v.center = 0;
 
 
     Rect l;
     l.bot = 290;
-    l.left = 2020;
+    l.left = 1020;
     l.center = 0;
 
     Rect r;
     r.bot = 290;
-    r.left = 2370;
+    r.left = 1370;
     r.center = 0;
     
     Rect d;
     d.bot = 310;
-    d.left = 2000;
+    d.left = 1000;
     d.center = 0;
     
     Rect x;
     x.bot = 30;
-    x.left = 2000;
+    x.left = 1000;
     x.center = 0;
 
     if(vel >=0 && vel < 0.5) { 

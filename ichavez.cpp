@@ -28,12 +28,14 @@ public:
     float rails = 0.2;
     Texture tex;
     vec camera;
+    int col;
     Global() {
         //constructor
         xres=640;
         yres=480;
         vel = 0.0f;
         MakeVector(0.0, 1.0, 8.0, camera);
+        col = 0; 
     }   
 } gx; 
 
@@ -159,7 +161,7 @@ void finish(float z, float x){
     box2(0.3, 1.0, 0.1, 3.0, 0.0, -25.0);
 
     glColor3f(1.0f, 0.5f, 0.0f);
-    box2(0.3, 1.0, 0.1, -2.0, 0.0, -30.0);
+    box2(0.3, 1.0, 0.1, 0.0, 0.0, -30.0);
 
     glColor3f(1.0f, 0.5f, 0.0f);
     box2(0.3, 1.0, 0.1, -3.0, 0.0, -40.0);
@@ -172,17 +174,44 @@ void finish(float z, float x){
 
     glColor3f(1.0f, 0.5f, 0.0f);
     box2(0.3, 1.0, 0.1, 3.0, 0.0, -70.0);
-
+    //this is collision for obj1
     if (z <= -22.0f && z >= -24.0f && x >= 2.8f && x <= 4.0f){
         cout<<"you hit a box / had a collision" << endl;
+        gx.col++;
     }
-
+    //this is collision for obj2
+    if (z <= -27.0f && z >= -29.0f && x >= -1.5f && x <= -3.0f){
+        cout<<"you hit a box / had a collision" << endl;
+        gx.col++;
+    }
+    //this is collision for obj3
+    if (z <= -37.0f && z >= -36.0f && x >= -2.3f && x <= -4.0f){
+        cout<<"you hit a box / had a collision" << endl;
+        gx.col++;
+    }
+    //this is collision for obj4
+    if (z <= -47.0f && z >= -46.0f && x >= -1.5f && x <= -3.0f){
+        cout<<"you hit a box / had a collision" << endl;
+        gx.col++;
+    }
+    //this is collision for obj5
+    if (z <= -57.0f && z >= -56.0f && x >= 1.4f && x <= 3.0f){
+        cout<<"you hit a box / had a collision" << endl;
+        gx.col++;
+    }
+    //this is collision for obj6
+    if (z <= -68.0f && z >= -67.0f && x >= 2.0f && x <= 4.0f){
+        cout<<"you hit a box / had a collision" << endl;
+        gx.col++;
+    }
+    //this is goign to tell you if you won or lost
+    cout << "You had " << gx.col << " collisions"<< endl;
     //this is the finish line
-    //this is not baby green 
+    
     glColor3f(240.0f, 230.0f, 140.0f);//sign
     box2(7.0, 2.0, 0.1, 0.0, 5.0, -74.0);
 
-    //this is not brown
+    
     glColor3f(255.0f, 160.0f, 122.0f);// left pole 
     box2(0.3, 7.0, 0.1, -7.0, 0.0, -74.0);
        
@@ -218,7 +247,7 @@ void finishText(){
     s.bot = 980;
     s.left = 800;
     s.center = 0;
-    ggprint16(&s, 16, 0x000b173b, "Your life level won't be affected");
+    ggprint16(&s, 16, 0x000b173b, "Try to avoid the objects");
     
     Rect t;
     t.bot = 960;

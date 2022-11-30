@@ -7,7 +7,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "sdenney.h"
 #include "log.h"
 #include "fonts.h"
 #include <GL/gl.h>
@@ -16,6 +15,7 @@
 #include <cmath>
 #include <math.h>
 #include <fcntl.h>
+#include "sdenney.h"
 #include <sys/stat.h>
 #ifdef USE_OPENAL_SOUND
 #include </usr/include/AL/alut.h>
@@ -133,45 +133,9 @@ bool car(bool z) {
 		z = false;
 	return z;
 }
-/*
-const unsigned NUM_BUFFERS = 1;
-const unsigned NUM_SOURCES = 1;
 
-void m_music(int argc, char* argv[])
-{ 
-	// Sound buffer variable 
-	ALuint buffer = 0;
-
-	// Sound source varialbe 
-	ALuint source = 0;
-
-	// Initialize ALUT 
-	alutInit(&argc, argv);
-
-	// Generate sound buffer 
-	alGenBuffers(NUM_BUFFERS, &buffer);
-
-	// Load WAV file 
-	buffer = alutCreateBufferFromFile("Deja.wav");
-
-	// Generate sound source (sound position in 3D space) 
-	alGenSources(NUM_SOURCES, &source);
-
-	// Associate source with sound buffer 
-	alSourcei(source, AL_BUFFER, buffer);
-
-	// Play the sound 
-	alSourcePlay(source);
-
-	// Wait for playing sound 
-	alutSleep(250000);
-
-	// Exit from ALUT 
-	alutExit();
-
-	return;
-}
-*/
+// creates a tunnel at the midway point
+// creates 4 different towers on each side of the road 
 void tunnel() {
 	/*double width = 9.0;
 	double height = 6.0;
@@ -297,31 +261,6 @@ void tunnel() {
 			glPopMatrix();
 			k += 20; 
 		}
-		/*if (i > 250) {
-			glPushMatrix();
-			glTranslatef(4.5f, -0.5f, (float)-i*2.5);
-			//3rd element was 0.2
-			//2nd element was 5.0
-			box1(0.2, 8.0, gl.rails);
-			glPopMatrix();
-			glPushMatrix();
-			glTranslatef(-4.5f, -0.5f, (float)-i*2.5);
-			//3rd element was 0.2
-			//2nd element was 5.0
-			box1(0.2, 8.0, gl.rails);
-			glPopMatrix();
-			//-------------------top of tunnel--------------------------
-			glPushMatrix();
-			//1st element(x-pos) was 0.0f
-			//2nd element was -0.5f
-			//3rd element was (float)-i*2.5
-			glTranslatef(0.0f, 2.5f, (float)-i*2.5);
-			//1st element (width) was 0.5
-			//2nd element(height) was 0.2
-			//3rd element (length) was 0.5
-			box1(9.0, 0.2, 4.0);
-			glPopMatrix();
-		}*/
 	}
 } 
 void pause_state() 

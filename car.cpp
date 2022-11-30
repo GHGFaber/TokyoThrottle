@@ -140,7 +140,7 @@ public:
 	Global() {
 		//constructor
 		xres=1920;
-		yres=3000;
+		yres=1080;
 
 		rmCountDown = 5;
 		numFrames = 0;
@@ -206,7 +206,7 @@ public:
 		//XVisualInfo *vi;
 		Colormap cmap;
 		XSetWindowAttributes swa;
-		setup_screen_res(640, 480);
+		setup_screen_res(g.xres, g.yres);
 		dpy = XOpenDisplay(NULL);
 		if (dpy == NULL) {
 			printf("\n\tcannot connect to X server\n\n");
@@ -486,6 +486,9 @@ int check_keys(XEvent *e)
 				break;
 			case XK_y:
 				if(g.bounds_mode != 0) {
+					g.yPressed ^= 1;
+				}
+				if(g.finishMode != 0){
 					g.yPressed ^= 1;
 				}
 				break;
@@ -814,6 +817,9 @@ void drawStreet()
 	mainFinish();
 	if(g.finishMode != 0){
 		finish(g.cameraPosition[2], g.cameraPosition[0]);
+		if(g.yPressed != 0){
+			g.cameraPosition[0] = g.iniPos;
+		}
 	}
 
 	//double yellow line
@@ -1002,11 +1008,23 @@ void render()
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		//for documentation...
+		//
+		if(g.cameraPosition[0] > 5 || g.cameraPosition[0] < -5){
+			Vec up = {static_cast<float>((rnd()*.2)-0.1), 1, static_cast<float>((rnd()*.2)-0.1)};
+
+		gluLookAt(
+			g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2],
+			g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2]-1.0,
+			up[0], up[1], up[2]);
+		}
+		else{	
+
 		Vec up = {0,1,0};
 		gluLookAt(
 			g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2],
 			g.cameraPosition[0], g.cameraPosition[1], g.cameraPosition[2]-1.0,
 			up[0], up[1], up[2]);
+		}
 		glLightfv(GL_LIGHT0, GL_POSITION, g.lightPosition);
 		//
 		drawStreet();

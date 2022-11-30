@@ -24,31 +24,29 @@ ALuint alSourceDrip, alSourceTick, alSourceSET, alSourceGO, alSourceIDLE, alSour
 void show_name(){
     cout << "Moises Fuentes:";
 }
-
-bool credits(bool pressed)
-{
+//Credits Screen
+bool credits(bool pressed){
     pressed = true;
 	return pressed;
 }
-
-bool rmcredits(bool pressed)
-{
+//cred screen
+bool rmcredits(bool pressed){
     pressed = false;
 	return pressed;
 }
-
-bool startMenu(bool pressed)
-{
+//Initial Start Menu
+bool startMenu(bool pressed){
     pressed = true;
     return pressed; 
 }
-
-void switchColor()
-{
+//Switch Color Feature
+void switchColor(){
     //glColor3f(red, green, blue);
     glColor3f(red, green, blue);
 }
-
+//=============================
+//Sound
+//=============================
 void initSound()
 {
         #ifdef USE_OPENAL_SOUND
