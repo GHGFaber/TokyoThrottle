@@ -247,7 +247,7 @@ void finishText(){
     s.bot = 980;
     s.left = 800;
     s.center = 0;
-    ggprint16(&s, 16, 0x000b173b, "Your life level won't be affected");
+    ggprint16(&s, 16, 0x000b173b, "Try to avoid the objects");
     
     Rect t;
     t.bot = 960;
